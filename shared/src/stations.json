@@ -1,0 +1,155 @@
+[
+  {
+    "id": "anand-vihar",
+    "name": "Anand Vihar, Delhi - DPCC",
+    "area": "Anand Vihar",
+    "lat": 28.6468,
+    "lon": 77.316,
+    "isHotspot": true,
+    "cpcbName": "Anand Vihar, Delhi - DPCC"
+  },
+  {
+    "id": "mundka",
+    "name": "Mundka, Delhi - DPCC",
+    "area": "Mundka",
+    "lat": 28.6842,
+    "lon": 77.0767,
+    "isHotspot": true,
+    "cpcbName": "Mundka, Delhi - DPCC"
+  },
+  {
+    "id": "wazirpur",
+    "name": "Wazirpur, Delhi - DPCC",
+    "area": "Wazirpur",
+    "lat": 28.6998,
+    "lon": 77.1654,
+    "isHotspot": true,
+    "cpcbName": "Wazirpur, Delhi - DPCC"
+  },
+  {
+    "id": "jahangirpuri",
+    "name": "Jahangirpuri, Delhi - DPCC",
+    "area": "Jahangirpuri",
+    "lat": 28.7328,
+    "lon": 77.1707,
+    "isHotspot": true,
+    "cpcbName": "Jahangirpuri, Delhi - DPCC"
+  },
+  {
+    "id": "rk-puram",
+    "name": "R K Puram, Delhi - DPCC",
+    "area": "R K Puram",
+    "lat": 28.5633,
+    "lon": 77.1869,
+    "isHotspot": true,
+    "cpcbName": "R K Puram, Delhi - DPCC"
+  },
+  {
+    "id": "rohini",
+    "name": "Rohini, Delhi - DPCC",
+    "area": "Rohini",
+    "lat": 28.7325,
+    "lon": 77.1199,
+    "isHotspot": true,
+    "cpcbName": "Rohini, Delhi - DPCC"
+  },
+  {
+    "id": "punjabi-bagh",
+    "name": "Punjabi Bagh, Delhi - DPCC",
+    "area": "Punjabi Bagh",
+    "lat": 28.674,
+    "lon": 77.131,
+    "isHotspot": true,
+    "cpcbName": "Punjabi Bagh, Delhi - DPCC"
+  },
+  {
+    "id": "okhla",
+    "name": "Okhla Phase-2, Delhi - DPCC",
+    "area": "Okhla",
+    "lat": 28.5308,
+    "lon": 77.2713,
+    "isHotspot": true,
+    "cpcbName": "Okhla Phase-2, Delhi - DPCC"
+  },
+  {
+    "id": "bawana",
+    "name": "Bawana, Delhi - DPCC",
+    "area": "Bawana",
+    "lat": 28.7762,
+    "lon": 77.0511,
+    "isHotspot": true,
+    "cpcbName": "Bawana, Delhi - DPCC"
+  },
+  {
+    "id": "narela",
+    "name": "Narela, Delhi - DPCC",
+    "area": "Narela",
+    "lat": 28.8228,
+    "lon": 77.1019,
+    "isHotspot": true,
+    "cpcbName": "Narela, Delhi - DPCC"
+  },
+  {
+    "id": "vivek-vihar",
+    "name": "Vivek Vihar, Delhi - DPCC",
+    "area": "Vivek Vihar",
+    "lat": 28.6723,
+    "lon": 77.3152,
+    "isHotspot": true,
+    "cpcbName": "Vivek Vihar, Delhi - DPCC"
+  },
+  {
+    "id": "dwarka",
+    "name": "Dwarka-Sector 8, Delhi - DPCC",
+    "area": "Dwarka",
+    "lat": 28.571,
+    "lon": 77.0719,
+    "isHotspot": true,
+    "cpcbName": "Dwarka-Sector 8, Delhi - DPCC"
+  },
+  {
+    "id": "ashok-vihar",
+    "name": "Ashok Vihar, Delhi - DPCC",
+    "area": "Ashok Vihar",
+    "lat": 28.6954,
+    "lon": 77.1819,
+    "isHotspot": true,
+    "cpcbName": "Ashok Vihar, Delhi - DPCC"
+  },
+  {
+    "id": "lodhi-road",
+    "name": "Lodhi Road, Delhi - IMD",
+    "area": "Lodhi Road",
+    "lat": 28.5918,
+    "lon": 77.2273,
+    "isHotspot": false,
+    "cpcbName": "Lodhi Road, Delhi - IMD"
+  },
+  {
+    "id": "ito",
+    "name": "ITO, Delhi - CPCB",
+    "area": "ITO",
+    "lat": 28.6286,
+    "lon": 77.241,
+    "isHotspot": false,
+    "cpcbName": "ITO, Delhi - CPCB"
+  },
+  {
+    "id": "mandir-marg",
+    "name": "Mandir Marg, Delhi - DPCC",
+    "area": "Mandir Marg",
+    "lat": 28.6364,
+    "lon": 77.2011,
+    "isHotspot": false,
+    "cpcbName": "Mandir Marg, Delhi - DPCC"
+  },
+  {
+    "id": "sirifort",
+    "name": "Sirifort, Delhi - CPCB",
+    "area": "Sirifort",
+    "lat": 28.5504,
+    "lon": 77.2159,
+    "isHotspot": false,
+    "cpcbName": "Sirifort, Delhi - CPCB"
+  }
+]

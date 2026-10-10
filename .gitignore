@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.aws-sam/
+.env
+.env.*
+!.env.example
+samconfig.toml
+.DS_Store
+*.log
+.next/
+coverage/
+# local MemoryStore persistence (STORE_FILE); commit only shared/fixtures/snapshot.json
+.data/

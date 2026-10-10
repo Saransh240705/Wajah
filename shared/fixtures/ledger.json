@@ -1,0 +1,103 @@
+{
+  "totals": {
+    "issued": 18,
+    "measured": 16,
+    "worked": 8,
+    "noEffect": 6,
+    "inconclusive": 2
+  },
+  "placebo": {
+    "tested": 24,
+    "wronglyWorked": 2
+  },
+  "rows": [
+    {
+      "stationId": "anand-vihar",
+      "area": "Anand Vihar",
+      "actionType": "water_sprinkling",
+      "tried": 4,
+      "worked": 3,
+      "noEffect": 1,
+      "inconclusive": 0,
+      "avgNetChangePct": -18.4,
+      "illustrative": false
+    },
+    {
+      "stationId": "jahangirpuri",
+      "area": "Jahangirpuri",
+      "actionType": "anti_burning_patrol",
+      "tried": 3,
+      "worked": 2,
+      "noEffect": 1,
+      "inconclusive": 0,
+      "avgNetChangePct": -14.9,
+      "illustrative": false
+    },
+    {
+      "stationId": "mundka",
+      "area": "Mundka",
+      "actionType": "water_sprinkling",
+      "tried": 2,
+      "worked": 0,
+      "noEffect": 2,
+      "inconclusive": 0,
+      "avgNetChangePct": -1.6,
+      "illustrative": false
+    },
+    {
+      "stationId": "punjabi-bagh",
+      "area": "Punjabi Bagh",
+      "actionType": "traffic_management",
+      "tried": 1,
+      "worked": 0,
+      "noEffect": 0,
+      "inconclusive": 1,
+      "avgNetChangePct": null,
+      "illustrative": false
+    },
+    {
+      "stationId": "wazirpur",
+      "area": "Wazirpur",
+      "actionType": "anti_burning_patrol",
+      "tried": 2,
+      "worked": 1,
+      "noEffect": 1,
+      "inconclusive": 0,
+      "avgNetChangePct": -9.8,
+      "illustrative": false
+    },
+    {
+      "stationId": "rohini",
+      "area": "Rohini",
+      "actionType": "anti_burning_patrol",
+      "tried": 1,
+      "worked": 1,
+      "noEffect": 0,
+      "inconclusive": 0,
+      "avgNetChangePct": -21,
+      "illustrative": true
+    },
+    {
+      "stationId": "okhla",
+      "area": "Okhla",
+      "actionType": "mechanical_sweeping",
+      "tried": 1,
+      "worked": 0,
+      "noEffect": 1,
+      "inconclusive": 0,
+      "avgNetChangePct": -4.2,
+      "illustrative": false
+    },
+    {
+      "stationId": "rk-puram",
+      "area": "R K Puram",
+      "actionType": "water_sprinkling",
+      "tried": 2,
+      "worked": 1,
+      "noEffect": 0,
+      "inconclusive": 1,
+      "avgNetChangePct": -16.3,
+      "illustrative": false
+    }
+  ]
+}

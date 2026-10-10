@@ -1,0 +1,82 @@
+{
+  "totals": {
+    "incidents": 8,
+    "dispatched": 3,
+    "cleared": 1,
+    "recurred": 1
+  },
+  "areas": [
+    {
+      "stationId": "mundka",
+      "area": "Mundka",
+      "incidents": 1,
+      "recurred": 1,
+      "cleared": 0,
+      "topCause": "dust",
+      "lastIncidentAt": "2026-10-07T05:00:00.000Z"
+    },
+    {
+      "stationId": "wazirpur",
+      "area": "Wazirpur",
+      "incidents": 1,
+      "recurred": 0,
+      "cleared": 0,
+      "topCause": "local_burning",
+      "lastIncidentAt": "2026-10-09T05:00:00.000Z"
+    },
+    {
+      "stationId": "punjabi-bagh",
+      "area": "Punjabi Bagh",
+      "incidents": 1,
+      "recurred": 0,
+      "cleared": 0,
+      "topCause": "traffic",
+      "lastIncidentAt": "2026-10-09T02:00:00.000Z"
+    },
+    {
+      "stationId": "ito",
+      "area": "ITO",
+      "incidents": 1,
+      "recurred": 0,
+      "cleared": 0,
+      "topCause": "regional_smoke",
+      "lastIncidentAt": "2026-10-09T00:00:00.000Z"
+    },
+    {
+      "stationId": "vivek-vihar",
+      "area": "Vivek Vihar",
+      "incidents": 1,
+      "recurred": 0,
+      "cleared": 0,
+      "topCause": "local_burning",
+      "lastIncidentAt": "2026-10-08T17:00:00.000Z"
+    },
+    {
+      "stationId": "anand-vihar",
+      "area": "Anand Vihar",
+      "incidents": 1,
+      "recurred": 0,
+      "cleared": 0,
+      "topCause": "dust",
+      "lastIncidentAt": "2026-10-08T07:00:00.000Z"
+    },
+    {
+      "stationId": "narela",
+      "area": "Narela",
+      "incidents": 1,
+      "recurred": 0,
+      "cleared": 0,
+      "topCause": "trapped_air",
+      "lastIncidentAt": "2026-10-07T18:00:00.000Z"
+    },
+    {
+      "stationId": "jahangirpuri",
+      "area": "Jahangirpuri",
+      "incidents": 1,
+      "recurred": 0,
+      "cleared": 1,
+      "topCause": "local_burning",
+      "lastIncidentAt": "2026-10-06T16:00:00.000Z"
+    }
+  ]
+}

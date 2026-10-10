@@ -1,0 +1,212 @@
+[
+  {
+    "lat": 29.9786,
+    "lon": 74.487,
+    "acquiredAt": "2026-10-08T07:00:00.000Z",
+    "frp": 22.3,
+    "confidence": "n"
+  },
+  {
+    "lat": 30.5941,
+    "lon": 75.5872,
+    "acquiredAt": "2026-10-08T20:30:00.000Z",
+    "frp": 6.8,
+    "confidence": "n"
+  },
+  {
+    "lat": 31.2738,
+    "lon": 76.5782,
+    "acquiredAt": "2026-10-09T07:00:00.000Z",
+    "frp": 31.2,
+    "confidence": "h"
+  },
+  {
+    "lat": 31.1072,
+    "lon": 75.6472,
+    "acquiredAt": "2026-10-08T08:30:00.000Z",
+    "frp": 12.6,
+    "confidence": "l"
+  },
+  {
+    "lat": 30.0184,
+    "lon": 74.5661,
+    "acquiredAt": "2026-10-08T19:00:00.000Z",
+    "frp": 40.6,
+    "confidence": "n"
+  },
+  {
+    "lat": 29.9805,
+    "lon": 76.6046,
+    "acquiredAt": "2026-10-09T08:30:00.000Z",
+    "frp": 36.1,
+    "confidence": "n"
+  },
+  {
+    "lat": 30.6719,
+    "lon": 76.3731,
+    "acquiredAt": "2026-10-08T07:00:00.000Z",
+    "frp": 6.9,
+    "confidence": "h"
+  },
+  {
+    "lat": 30.9536,
+    "lon": 75.0543,
+    "acquiredAt": "2026-10-08T20:30:00.000Z",
+    "frp": 38.8,
+    "confidence": "l"
+  },
+  {
+    "lat": 29.9495,
+    "lon": 76.7466,
+    "acquiredAt": "2026-10-09T07:00:00.000Z",
+    "frp": 3.9,
+    "confidence": "n"
+  },
+  {
+    "lat": 31.4072,
+    "lon": 76.5504,
+    "acquiredAt": "2026-10-08T08:30:00.000Z",
+    "frp": 33.1,
+    "confidence": "n"
+  },
+  {
+    "lat": 31.0713,
+    "lon": 76.7351,
+    "acquiredAt": "2026-10-08T19:00:00.000Z",
+    "frp": 11.2,
+    "confidence": "h"
+  },
+  {
+    "lat": 30.3427,
+    "lon": 74.8154,
+    "acquiredAt": "2026-10-09T08:30:00.000Z",
+    "frp": 6.6,
+    "confidence": "l"
+  },
+  {
+    "lat": 30.484,
+    "lon": 76.4914,
+    "acquiredAt": "2026-10-08T07:00:00.000Z",
+    "frp": 31.5,
+    "confidence": "n"
+  },
+  {
+    "lat": 29.8293,
+    "lon": 74.8626,
+    "acquiredAt": "2026-10-08T20:30:00.000Z",
+    "frp": 36.2,
+    "confidence": "n"
+  },
+  {
+    "lat": 30.0649,
+    "lon": 75.2996,
+    "acquiredAt": "2026-10-09T07:00:00.000Z",
+    "frp": 31.3,
+    "confidence": "h"
+  },
+  {
+    "lat": 30.2011,
+    "lon": 74.9503,
+    "acquiredAt": "2026-10-08T08:30:00.000Z",
+    "frp": 21.3,
+    "confidence": "l"
+  },
+  {
+    "lat": 29.8007,
+    "lon": 75.1267,
+    "acquiredAt": "2026-10-08T19:00:00.000Z",
+    "frp": 40.9,
+    "confidence": "n"
+  },
+  {
+    "lat": 30.4903,
+    "lon": 74.9279,
+    "acquiredAt": "2026-10-09T08:30:00.000Z",
+    "frp": 26.2,
+    "confidence": "n"
+  },
+  {
+    "lat": 31.0903,
+    "lon": 75.6659,
+    "acquiredAt": "2026-10-08T07:00:00.000Z",
+    "frp": 28.4,
+    "confidence": "h"
+  },
+  {
+    "lat": 30.1891,
+    "lon": 75.9103,
+    "acquiredAt": "2026-10-08T20:30:00.000Z",
+    "frp": 17.4,
+    "confidence": "l"
+  },
+  {
+    "lat": 31.3055,
+    "lon": 75.8437,
+    "acquiredAt": "2026-10-09T07:00:00.000Z",
+    "frp": 18.7,
+    "confidence": "n"
+  },
+  {
+    "lat": 31.1486,
+    "lon": 75.4236,
+    "acquiredAt": "2026-10-08T08:30:00.000Z",
+    "frp": 39.8,
+    "confidence": "n"
+  },
+  {
+    "lat": 30.0795,
+    "lon": 76.1036,
+    "acquiredAt": "2026-10-08T19:00:00.000Z",
+    "frp": 1,
+    "confidence": "h"
+  },
+  {
+    "lat": 31.1271,
+    "lon": 74.9944,
+    "acquiredAt": "2026-10-09T08:30:00.000Z",
+    "frp": 35.6,
+    "confidence": "l"
+  },
+  {
+    "lat": 30.2376,
+    "lon": 74.6014,
+    "acquiredAt": "2026-10-08T07:00:00.000Z",
+    "frp": 16.6,
+    "confidence": "n"
+  },
+  {
+    "lat": 31.032,
+    "lon": 76.6294,
+    "acquiredAt": "2026-10-08T20:30:00.000Z",
+    "frp": 13.7,
+    "confidence": "n"
+  },
+  {
+    "lat": 31.2272,
+    "lon": 75.0124,
+    "acquiredAt": "2026-10-09T07:00:00.000Z",
+    "frp": 22.9,
+    "confidence": "h"
+  },
+  {
+    "lat": 31.1302,
+    "lon": 75.412,
+    "acquiredAt": "2026-10-08T08:30:00.000Z",
+    "frp": 30.8,
+    "confidence": "l"
+  },
+  {
+    "lat": 30.7347,
+    "lon": 74.4998,
+    "acquiredAt": "2026-10-08T19:00:00.000Z",
+    "frp": 26.8,
+    "confidence": "n"
+  },
+  {
+    "lat": 31.1587,
+    "lon": 76.1497,
+    "acquiredAt": "2026-10-09T08:30:00.000Z",
+    "frp": 9.7,
+    "confidence": "n"
+  }
+]

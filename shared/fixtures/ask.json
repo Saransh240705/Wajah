@@ -1,0 +1,62 @@
+{
+  "ask": {
+    "answer": "PM10 at Anand Vihar peaked at 480 at 1:30pm yesterday, about 2.5 times the usual level. The likely cause is dust (confidence: high): coarse particles dominated, the wind was 5.1 m/s, and only 2 of 14 areas spiked. Water sprinkling through PWD worked here 3 of 4 times. Next step: open the incident to see the measured result of yesterday's work order.",
+    "evidence": [
+      {
+        "key": "pm_ratio_coarse",
+        "cause": "dust",
+        "label": "Coarse particles dominate: PM2.5 is only 0.31 of PM10",
+        "value": "0.31",
+        "effect": "supports"
+      },
+      {
+        "key": "co_flat",
+        "cause": "dust",
+        "label": "CO close to its usual level (1.1×)",
+        "value": "1.1×",
+        "effect": "supports"
+      },
+      {
+        "key": "wind_strong",
+        "cause": "dust",
+        "label": "Wind 5.1 m/s, strong enough to lift dust",
+        "value": "5.1 m/s",
+        "effect": "supports"
+      },
+      {
+        "key": "some_areas",
+        "cause": "dust",
+        "label": "Only 2 of 14 areas spiked",
+        "value": "2 of 14",
+        "effect": "supports"
+      },
+      {
+        "key": "daytime",
+        "cause": "dust",
+        "label": "Peak in the daytime",
+        "value": "day",
+        "effect": "supports"
+      }
+    ],
+    "incidentId": "live-anand-vihar-2026100807",
+    "suggestedActions": [
+      {
+        "type": "open_incident",
+        "label": "Open the Anand Vihar incident",
+        "payload": {
+          "incidentId": "live-anand-vihar-2026100807"
+        }
+      }
+    ]
+  },
+  "brief": {
+    "answer": "1. Wazirpur: likely local burning, high confidence. Send an anti-burning patrol through MCD; it worked here 1 of 2 times.\n2. Mundka: dust again, but sprinkling had no effect here 2 of 2 times, so send mechanical sweeping through MCD.\n3. Vivek Vihar: cause unclear, low confidence. Check again next hour before sending a team.\nDo not deploy sprinklers for the city-wide haze at ITO and 11 other areas: smoke from farm fires is the likely cause and no local action will help.",
+    "evidence": [],
+    "suggestedActions": [
+      {
+        "type": "open_board",
+        "label": "Open the action board"
+      }
+    ]
+  }
+}

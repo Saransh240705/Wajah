@@ -1,0 +1,1092 @@
+[
+  {
+    "id": "live-wazirpur-2026100905",
+    "dataset": "live",
+    "stationId": "wazirpur",
+    "area": "Wazirpur",
+    "start": "2026-10-09T05:00:00.000Z",
+    "end": null,
+    "peakPm25": 260,
+    "peakPm10": 360,
+    "peakAt": "2026-10-09T07:00:00.000Z",
+    "baselinePm25": 96,
+    "features": {
+      "pmRatio": 0.7,
+      "coRise": 1.5,
+      "no2Rise": 1.1,
+      "windSpeed": 1.4,
+      "windDir": 240,
+      "blh": 600,
+      "upwindFires": 6,
+      "hourBand": "day",
+      "spatialShare": 0.14
+    },
+    "scores": {
+      "local_burning": 85,
+      "dust": 30,
+      "traffic": 40,
+      "regional_smoke": 10,
+      "trapped_air": 40
+    },
+    "topCause": "local_burning",
+    "confidence": "high",
+    "evidence": [
+      {
+        "key": "pm_ratio_fine",
+        "cause": "local_burning",
+        "label": "Fine particles dominate: PM2.5 is 0.70 of PM10",
+        "value": "0.70",
+        "effect": "supports"
+      },
+      {
+        "key": "co_rise",
+        "cause": "local_burning",
+        "label": "CO up 1.5× its usual level",
+        "value": "1.5×",
+        "effect": "supports"
+      },
+      {
+        "key": "few_areas",
+        "cause": "local_burning",
+        "label": "Only 2 of 14 areas spiked",
+        "value": "2 of 14",
+        "effect": "supports"
+      },
+      {
+        "key": "few_upwind_fires",
+        "cause": "local_burning",
+        "label": "Only 6 farm fires upwind",
+        "value": "6",
+        "effect": "supports"
+      },
+      {
+        "key": "co_rise_traffic",
+        "cause": "traffic",
+        "label": "CO up 1.5× its usual level",
+        "value": "1.5×",
+        "effect": "supports"
+      },
+      {
+        "key": "some_areas",
+        "cause": "traffic",
+        "label": "Only 2 of 14 areas spiked",
+        "value": "2 of 14",
+        "effect": "supports"
+      },
+      {
+        "key": "pm_ratio_mixed",
+        "cause": "traffic",
+        "label": "Mixed particle sizes: PM2.5 is 0.70 of PM10",
+        "value": "0.70",
+        "effect": "supports"
+      },
+      {
+        "key": "some_areas",
+        "cause": "dust",
+        "label": "Only 2 of 14 areas spiked",
+        "value": "2 of 14",
+        "effect": "supports"
+      },
+      {
+        "key": "daytime",
+        "cause": "dust",
+        "label": "Peak in the daytime",
+        "value": "day",
+        "effect": "supports"
+      },
+      {
+        "key": "pm_ratio_smoke",
+        "cause": "regional_smoke",
+        "label": "Fine particles dominate: PM2.5 is 0.70 of PM10",
+        "value": "0.70",
+        "effect": "supports"
+      },
+      {
+        "key": "wind_calm",
+        "cause": "trapped_air",
+        "label": "Wind nearly calm at 1.4 m/s",
+        "value": "1.4 m/s",
+        "effect": "supports"
+      },
+      {
+        "key": "few_fires",
+        "cause": "trapped_air",
+        "label": "Only 6 farm fires upwind",
+        "value": "6",
+        "effect": "supports"
+      }
+    ],
+    "status": "open",
+    "recurrenceCount": 0,
+    "escalationLevel": 0,
+    "workOrders": [],
+    "checks": [],
+    "createdAt": "2026-10-09T06:00:00.000Z",
+    "updatedAt": "2026-10-09T08:00:00.000Z"
+  },
+  {
+    "id": "live-punjabi-bagh-2026100902",
+    "dataset": "live",
+    "stationId": "punjabi-bagh",
+    "area": "Punjabi Bagh",
+    "start": "2026-10-09T02:00:00.000Z",
+    "end": "2026-10-09T05:00:00.000Z",
+    "peakPm25": 215,
+    "peakPm10": 370,
+    "peakAt": "2026-10-09T03:00:00.000Z",
+    "baselinePm25": 84,
+    "features": {
+      "pmRatio": 0.58,
+      "coRise": 1.3,
+      "no2Rise": 1.8,
+      "windSpeed": 2,
+      "windDir": 310,
+      "blh": 450,
+      "upwindFires": 8,
+      "hourBand": "morning_rush",
+      "spatialShare": 0.21
+    },
+    "scores": {
+      "local_burning": 60,
+      "dust": 15,
+      "traffic": 100,
+      "regional_smoke": 25,
+      "trapped_air": 20
+    },
+    "topCause": "traffic",
+    "confidence": "high",
+    "evidence": [
+      {
+        "key": "no2_rise",
+        "cause": "traffic",
+        "label": "NO2 up 1.8× its usual level",
+        "value": "1.8×",
+        "effect": "supports"
+      },
+      {
+        "key": "rush_hour",
+        "cause": "traffic",
+        "label": "Peak in the morning rush hour",
+        "value": "morning rush",
+        "effect": "supports"
+      },
+      {
+        "key": "co_rise_traffic",
+        "cause": "traffic",
+        "label": "CO up 1.3× its usual level",
+        "value": "1.3×",
+        "effect": "supports"
+      },
+      {
+        "key": "some_areas",
+        "cause": "traffic",
+        "label": "Only 3 of 14 areas spiked",
+        "value": "3 of 14",
+        "effect": "supports"
+      },
+      {
+        "key": "pm_ratio_mixed",
+        "cause": "traffic",
+        "label": "Mixed particle sizes: PM2.5 is 0.58 of PM10",
+        "value": "0.58",
+        "effect": "supports"
+      },
+      {
+        "key": "co_rise",
+        "cause": "local_burning",
+        "label": "CO up 1.3× its usual level",
+        "value": "1.3×",
+        "effect": "supports"
+      },
+      {
+        "key": "few_areas",
+        "cause": "local_burning",
+        "label": "Only 3 of 14 areas spiked",
+        "value": "3 of 14",
+        "effect": "supports"
+      },
+      {
+        "key": "few_upwind_fires",
+        "cause": "local_burning",
+        "label": "Only 8 farm fires upwind",
+        "value": "8",
+        "effect": "supports"
+      },
+      {
+        "key": "some_areas",
+        "cause": "dust",
+        "label": "Only 3 of 14 areas spiked",
+        "value": "3 of 14",
+        "effect": "supports"
+      },
+      {
+        "key": "wind_from_northwest",
+        "cause": "regional_smoke",
+        "label": "Wind from the north-west (310°), the direction of the farm fires",
+        "value": "310°",
+        "effect": "supports"
+      },
+      {
+        "key": "pm_ratio_smoke",
+        "cause": "regional_smoke",
+        "label": "Fine particles dominate: PM2.5 is 0.58 of PM10",
+        "value": "0.58",
+        "effect": "supports"
+      },
+      {
+        "key": "few_fires",
+        "cause": "trapped_air",
+        "label": "Only 8 farm fires upwind",
+        "value": "8",
+        "effect": "supports"
+      },
+      {
+        "key": "co_no2_rise",
+        "cause": "trapped_air",
+        "label": "CO and NO2 both up: 1.3× and 1.8×",
+        "value": "1.3×, 1.8×",
+        "effect": "supports"
+      }
+    ],
+    "status": "dispatched",
+    "recurrenceCount": 0,
+    "escalationLevel": 0,
+    "workOrders": [
+      {
+        "id": "live-punjabi-bagh-2026100902-w1",
+        "incidentId": "live-punjabi-bagh-2026100902",
+        "stationId": "punjabi-bagh",
+        "area": "Punjabi Bagh",
+        "actionType": "traffic_management",
+        "agency": "Traffic Police",
+        "reason": "Traffic is the likely cause. Traffic management has not been tried here yet.",
+        "instructionsEn": "PM2.5 reached 215 µg/m³ at Punjabi Bagh at 8:30am, about 2.6 times the usual level. Clear the jams near the Punjabi Bagh monitoring station and divert heavy vehicles away from it. Responsible: Traffic Police. Tap Mark started and Mark done on the field page, and add one photo.",
+        "instructionsHi": "Punjabi Bagh में सुबह 8:30 बजे PM2.5 215 µg/m³ तक पहुँचा, जो सामान्य स्तर का लगभग 2.6 गुना है। Punjabi Bagh निगरानी स्टेशन के पास जाम खुलवाएँ और भारी वाहनों को दूसरे रास्ते से भेजें। ज़िम्मेदारी: Traffic Police। फ़ील्ड पेज पर \"काम शुरू\" और \"काम पूरा\" दबाएँ, और एक फ़ोटो जोड़ें।",
+        "escalationLevel": 0,
+        "demo": true,
+        "status": "done",
+        "issuedAt": "2026-10-09T03:05:00.000Z",
+        "startedAt": "2026-10-09T03:10:00.000Z",
+        "doneAt": "2026-10-09T04:00:00.000Z",
+        "effect": {
+          "pollutant": "pm25",
+          "beforeMean": 210,
+          "afterMean": 150,
+          "changePct": -28.6,
+          "expectedChangePct": -8,
+          "cityChangePct": -27.3,
+          "netChangePct": -20.6,
+          "verdict": "inconclusive",
+          "note": "the whole city shifted at once",
+          "measuredAt": "2026-10-09T07:30:00.000Z"
+        }
+      },
+      {
+        "id": "live-punjabi-bagh-2026100902-w2",
+        "incidentId": "live-punjabi-bagh-2026100902",
+        "stationId": "punjabi-bagh",
+        "area": "Punjabi Bagh",
+        "actionType": "traffic_management",
+        "agency": "Traffic Police",
+        "reason": "Traffic is the likely cause. Traffic management here had no effect 1 of 1 times.",
+        "instructionsEn": "PM2.5 reached 215 µg/m³ at Punjabi Bagh at 8:30am, about 2.6 times the usual level. Clear the jams near the Punjabi Bagh monitoring station and divert heavy vehicles away from it. Responsible: Traffic Police. Tap Mark started and Mark done on the field page, and add one photo.",
+        "instructionsHi": "Punjabi Bagh में सुबह 8:30 बजे PM2.5 215 µg/m³ तक पहुँचा, जो सामान्य स्तर का लगभग 2.6 गुना है। Punjabi Bagh निगरानी स्टेशन के पास जाम खुलवाएँ और भारी वाहनों को दूसरे रास्ते से भेजें। ज़िम्मेदारी: Traffic Police। फ़ील्ड पेज पर \"काम शुरू\" और \"काम पूरा\" दबाएँ, और एक फ़ोटो जोड़ें।",
+        "escalationLevel": 0,
+        "demo": true,
+        "status": "in_progress",
+        "issuedAt": "2026-10-09T06:10:00.000Z",
+        "startedAt": "2026-10-09T06:30:00.000Z"
+      }
+    ],
+    "checks": [],
+    "createdAt": "2026-10-09T03:00:00.000Z",
+    "updatedAt": "2026-10-09T08:00:00.000Z"
+  },
+  {
+    "id": "live-ito-2026100900",
+    "dataset": "live",
+    "stationId": "ito",
+    "area": "ITO",
+    "start": "2026-10-09T00:00:00.000Z",
+    "end": null,
+    "peakPm25": 420,
+    "peakPm10": 610,
+    "peakAt": "2026-10-09T06:00:00.000Z",
+    "baselinePm25": 158,
+    "features": {
+      "pmRatio": 0.69,
+      "coRise": 1.15,
+      "no2Rise": 1.05,
+      "windSpeed": 2.6,
+      "windDir": 305,
+      "blh": 350,
+      "upwindFires": 210,
+      "hourBand": "day",
+      "spatialShare": 0.86
+    },
+    "scores": {
+      "local_burning": 25,
+      "dust": 15,
+      "traffic": 10,
+      "regional_smoke": 100,
+      "trapped_air": 30
+    },
+    "topCause": "regional_smoke",
+    "confidence": "high",
+    "evidence": [
+      {
+        "key": "upwind_fires",
+        "cause": "regional_smoke",
+        "label": "210 farm fires upwind in the last 48 hours",
+        "value": "210",
+        "effect": "supports"
+      },
+      {
+        "key": "upwind_fires_many",
+        "cause": "regional_smoke",
+        "label": "210 farm fires upwind in the last 48 hours",
+        "value": "210",
+        "effect": "supports"
+      },
+      {
+        "key": "most_areas",
+        "cause": "regional_smoke",
+        "label": "12 of 14 areas spiked together",
+        "value": "12 of 14",
+        "effect": "supports"
+      },
+      {
+        "key": "wind_from_northwest",
+        "cause": "regional_smoke",
+        "label": "Wind from the north-west (305°), the direction of the farm fires",
+        "value": "305°",
+        "effect": "supports"
+      },
+      {
+        "key": "pm_ratio_smoke",
+        "cause": "regional_smoke",
+        "label": "Fine particles dominate: PM2.5 is 0.69 of PM10",
+        "value": "0.69",
+        "effect": "supports"
+      },
+      {
+        "key": "most_areas",
+        "cause": "trapped_air",
+        "label": "12 of 14 areas spiked together",
+        "value": "12 of 14",
+        "effect": "supports"
+      },
+      {
+        "key": "pm_ratio_fine",
+        "cause": "local_burning",
+        "label": "Fine particles dominate: PM2.5 is 0.69 of PM10",
+        "value": "0.69",
+        "effect": "supports"
+      },
+      {
+        "key": "daytime",
+        "cause": "dust",
+        "label": "Peak in the daytime",
+        "value": "day",
+        "effect": "supports"
+      },
+      {
+        "key": "pm_ratio_mixed",
+        "cause": "traffic",
+        "label": "Mixed particle sizes: PM2.5 is 0.69 of PM10",
+        "value": "0.69",
+        "effect": "supports"
+      }
+    ],
+    "status": "open",
+    "recurrenceCount": 0,
+    "escalationLevel": 0,
+    "workOrders": [],
+    "checks": [],
+    "createdAt": "2026-10-09T01:00:00.000Z",
+    "updatedAt": "2026-10-09T08:00:00.000Z"
+  },
+  {
+    "id": "live-vivek-vihar-2026100817",
+    "dataset": "live",
+    "stationId": "vivek-vihar",
+    "area": "Vivek Vihar",
+    "start": "2026-10-08T17:00:00.000Z",
+    "end": "2026-10-08T20:00:00.000Z",
+    "peakPm25": 240,
+    "peakPm10": 330,
+    "peakAt": "2026-10-08T18:00:00.000Z",
+    "baselinePm25": 100,
+    "features": {
+      "pmRatio": 0.55,
+      "coRise": 1.3,
+      "no2Rise": 1.1,
+      "windSpeed": 1.1,
+      "windDir": 180,
+      "blh": null,
+      "upwindFires": 30,
+      "hourBand": "night",
+      "spatialShare": 0.5
+    },
+    "scores": {
+      "local_burning": 40,
+      "dust": 15,
+      "traffic": 40,
+      "regional_smoke": 10,
+      "trapped_air": 40
+    },
+    "topCause": "local_burning",
+    "confidence": "low",
+    "evidence": [
+      {
+        "key": "co_rise",
+        "cause": "local_burning",
+        "label": "CO up 1.3× its usual level",
+        "value": "1.3×",
+        "effect": "supports"
+      },
+      {
+        "key": "night",
+        "cause": "local_burning",
+        "label": "Peak at night",
+        "value": "night",
+        "effect": "supports"
+      },
+      {
+        "key": "co_rise_traffic",
+        "cause": "traffic",
+        "label": "CO up 1.3× its usual level",
+        "value": "1.3×",
+        "effect": "supports"
+      },
+      {
+        "key": "some_areas",
+        "cause": "traffic",
+        "label": "Only 7 of 14 areas spiked",
+        "value": "7 of 14",
+        "effect": "supports"
+      },
+      {
+        "key": "pm_ratio_mixed",
+        "cause": "traffic",
+        "label": "Mixed particle sizes: PM2.5 is 0.55 of PM10",
+        "value": "0.55",
+        "effect": "supports"
+      },
+      {
+        "key": "some_areas",
+        "cause": "dust",
+        "label": "Only 7 of 14 areas spiked",
+        "value": "7 of 14",
+        "effect": "supports"
+      },
+      {
+        "key": "pm_ratio_smoke",
+        "cause": "regional_smoke",
+        "label": "Fine particles dominate: PM2.5 is 0.55 of PM10",
+        "value": "0.55",
+        "effect": "supports"
+      },
+      {
+        "key": "wind_calm",
+        "cause": "trapped_air",
+        "label": "Wind nearly calm at 1.1 m/s",
+        "value": "1.1 m/s",
+        "effect": "supports"
+      },
+      {
+        "key": "few_fires",
+        "cause": "trapped_air",
+        "label": "Only 30 farm fires upwind",
+        "value": "30",
+        "effect": "supports"
+      }
+    ],
+    "status": "open",
+    "recurrenceCount": 0,
+    "escalationLevel": 0,
+    "workOrders": [],
+    "checks": [],
+    "createdAt": "2026-10-08T18:00:00.000Z",
+    "updatedAt": "2026-10-09T08:00:00.000Z"
+  },
+  {
+    "id": "live-anand-vihar-2026100807",
+    "dataset": "live",
+    "stationId": "anand-vihar",
+    "area": "Anand Vihar",
+    "start": "2026-10-08T07:00:00.000Z",
+    "end": "2026-10-08T10:00:00.000Z",
+    "peakPm25": 150,
+    "peakPm10": 480,
+    "peakAt": "2026-10-08T08:00:00.000Z",
+    "baselinePm25": 62,
+    "features": {
+      "pmRatio": 0.31,
+      "coRise": 1.05,
+      "no2Rise": 1.1,
+      "windSpeed": 5.1,
+      "windDir": 290,
+      "blh": 900,
+      "upwindFires": 3,
+      "hourBand": "day",
+      "spatialShare": 0.14
+    },
+    "scores": {
+      "local_burning": 35,
+      "dust": 100,
+      "traffic": 15,
+      "regional_smoke": 15,
+      "trapped_air": 10
+    },
+    "topCause": "dust",
+    "confidence": "high",
+    "evidence": [
+      {
+        "key": "pm_ratio_coarse",
+        "cause": "dust",
+        "label": "Coarse particles dominate: PM2.5 is only 0.31 of PM10",
+        "value": "0.31",
+        "effect": "supports"
+      },
+      {
+        "key": "co_flat",
+        "cause": "dust",
+        "label": "CO close to its usual level (1.1×)",
+        "value": "1.1×",
+        "effect": "supports"
+      },
+      {
+        "key": "wind_strong",
+        "cause": "dust",
+        "label": "Wind 5.1 m/s, strong enough to lift dust",
+        "value": "5.1 m/s",
+        "effect": "supports"
+      },
+      {
+        "key": "some_areas",
+        "cause": "dust",
+        "label": "Only 2 of 14 areas spiked",
+        "value": "2 of 14",
+        "effect": "supports"
+      },
+      {
+        "key": "daytime",
+        "cause": "dust",
+        "label": "Peak in the daytime",
+        "value": "day",
+        "effect": "supports"
+      },
+      {
+        "key": "few_areas",
+        "cause": "local_burning",
+        "label": "Only 2 of 14 areas spiked",
+        "value": "2 of 14",
+        "effect": "supports"
+      },
+      {
+        "key": "few_upwind_fires",
+        "cause": "local_burning",
+        "label": "Only 3 farm fires upwind",
+        "value": "3",
+        "effect": "supports"
+      },
+      {
+        "key": "some_areas",
+        "cause": "traffic",
+        "label": "Only 2 of 14 areas spiked",
+        "value": "2 of 14",
+        "effect": "supports"
+      },
+      {
+        "key": "wind_from_northwest",
+        "cause": "regional_smoke",
+        "label": "Wind from the north-west (290°), the direction of the farm fires",
+        "value": "290°",
+        "effect": "supports"
+      },
+      {
+        "key": "few_fires",
+        "cause": "trapped_air",
+        "label": "Only 3 farm fires upwind",
+        "value": "3",
+        "effect": "supports"
+      }
+    ],
+    "status": "dispatched",
+    "recurrenceCount": 0,
+    "escalationLevel": 0,
+    "workOrders": [
+      {
+        "id": "live-anand-vihar-2026100807-w1",
+        "incidentId": "live-anand-vihar-2026100807",
+        "stationId": "anand-vihar",
+        "area": "Anand Vihar",
+        "actionType": "water_sprinkling",
+        "agency": "PWD",
+        "reason": "Dust is the likely cause. Sprinkling here worked 2 of 3 times.",
+        "instructionsEn": "PM10 reached 480 µg/m³ at Anand Vihar at 1:30pm, about 2.5 times the usual level. Sprinkle the main roads within about 1 km of the Anand Vihar monitoring station. Responsible: PWD. Tap Mark started and Mark done on the field page, and add one photo.",
+        "instructionsHi": "Anand Vihar में दोपहर 1:30 बजे PM10 480 µg/m³ तक पहुँचा, जो सामान्य स्तर का लगभग 2.5 गुना है। Anand Vihar निगरानी स्टेशन के लगभग 1 किमी के दायरे की मुख्य सड़कों पर छिड़काव करें। ज़िम्मेदारी: PWD। फ़ील्ड पेज पर \"काम शुरू\" और \"काम पूरा\" दबाएँ, और एक फ़ोटो जोड़ें।",
+        "escalationLevel": 0,
+        "demo": true,
+        "status": "done",
+        "issuedAt": "2026-10-08T08:35:00.000Z",
+        "startedAt": "2026-10-08T08:55:00.000Z",
+        "doneAt": "2026-10-08T09:40:00.000Z",
+        "photo": {
+          "key": "photos/live-anand-vihar-2026100807-w1.jpg",
+          "result": "pass",
+          "note": "A water tanker is spraying a road."
+        },
+        "effect": {
+          "pollutant": "pm10",
+          "beforeMean": 430,
+          "afterMean": 290,
+          "changePct": -32.6,
+          "expectedChangePct": -10,
+          "cityChangePct": -4.1,
+          "netChangePct": -22.6,
+          "verdict": "worked",
+          "measuredAt": "2026-10-08T13:00:00.000Z"
+        }
+      }
+    ],
+    "checks": [],
+    "createdAt": "2026-10-08T08:00:00.000Z",
+    "updatedAt": "2026-10-09T08:00:00.000Z"
+  },
+  {
+    "id": "live-narela-2026100718",
+    "dataset": "live",
+    "stationId": "narela",
+    "area": "Narela",
+    "start": "2026-10-07T18:00:00.000Z",
+    "end": "2026-10-07T23:00:00.000Z",
+    "peakPm25": 280,
+    "peakPm10": 390,
+    "peakAt": "2026-10-07T20:00:00.000Z",
+    "baselinePm25": 110,
+    "features": {
+      "pmRatio": 0.72,
+      "coRise": 1.25,
+      "no2Rise": 1.3,
+      "windSpeed": 0.8,
+      "windDir": 90,
+      "blh": 200,
+      "upwindFires": 5,
+      "hourBand": "night",
+      "spatialShare": 0.79
+    },
+    "scores": {
+      "local_burning": 50,
+      "dust": 0,
+      "traffic": 50,
+      "regional_smoke": 40,
+      "trapped_air": 100
+    },
+    "topCause": "trapped_air",
+    "confidence": "high",
+    "evidence": [
+      {
+        "key": "wind_calm",
+        "cause": "trapped_air",
+        "label": "Wind nearly calm at 0.8 m/s",
+        "value": "0.8 m/s",
+        "effect": "supports"
+      },
+      {
+        "key": "low_mixing",
+        "cause": "trapped_air",
+        "label": "Air trapped near the ground: mixing layer only 200 m deep",
+        "value": "200 m",
+        "effect": "supports"
+      },
+      {
+        "key": "most_areas",
+        "cause": "trapped_air",
+        "label": "11 of 14 areas spiked together",
+        "value": "11 of 14",
+        "effect": "supports"
+      },
+      {
+        "key": "few_fires",
+        "cause": "trapped_air",
+        "label": "Only 5 farm fires upwind",
+        "value": "5",
+        "effect": "supports"
+      },
+      {
+        "key": "co_no2_rise",
+        "cause": "trapped_air",
+        "label": "CO and NO2 both up: 1.3× and 1.3×",
+        "value": "1.3×, 1.3×",
+        "effect": "supports"
+      },
+      {
+        "key": "pm_ratio_fine",
+        "cause": "local_burning",
+        "label": "Fine particles dominate: PM2.5 is 0.72 of PM10",
+        "value": "0.72",
+        "effect": "supports"
+      },
+      {
+        "key": "night",
+        "cause": "local_burning",
+        "label": "Peak at night",
+        "value": "night",
+        "effect": "supports"
+      },
+      {
+        "key": "few_upwind_fires",
+        "cause": "local_burning",
+        "label": "Only 5 farm fires upwind",
+        "value": "5",
+        "effect": "supports"
+      },
+      {
+        "key": "no2_rise",
+        "cause": "traffic",
+        "label": "NO2 up 1.3× its usual level",
+        "value": "1.3×",
+        "effect": "supports"
+      },
+      {
+        "key": "co_rise_traffic",
+        "cause": "traffic",
+        "label": "CO up 1.3× its usual level",
+        "value": "1.3×",
+        "effect": "supports"
+      },
+      {
+        "key": "most_areas",
+        "cause": "regional_smoke",
+        "label": "11 of 14 areas spiked together",
+        "value": "11 of 14",
+        "effect": "supports"
+      },
+      {
+        "key": "pm_ratio_smoke",
+        "cause": "regional_smoke",
+        "label": "Fine particles dominate: PM2.5 is 0.72 of PM10",
+        "value": "0.72",
+        "effect": "supports"
+      }
+    ],
+    "status": "dispatched",
+    "recurrenceCount": 0,
+    "escalationLevel": 0,
+    "workOrders": [
+      {
+        "id": "live-narela-2026100718-w1",
+        "incidentId": "live-narela-2026100718",
+        "stationId": "narela",
+        "area": "Narela",
+        "actionType": "public_advisory",
+        "agency": "Residents",
+        "reason": "Still air trapping pollution is the likely cause. No local action will help. Hold all burning until the air clears.",
+        "instructionsEn": "PM2.5 reached 280 µg/m³ at Narela at 1:30am, about 2.5 times the usual level. No local action will help. Keep windows closed, move activity indoors, and wear a well-fitted mask outside. Do not light any fires.",
+        "instructionsHi": "Narela में रात 1:30 बजे PM2.5 280 µg/m³ तक पहुँचा, जो सामान्य स्तर का लगभग 2.5 गुना है। कोई स्थानीय उपाय मदद नहीं करेगा। खिड़कियाँ बंद रखें, काम घर के अंदर करें, और बाहर ठीक से लगने वाला मास्क पहनें। कोई आग न जलाएँ।",
+        "escalationLevel": 0,
+        "demo": true,
+        "status": "done",
+        "issuedAt": "2026-10-07T19:00:00.000Z",
+        "doneAt": "2026-10-07T19:00:00.000Z"
+      }
+    ],
+    "checks": [],
+    "createdAt": "2026-10-07T19:00:00.000Z",
+    "updatedAt": "2026-10-09T08:00:00.000Z"
+  },
+  {
+    "id": "live-mundka-2026100705",
+    "dataset": "live",
+    "stationId": "mundka",
+    "area": "Mundka",
+    "start": "2026-10-07T05:00:00.000Z",
+    "end": "2026-10-07T10:00:00.000Z",
+    "peakPm25": 160,
+    "peakPm10": 440,
+    "peakAt": "2026-10-07T07:00:00.000Z",
+    "baselinePm25": 74,
+    "features": {
+      "pmRatio": 0.36,
+      "coRise": 1.2,
+      "no2Rise": 1.15,
+      "windSpeed": 3.2,
+      "windDir": 270,
+      "blh": 1100,
+      "upwindFires": 20,
+      "hourBand": "day",
+      "spatialShare": 0.57
+    },
+    "scores": {
+      "local_burning": 0,
+      "dust": 55,
+      "traffic": 15,
+      "regional_smoke": 15,
+      "trapped_air": 10
+    },
+    "topCause": "dust",
+    "confidence": "medium",
+    "evidence": [
+      {
+        "key": "pm_ratio_coarse",
+        "cause": "dust",
+        "label": "Coarse particles dominate: PM2.5 is only 0.36 of PM10",
+        "value": "0.36",
+        "effect": "supports"
+      },
+      {
+        "key": "daytime",
+        "cause": "dust",
+        "label": "Peak in the daytime",
+        "value": "day",
+        "effect": "supports"
+      },
+      {
+        "key": "co_rise_traffic",
+        "cause": "traffic",
+        "label": "CO up 1.2× its usual level",
+        "value": "1.2×",
+        "effect": "supports"
+      },
+      {
+        "key": "wind_from_northwest",
+        "cause": "regional_smoke",
+        "label": "Wind from the north-west (270°), the direction of the farm fires",
+        "value": "270°",
+        "effect": "supports"
+      },
+      {
+        "key": "few_fires",
+        "cause": "trapped_air",
+        "label": "Only 20 farm fires upwind",
+        "value": "20",
+        "effect": "supports"
+      }
+    ],
+    "status": "recurred",
+    "recurrenceCount": 1,
+    "escalationLevel": 1,
+    "workOrders": [
+      {
+        "id": "live-mundka-2026100705-w1",
+        "incidentId": "live-mundka-2026100705",
+        "stationId": "mundka",
+        "area": "Mundka",
+        "actionType": "water_sprinkling",
+        "agency": "PWD",
+        "reason": "Dust is the likely cause. Sprinkling here had no effect 1 of 1 times.",
+        "instructionsEn": "PM10 reached 440 µg/m³ at Mundka at 12:30pm, about 2.3 times the usual level. Sprinkle the main roads within about 1 km of the Mundka monitoring station. Responsible: PWD. Tap Mark started and Mark done on the field page, and add one photo.",
+        "instructionsHi": "Mundka में दोपहर 12:30 बजे PM10 440 µg/m³ तक पहुँचा, जो सामान्य स्तर का लगभग 2.3 गुना है। Mundka निगरानी स्टेशन के लगभग 1 किमी के दायरे की मुख्य सड़कों पर छिड़काव करें। ज़िम्मेदारी: PWD। फ़ील्ड पेज पर \"काम शुरू\" और \"काम पूरा\" दबाएँ, और एक फ़ोटो जोड़ें।",
+        "escalationLevel": 0,
+        "demo": true,
+        "status": "done",
+        "issuedAt": "2026-10-07T06:00:00.000Z",
+        "startedAt": "2026-10-07T06:20:00.000Z",
+        "doneAt": "2026-10-07T07:20:00.000Z",
+        "effect": {
+          "pollutant": "pm10",
+          "beforeMean": 420,
+          "afterMean": 370,
+          "changePct": -11.9,
+          "expectedChangePct": -9.8,
+          "cityChangePct": -3.5,
+          "netChangePct": -2.1,
+          "verdict": "no_effect",
+          "measuredAt": "2026-10-07T11:00:00.000Z"
+        }
+      },
+      {
+        "id": "live-mundka-2026100705-w2",
+        "incidentId": "live-mundka-2026100705",
+        "stationId": "mundka",
+        "area": "Mundka",
+        "actionType": "mechanical_sweeping",
+        "agency": "MCD",
+        "reason": "Dust is the likely cause. Sprinkling here had no effect 2 of 2 times, so try mechanical sweeping.",
+        "instructionsEn": "PM10 reached 440 µg/m³ at Mundka at 12:30pm, about 2.3 times the usual level. Run mechanical road sweepers on the main roads within about 1 km of the Mundka monitoring station and clear dust heaps from the kerbs. Responsible: MCD. Tap Mark started and Mark done on the field page, and add one photo.",
+        "instructionsHi": "Mundka में दोपहर 12:30 बजे PM10 440 µg/m³ तक पहुँचा, जो सामान्य स्तर का लगभग 2.3 गुना है। Mundka निगरानी स्टेशन के लगभग 1 किमी के दायरे की मुख्य सड़कों पर मशीन से सफ़ाई करें और किनारों से धूल के ढेर हटाएँ। ज़िम्मेदारी: MCD। फ़ील्ड पेज पर \"काम शुरू\" और \"काम पूरा\" दबाएँ, और एक फ़ोटो जोड़ें।",
+        "escalationLevel": 1,
+        "demo": true,
+        "status": "issued",
+        "issuedAt": "2026-10-09T07:40:00.000Z"
+      }
+    ],
+    "checks": [
+      {
+        "date": "2026-10-08",
+        "result": "recurred",
+        "peakPm25": 150
+      }
+    ],
+    "createdAt": "2026-10-07T06:00:00.000Z",
+    "updatedAt": "2026-10-09T08:00:00.000Z"
+  },
+  {
+    "id": "live-jahangirpuri-2026100616",
+    "dataset": "live",
+    "stationId": "jahangirpuri",
+    "area": "Jahangirpuri",
+    "start": "2026-10-06T16:00:00.000Z",
+    "end": "2026-10-06T19:00:00.000Z",
+    "peakPm25": 310,
+    "peakPm10": 425,
+    "peakAt": "2026-10-06T17:00:00.000Z",
+    "baselinePm25": 118,
+    "features": {
+      "pmRatio": 0.73,
+      "coRise": 1.4,
+      "no2Rise": 1.25,
+      "windSpeed": 1.2,
+      "windDir": 200,
+      "blh": null,
+      "upwindFires": 12,
+      "hourBand": "night",
+      "spatialShare": 0.36
+    },
+    "scores": {
+      "local_burning": 65,
+      "dust": 15,
+      "traffic": 30,
+      "regional_smoke": 10,
+      "trapped_air": 50
+    },
+    "topCause": "local_burning",
+    "confidence": "medium",
+    "evidence": [
+      {
+        "key": "pm_ratio_fine",
+        "cause": "local_burning",
+        "label": "Fine particles dominate: PM2.5 is 0.73 of PM10",
+        "value": "0.73",
+        "effect": "supports"
+      },
+      {
+        "key": "co_rise",
+        "cause": "local_burning",
+        "label": "CO up 1.4× its usual level",
+        "value": "1.4×",
+        "effect": "supports"
+      },
+      {
+        "key": "night",
+        "cause": "local_burning",
+        "label": "Peak at night",
+        "value": "night",
+        "effect": "supports"
+      },
+      {
+        "key": "wind_calm",
+        "cause": "trapped_air",
+        "label": "Wind nearly calm at 1.2 m/s",
+        "value": "1.2 m/s",
+        "effect": "supports"
+      },
+      {
+        "key": "few_fires",
+        "cause": "trapped_air",
+        "label": "Only 12 farm fires upwind",
+        "value": "12",
+        "effect": "supports"
+      },
+      {
+        "key": "co_no2_rise",
+        "cause": "trapped_air",
+        "label": "CO and NO2 both up: 1.4× and 1.3×",
+        "value": "1.4×, 1.3×",
+        "effect": "supports"
+      },
+      {
+        "key": "some_areas",
+        "cause": "dust",
+        "label": "Only 5 of 14 areas spiked",
+        "value": "5 of 14",
+        "effect": "supports"
+      },
+      {
+        "key": "co_rise_traffic",
+        "cause": "traffic",
+        "label": "CO up 1.4× its usual level",
+        "value": "1.4×",
+        "effect": "supports"
+      },
+      {
+        "key": "some_areas",
+        "cause": "traffic",
+        "label": "Only 5 of 14 areas spiked",
+        "value": "5 of 14",
+        "effect": "supports"
+      },
+      {
+        "key": "pm_ratio_smoke",
+        "cause": "regional_smoke",
+        "label": "Fine particles dominate: PM2.5 is 0.73 of PM10",
+        "value": "0.73",
+        "effect": "supports"
+      }
+    ],
+    "status": "cleared",
+    "recurrenceCount": 0,
+    "escalationLevel": 0,
+    "workOrders": [
+      {
+        "id": "live-jahangirpuri-2026100616-w1",
+        "incidentId": "live-jahangirpuri-2026100616",
+        "stationId": "jahangirpuri",
+        "area": "Jahangirpuri",
+        "actionType": "anti_burning_patrol",
+        "agency": "MCD",
+        "reason": "Local burning is the likely cause. The anti-burning patrol here worked 1 of 2 times.",
+        "instructionsEn": "PM2.5 reached 310 µg/m³ at Jahangirpuri at 10:30pm, about 2.6 times the usual level. Patrol within about 1 km of the Jahangirpuri monitoring station. Put out open fires: waste, leaves, tyres and guards' bonfires. Responsible: MCD. Tap Mark started and Mark done on the field page, and add one photo.",
+        "instructionsHi": "Jahangirpuri में रात 10:30 बजे PM2.5 310 µg/m³ तक पहुँचा, जो सामान्य स्तर का लगभग 2.6 गुना है। Jahangirpuri निगरानी स्टेशन के लगभग 1 किमी के दायरे में गश्त करें। खुले में जल रहा कचरा, पत्ते, टायर और अलाव बुझाएँ। ज़िम्मेदारी: MCD। फ़ील्ड पेज पर \"काम शुरू\" और \"काम पूरा\" दबाएँ, और एक फ़ोटो जोड़ें।",
+        "escalationLevel": 0,
+        "demo": true,
+        "status": "cancelled",
+        "issuedAt": "2026-10-06T17:10:00.000Z"
+      },
+      {
+        "id": "live-jahangirpuri-2026100616-w2",
+        "incidentId": "live-jahangirpuri-2026100616",
+        "stationId": "jahangirpuri",
+        "area": "Jahangirpuri",
+        "actionType": "anti_burning_patrol",
+        "agency": "MCD",
+        "reason": "Local burning is the likely cause. The anti-burning patrol here worked 1 of 2 times.",
+        "instructionsEn": "PM2.5 reached 310 µg/m³ at Jahangirpuri at 10:30pm, about 2.6 times the usual level. Patrol within about 1 km of the Jahangirpuri monitoring station. Put out open fires: waste, leaves, tyres and guards' bonfires. Responsible: MCD. Tap Mark started and Mark done on the field page, and add one photo.",
+        "instructionsHi": "Jahangirpuri में रात 10:30 बजे PM2.5 310 µg/m³ तक पहुँचा, जो सामान्य स्तर का लगभग 2.6 गुना है। Jahangirpuri निगरानी स्टेशन के लगभग 1 किमी के दायरे में गश्त करें। खुले में जल रहा कचरा, पत्ते, टायर और अलाव बुझाएँ। ज़िम्मेदारी: MCD। फ़ील्ड पेज पर \"काम शुरू\" और \"काम पूरा\" दबाएँ, और एक फ़ोटो जोड़ें।",
+        "escalationLevel": 0,
+        "demo": true,
+        "status": "done",
+        "issuedAt": "2026-10-06T17:20:00.000Z",
+        "startedAt": "2026-10-06T17:35:00.000Z",
+        "doneAt": "2026-10-06T18:30:00.000Z",
+        "effect": {
+          "pollutant": "pm25",
+          "beforeMean": 300,
+          "afterMean": 190,
+          "changePct": -36.7,
+          "expectedChangePct": -14.2,
+          "cityChangePct": -3,
+          "netChangePct": -22.5,
+          "verdict": "worked",
+          "measuredAt": "2026-10-06T22:00:00.000Z"
+        }
+      }
+    ],
+    "checks": [
+      {
+        "date": "2026-10-07",
+        "result": "clean",
+        "peakPm25": 140
+      },
+      {
+        "date": "2026-10-08",
+        "result": "clean",
+        "peakPm25": 128
+      }
+    ],
+    "createdAt": "2026-10-06T17:00:00.000Z",
+    "updatedAt": "2026-10-09T08:00:00.000Z"
+  }
+]
