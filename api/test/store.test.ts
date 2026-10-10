@@ -99,3 +99,30 @@ describe('MemoryStore persistence', () => {
     expect((await s.getLatestReadings('live')).length).toBeGreaterThanOrEqual(12);
   });
 });
+
+// A5.1: the same contract against real tables. Runs only with STORE=dynamo and the stack's table names set.
+if (process.env.STORE === 'dynamo') {
+  const { DynamoStore } = await import('../src/store/dynamo');
+  const run = `t${Date.now()}`;
+  // Use a unique dataset-free prefix by station id so test rows never collide with real ones
+  storeContract('DynamoStore', () => {
+    const s = new DynamoStore();
+    const wrap = (id: string) => `${run}-${id}`;
+    return {
+      ...s,
+      putReadings: (ds, rows) => s.putReadings(ds, rows.map((r) => ({ ...r, stationId: wrap(r.stationId) }))),
+      getReadings: async (ds, id, f, t) => (await s.getReadings(ds, wrap(id), f, t)).map((r) => ({ ...r, stationId: r.stationId.slice(run.length + 1) })),
+      getLatestReadings: async () => [],
+      putWeather: (ds, rows) => s.putWeather(ds, rows),
+      getWeather: (ds, f, t) => s.getWeather(ds, f, t),
+      putFires: (ds, d, rows) => s.putFires(ds, d, rows),
+      getFires: (ds, f, t) => s.getFires(ds, f, t),
+      putIncident: (i) => s.putIncident({ ...i, id: wrap(i.id) }),
+      getIncident: async (id) => {
+        const i = await s.getIncident(wrap(id));
+        return i ? { ...i, id: i.id.slice(run.length + 1) } : null;
+      },
+      listIncidents: async (f) => (await s.listIncidents(f)).filter((i) => i.id.startsWith(run)).map((i) => ({ ...i, id: i.id.slice(run.length + 1) })),
+    } as Store;
+  });
+}
