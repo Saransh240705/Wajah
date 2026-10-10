@@ -34,14 +34,11 @@ Parameters:
     Default: ''
   WebOrigin:
     Type: String
-    Default: ''
-    Description: The Amplify URL, e.g. https://main.xxxx.amplifyapp.com (no trailing slash). Empty allows localhost only.
+    Default: 'http://127.0.0.1:3000'
+    Description: The Amplify URL, e.g. https://main.xxxx.amplifyapp.com (no trailing slash). The default is a harmless local placeholder.
   WebUrl:
     Type: String
     Default: 'http://localhost:3000'
-
-Conditions:
-  HasWebOrigin: !Not [!Equals [!Ref WebOrigin, '']]
 
 Globals:
   Function:
@@ -104,7 +101,7 @@ Resources:
       CorsConfiguration:
         CorsRules:
           - AllowedMethods: [PUT, GET]
-            AllowedOrigins: !If [HasWebOrigin, [!Ref WebOrigin, 'http://localhost:3000'], ['http://localhost:3000']]
+            AllowedOrigins: [!Ref WebOrigin, 'http://localhost:3000']
             AllowedHeaders: ['*']
             MaxAge: 3000
 
@@ -113,11 +110,12 @@ Resources:
     Properties:
       DisplayName: Wajah
 
+  # CORS origins are plain lists: SAM mistranslates an !If here and silently drops the CORS block.
   HttpApi:
     Type: AWS::Serverless::HttpApi
     Properties:
       CorsConfiguration:
-        AllowOrigins: !If [HasWebOrigin, [!Ref WebOrigin, 'http://localhost:3000'], ['http://localhost:3000']]
+        AllowOrigins: [!Ref WebOrigin, 'http://localhost:3000']
         AllowMethods: [GET, POST, OPTIONS]
         AllowHeaders: [content-type]
 
@@ -157,7 +155,7 @@ Resources:
       FunctionUrlConfig:
         AuthType: NONE
         Cors:
-          AllowOrigins: !If [HasWebOrigin, [!Ref WebOrigin, 'http://localhost:3000'], ['http://localhost:3000']]
+          AllowOrigins: [!Ref WebOrigin, 'http://localhost:3000']
           AllowMethods: [POST]
           AllowHeaders: [content-type]
 

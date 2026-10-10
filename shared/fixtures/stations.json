@@ -1,12 +1,12 @@
 [
   {
     "id": "anand-vihar",
-    "name": "Anand Vihar, Delhi - DPCC",
+    "name": "Anand Vihar, New Delhi - DPCC",
     "area": "Anand Vihar",
     "lat": 28.6468,
     "lon": 77.316,
     "isHotspot": true,
-    "cpcbName": "Anand Vihar, Delhi - DPCC",
+    "openaqLocationId": 235,
     "latest": {
       "stationId": "anand-vihar",
       "ts": "2026-10-09T08:00:00.000Z",
@@ -25,10 +25,10 @@
     "id": "mundka",
     "name": "Mundka, Delhi - DPCC",
     "area": "Mundka",
-    "lat": 28.6842,
-    "lon": 77.0767,
+    "lat": 28.6847,
+    "lon": 77.0766,
     "isHotspot": true,
-    "cpcbName": "Mundka, Delhi - DPCC",
+    "openaqLocationId": 10486,
     "latest": {
       "stationId": "mundka",
       "ts": "2026-10-09T08:00:00.000Z",
@@ -48,9 +48,9 @@
     "name": "Wazirpur, Delhi - DPCC",
     "area": "Wazirpur",
     "lat": 28.6998,
-    "lon": 77.1654,
+    "lon": 77.1655,
     "isHotspot": true,
-    "cpcbName": "Wazirpur, Delhi - DPCC",
+    "openaqLocationId": 8915,
     "latest": {
       "stationId": "wazirpur",
       "ts": "2026-10-09T08:00:00.000Z",
@@ -70,9 +70,9 @@
     "name": "Jahangirpuri, Delhi - DPCC",
     "area": "Jahangirpuri",
     "lat": 28.7328,
-    "lon": 77.1707,
+    "lon": 77.1706,
     "isHotspot": true,
-    "cpcbName": "Jahangirpuri, Delhi - DPCC",
+    "openaqLocationId": 8235,
     "latest": {
       "stationId": "jahangirpuri",
       "ts": "2026-10-09T08:00:00.000Z",
@@ -94,7 +94,7 @@
     "lat": 28.5633,
     "lon": 77.1869,
     "isHotspot": true,
-    "cpcbName": "R K Puram, Delhi - DPCC",
+    "openaqLocationId": 17,
     "latest": {
       "stationId": "rk-puram",
       "ts": "2026-10-09T08:00:00.000Z",
@@ -116,7 +116,7 @@
     "lat": 28.7325,
     "lon": 77.1199,
     "isHotspot": true,
-    "cpcbName": "Rohini, Delhi - DPCC",
+    "openaqLocationId": 10831,
     "latest": {
       "stationId": "rohini",
       "ts": "2026-10-09T08:00:00.000Z",
@@ -138,7 +138,7 @@
     "lat": 28.674,
     "lon": 77.131,
     "isHotspot": true,
-    "cpcbName": "Punjabi Bagh, Delhi - DPCC",
+    "openaqLocationId": 50,
     "latest": {
       "stationId": "punjabi-bagh",
       "ts": "2026-10-09T08:00:00.000Z",
@@ -160,7 +160,7 @@
     "lat": 28.5308,
     "lon": 77.2713,
     "isHotspot": true,
-    "cpcbName": "Okhla Phase-2, Delhi - DPCC",
+    "openaqLocationId": 8239,
     "latest": {
       "stationId": "okhla",
       "ts": "2026-10-09T08:00:00.000Z",
@@ -182,7 +182,7 @@
     "lat": 28.7762,
     "lon": 77.0511,
     "isHotspot": true,
-    "cpcbName": "Bawana, Delhi - DPCC",
+    "openaqLocationId": 8472,
     "latest": {
       "stationId": "bawana",
       "ts": "2026-10-09T08:00:00.000Z",
@@ -202,9 +202,9 @@
     "name": "Narela, Delhi - DPCC",
     "area": "Narela",
     "lat": 28.8228,
-    "lon": 77.1019,
+    "lon": 77.102,
     "isHotspot": true,
-    "cpcbName": "Narela, Delhi - DPCC",
+    "openaqLocationId": 10485,
     "latest": {
       "stationId": "narela",
       "ts": "2026-10-09T08:00:00.000Z",
@@ -224,9 +224,9 @@
     "name": "Vivek Vihar, Delhi - DPCC",
     "area": "Vivek Vihar",
     "lat": 28.6723,
-    "lon": 77.3152,
+    "lon": 77.3153,
     "isHotspot": true,
-    "cpcbName": "Vivek Vihar, Delhi - DPCC",
+    "openaqLocationId": 6938,
     "latest": {
       "stationId": "vivek-vihar",
       "ts": "2026-10-09T08:00:00.000Z",
@@ -248,7 +248,7 @@
     "lat": 28.571,
     "lon": 77.0719,
     "isHotspot": true,
-    "cpcbName": "Dwarka-Sector 8, Delhi - DPCC",
+    "openaqLocationId": 6931,
     "latest": {
       "stationId": "dwarka",
       "ts": "2026-10-09T08:00:00.000Z",
@@ -268,9 +268,9 @@
     "name": "Ashok Vihar, Delhi - DPCC",
     "area": "Ashok Vihar",
     "lat": 28.6954,
-    "lon": 77.1819,
+    "lon": 77.1817,
     "isHotspot": true,
-    "cpcbName": "Ashok Vihar, Delhi - DPCC",
+    "openaqLocationId": 8917,
     "latest": {
       "stationId": "ashok-vihar",
       "ts": "2026-10-09T08:00:00.000Z",
@@ -287,12 +287,12 @@
   },
   {
     "id": "lodhi-road",
-    "name": "Lodhi Road, Delhi - IMD",
+    "name": "Lodhi Road, New Delhi - IMD",
     "area": "Lodhi Road",
     "lat": 28.5918,
     "lon": 77.2273,
     "isHotspot": false,
-    "cpcbName": "Lodhi Road, Delhi - IMD",
+    "openaqLocationId": 5634,
     "latest": {
       "stationId": "lodhi-road",
       "ts": "2026-10-09T08:00:00.000Z",
@@ -309,12 +309,12 @@
   },
   {
     "id": "ito",
-    "name": "ITO, Delhi - CPCB",
+    "name": "ITO, New Delhi - CPCB",
     "area": "ITO",
     "lat": 28.6286,
-    "lon": 77.241,
+    "lon": 77.2411,
     "isHotspot": false,
-    "cpcbName": "ITO, Delhi - CPCB",
+    "openaqLocationId": 5613,
     "latest": {
       "stationId": "ito",
       "ts": "2026-10-09T08:00:00.000Z",
@@ -331,12 +331,12 @@
   },
   {
     "id": "mandir-marg",
-    "name": "Mandir Marg, Delhi - DPCC",
+    "name": "Mandir Marg, New Delhi - DPCC",
     "area": "Mandir Marg",
     "lat": 28.6364,
     "lon": 77.2011,
     "isHotspot": false,
-    "cpcbName": "Mandir Marg, Delhi - DPCC",
+    "openaqLocationId": 6358,
     "latest": {
       "stationId": "mandir-marg",
       "ts": "2026-10-09T08:00:00.000Z",
@@ -358,7 +358,7 @@
     "lat": 28.5504,
     "lon": 77.2159,
     "isHotspot": false,
-    "cpcbName": "Sirifort, Delhi - CPCB",
+    "openaqLocationId": 5586,
     "latest": {
       "stationId": "sirifort",
       "ts": "2026-10-09T08:00:00.000Z",

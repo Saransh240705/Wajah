@@ -6,7 +6,7 @@
     "lat": 28.7325,
     "lon": 77.1199,
     "isHotspot": true,
-    "cpcbName": "Rohini, Delhi - DPCC"
+    "openaqLocationId": 10831
   },
   "readings": [
     {
