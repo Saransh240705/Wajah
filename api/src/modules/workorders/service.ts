@@ -3,7 +3,7 @@ import { ACTIONS, config, type ActionType, type Agency, type Dataset, type Incid
 import { datasetNow } from '../../lib/clock';
 import { HOTSPOT_IDS, STATIONS } from '../../lib/stations';
 import type { Store } from '../../store';
-import { afterWindowComplete, effectWindows, isUnacted, measureEffect, pollutantFor } from '../effect/measure';
+import { afterWindowComplete, effectWindows, isUnacted, measureEffect, pollutantFor, type EffectInput } from '../effect/measure';
 import { getRecommender } from './recommend';
 import { applyEffect, finish, findWorkOrder, incidentIdOf, issue, start, WorkOrderError } from './workorders';
 
@@ -94,16 +94,22 @@ export async function measureWorkOrder(store: Store, workOrderId: string, opts: 
   if (workOrder.effect && !opts.force) return { incident, workOrder, measured: false };
   if (!afterWindowComplete(workOrder, now)) return { incident, workOrder, measured: false };
 
+  const effect = measureEffect(await buildEffectInput(store, incident, workOrder, now));
+  const r = applyEffect(incident, workOrderId, effect, now);
+  await store.putIncident(r.incident);
+  return { ...r, measured: true };
+}
+
+
+/** Everything measureEffect needs for one work order, from the store. Shared by the API, ingest, workflow and placebo test. */
+export async function buildEffectInput(store: Store, incident: Incident, workOrder: WorkOrder, now: string, all?: Incident[]): Promise<EffectInput> {
   const ds = incident.dataset;
   const win = effectWindows(workOrder);
   const from = new Date(win.beforeHours[0]! - H).toISOString();
   const to = new Date(win.afterEnd).toISOString();
 
-  const [readings, weather, all] = await Promise.all([
-    store.getReadings(ds, incident.stationId, from, to),
-    store.getWeather(ds, from, to),
-    store.listIncidents({ dataset: ds }),
-  ]);
+  const [readings, weather] = await Promise.all([store.getReadings(ds, incident.stationId, from, to), store.getWeather(ds, from, to)]);
+  all ??= await store.listIncidents({ dataset: ds });
   const otherReadings: Record<string, Awaited<ReturnType<Store['getReadings']>>> = {};
   for (const s of STATIONS) if (s.id !== incident.stationId) otherReadings[s.id] = await store.getReadings(ds, s.id, from, to);
 
@@ -115,10 +121,7 @@ export async function measureWorkOrder(store: Store, workOrderId: string, opts: 
     .map(() => i.stationId)))];
 
   const pool = await poolFor(store, incident, workOrder, all);
-  const effect = measureEffect({ workOrder, incident, readings, otherReadings, inProgressStationIds, weather, pool, hotspotStationIds: HOTSPOT_IDS, now });
-  const r = applyEffect(incident, workOrderId, effect, now);
-  await store.putIncident(r.incident);
-  return { ...r, measured: true };
+  return { workOrder, incident, readings, otherReadings, inProgressStationIds, weather, pool, hotspotStationIds: HOTSPOT_IDS, now };
 }
 
 /** Unacted incidents in the same dataset, each with readings around its own equivalent window. */
