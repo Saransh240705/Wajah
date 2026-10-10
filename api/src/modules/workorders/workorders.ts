@@ -1,7 +1,7 @@
 // Work order lifecycle, master PRD 4.6 and track A section 5. Pure: each function takes an incident and returns a new one.
 import {
   ACTIONS, PLAYBOOKS, allowedActions, defaultAgency,
-  type ActionType, type Agency, type Incident, type PhotoCheck, type WorkOrder,
+  type ActionType, type Agency, type EffectResult, type Incident, type PhotoCheck, type WorkOrder,
 } from '@wajah/shared';
 import { buildInstructions } from './instructions';
 
@@ -123,6 +123,16 @@ export function finish(incident: Incident, id: string, now: string, photo?: Phot
     if (w.status === 'done') return photo ? { ...w, photo } : w; // idempotent; a late photo is still recorded
     return { ...w, status: 'done', startedAt: w.startedAt ?? now, doneAt: now, ...(photo ? { photo } : {}) };
   });
+}
+
+/**
+ * Store a measured effect on its work order and apply the verdict (master PRD 4.7, A3.7):
+ * no_effect sets the incident to recurred; worked and inconclusive leave its status as is.
+ */
+export function applyEffect(incident: Incident, id: string, effect: EffectResult, now: string) {
+  const r = update(incident, id, now, (w) => ({ ...w, effect }));
+  if (effect.verdict === 'no_effect' && r.incident.status !== 'cleared') r.incident.status = 'recurred';
+  return r;
 }
 
 export function cancel(incident: Incident, id: string, now: string) {
