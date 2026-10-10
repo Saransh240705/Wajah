@@ -1,0 +1,51 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
+  theme: {
+    extend: {
+      colors: {
+        paper: '#F2F1ED',
+        ink: '#141414',
+        'ink-2': '#4A4A46',
+        'ink-3': '#6B6A64',
+        rule: '#C9C7BF',
+        sheet: '#FFFFFF',
+        fill: '#DCDAD3',
+        'map-ground': '#E4E2DC',
+        'band-good': '#1E7B3A',
+        'band-satisfactory': '#9BD15A',
+        'band-moderate': '#F5D31F',
+        'band-poor': '#F28C1B',
+        'band-very-poor': '#D92D20',
+        'band-severe': '#7A1220',
+        'verdict-worked': '#141414',
+        'verdict-no-effect': '#141414',
+        'verdict-inconclusive': '#6B6A64',
+        'verdict-not-measured': '#6B6A64',
+      },
+      fontFamily: {
+        slab: ['"Rozha One"', 'serif'],
+        serif: ['Martel', 'serif'],
+        sans: ['"IBM Plex Sans"', '"IBM Plex Sans Devanagari"', 'sans-serif'],
+        mono: ['"IBM Plex Mono"', 'monospace'],
+        devanagari: ['"IBM Plex Sans Devanagari"', 'sans-serif'],
+      },
+      borderRadius: {
+        none: '0px',
+        DEFAULT: '0px',
+        sm: '0px',
+        md: '0px',
+        lg: '0px',
+        xl: '0px',
+        '2xl': '0px',
+        '3xl': '0px',
+        full: '9999px',
+      },
+    },
+  },
+  plugins: [],
+};

@@ -11,3 +11,7 @@ samconfig.toml
 coverage/
 # local MemoryStore persistence (STORE_FILE); commit only shared/fixtures/snapshot.json
 .data/
+*.tsbuildinfo
+/Wajah.pdf
+
+
