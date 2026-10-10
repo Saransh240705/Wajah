@@ -151,5 +151,185 @@
     "lon": 77.2159,
     "isHotspot": false,
     "openaqLocationId": 5586
+  },
+  {
+    "id": "alipur",
+    "name": "Alipur, Delhi - DPCC",
+    "area": "Alipur",
+    "lat": 28.8153,
+    "lon": 77.153,
+    "isHotspot": false,
+    "openaqLocationId": 6932
+  },
+  {
+    "id": "aya-nagar",
+    "name": "Aya Nagar, New Delhi - IMD",
+    "area": "Aya Nagar",
+    "lat": 28.4743,
+    "lon": 77.1316,
+    "isHotspot": false,
+    "openaqLocationId": 5570
+  },
+  {
+    "id": "burari-crossing",
+    "name": "Burari Crossing, New Delhi - IMD",
+    "area": "Burari Crossing",
+    "lat": 28.7257,
+    "lon": 77.2012,
+    "isHotspot": false,
+    "openaqLocationId": 5541
+  },
+  {
+    "id": "mathura-road",
+    "name": "CRRI Mathura Road, New Delhi - IMD",
+    "area": "Mathura Road",
+    "lat": 28.5512,
+    "lon": 77.2736,
+    "isHotspot": false,
+    "openaqLocationId": 5627
+  },
+  {
+    "id": "chandni-chowk",
+    "name": "Chandni Chowk, Delhi - IITM",
+    "area": "Chandni Chowk",
+    "lat": 28.6568,
+    "lon": 77.2272,
+    "isHotspot": false,
+    "openaqLocationId": 11603
+  },
+  {
+    "id": "dtu",
+    "name": "DTU, New Delhi - CPCB",
+    "area": "DTU",
+    "lat": 28.75,
+    "lon": 77.1113,
+    "isHotspot": false,
+    "openaqLocationId": 5626
+  },
+  {
+    "id": "karni-singh-range",
+    "name": "Dr. Karni Singh Shooting Range, Delhi - DPCC",
+    "area": "Karni Singh Range",
+    "lat": 28.4986,
+    "lon": 77.2648,
+    "isHotspot": false,
+    "openaqLocationId": 6934
+  },
+  {
+    "id": "igi-airport",
+    "name": "IGI Airport (T3), Delhi - IMD",
+    "area": "IGI Airport",
+    "lat": 28.5628,
+    "lon": 77.118,
+    "isHotspot": false,
+    "openaqLocationId": 5650
+  },
+  {
+    "id": "dilshad-garden",
+    "name": "IHBAS, Dilshad Garden,New Delhi - CPCB",
+    "area": "Dilshad Garden",
+    "lat": 28.6812,
+    "lon": 77.3025,
+    "isHotspot": false,
+    "openaqLocationId": 6359
+  },
+  {
+    "id": "jawaharlal-nehru-stadium",
+    "name": "Jawaharlal Nehru Stadium, Delhi - DPCC",
+    "area": "Jawaharlal Nehru Stadium",
+    "lat": 28.5803,
+    "lon": 77.2338,
+    "isHotspot": false,
+    "openaqLocationId": 6957
+  },
+  {
+    "id": "national-stadium",
+    "name": "Major Dhyan Chand National Stadium, Delhi - DPCC",
+    "area": "National Stadium",
+    "lat": 28.6113,
+    "lon": 77.2377,
+    "isHotspot": false,
+    "openaqLocationId": 6929
+  },
+  {
+    "id": "nsit-dwarka",
+    "name": "NSIT Dwarka, Delhi - CPCB",
+    "area": "NSIT Dwarka",
+    "lat": 28.6091,
+    "lon": 77.0325,
+    "isHotspot": false,
+    "openaqLocationId": 5622
+  },
+  {
+    "id": "najafgarh",
+    "name": "Najafgarh, Delhi - DPCC",
+    "area": "Najafgarh",
+    "lat": 28.5702,
+    "lon": 76.9338,
+    "isHotspot": false,
+    "openaqLocationId": 10488
+  },
+  {
+    "id": "nehru-nagar",
+    "name": "Nehru Nagar, Delhi - DPCC",
+    "area": "Nehru Nagar",
+    "lat": 28.5679,
+    "lon": 77.2505,
+    "isHotspot": false,
+    "openaqLocationId": 8365
+  },
+  {
+    "id": "north-campus",
+    "name": "North Campus, DU, Delhi - IMD",
+    "area": "North Campus",
+    "lat": 28.6574,
+    "lon": 77.1585,
+    "isHotspot": false,
+    "openaqLocationId": 5610
+  },
+  {
+    "id": "patparganj",
+    "name": "Patparganj, Delhi - DPCC",
+    "area": "Patparganj",
+    "lat": 28.6237,
+    "lon": 77.2872,
+    "isHotspot": false,
+    "openaqLocationId": 6960
+  },
+  {
+    "id": "pusa",
+    "name": "Pusa, Delhi - IMD",
+    "area": "Pusa",
+    "lat": 28.6396,
+    "lon": 77.1463,
+    "isHotspot": false,
+    "openaqLocationId": 5404
+  },
+  {
+    "id": "shadipur",
+    "name": "Shadipur, Delhi - CPCB",
+    "area": "Shadipur",
+    "lat": 28.6515,
+    "lon": 77.1473,
+    "isHotspot": false,
+    "openaqLocationId": 5630
+  },
+  {
+    "id": "sonia-vihar",
+    "name": "Sonia Vihar, Delhi - DPCC",
+    "area": "Sonia Vihar",
+    "lat": 28.7105,
+    "lon": 77.2495,
+    "isHotspot": false,
+    "openaqLocationId": 8475
+  },
+  {
+    "id": "sri-aurobindo-marg",
+    "name": "Sri Aurobindo Marg, Delhi - DPCC",
+    "area": "Sri Aurobindo Marg",
+    "lat": 28.5313,
+    "lon": 77.1902,
+    "isHotspot": false,
+    "openaqLocationId": 10484
   }
 ]
