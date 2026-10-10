@@ -114,6 +114,20 @@ export const config = {
     decimals: 1,
   },
 
+  // Replay has no real clock during an incident: work order times are simulated relative to the incident,
+  // so the readings that follow exist. Minutes. Issue after 2 spike hours, when detection first sees the incident.
+  replayClock: {
+    issueAfterStartMin: 120,
+    startAfterIssueMin: 20,
+    doneAfterStartMin: 45,
+  },
+
+  // Section 6.3 placebo test: a fake work order starting 1 hour after the spike began and lasting 1 hour
+  placebo: {
+    startAfterSpikeMin: 60,
+    durationMin: 60,
+  },
+
   // 4.8 Recurrence check
   recurrence: {
     windowPadHours: 1,

@@ -1,6 +1,7 @@
 {
   "name": "wajah",
   "private": true,
+  "type": "module",
   "workspaces": [
     "shared",
     "api",

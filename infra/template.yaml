@@ -1,0 +1,209 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Wajah backend (track A). Step one - everything except the Step Functions workflow.
+
+# Deploy: npx tsx scripts/build-lambdas.ts && cd infra && sam deploy   (no `sam build`: functions are pre-bundled)
+
+Parameters:
+  OpenaqApiKey:
+    Type: String
+    NoEcho: true
+    Default: ''
+  DataGovApiKey:
+    Type: String
+    NoEcho: true
+    Default: ''
+  FirmsMapKey:
+    Type: String
+    NoEcho: true
+    Default: ''
+  GoogleApiKey:
+    Type: String
+    NoEcho: true
+    Default: ''
+  ReadingsSource:
+    Type: String
+    Default: openaq
+    AllowedValues: [openaq, cpcb]
+  ModelProvider:
+    Type: String
+    Default: google
+    AllowedValues: [google, bedrock, openai]
+  ModelId:
+    Type: String
+    Default: ''
+  WebOrigin:
+    Type: String
+    Default: ''
+    Description: The Amplify URL, e.g. https://main.xxxx.amplifyapp.com (no trailing slash). Empty allows localhost only.
+  WebUrl:
+    Type: String
+    Default: 'http://localhost:3000'
+
+Conditions:
+  HasWebOrigin: !Not [!Equals [!Ref WebOrigin, '']]
+
+Globals:
+  Function:
+    Runtime: nodejs22.x
+    Architectures: [arm64]
+    Handler: index.handler
+    MemorySize: 512
+    Timeout: 30
+    Environment:
+      Variables:
+        STORE: dynamo
+        READINGS_TABLE: !Ref ReadingsTable
+        INCIDENTS_TABLE: !Ref IncidentsTable
+        EVIDENCE_BUCKET: !Ref EvidenceBucket
+        ALERTS_TOPIC_ARN: !Ref AlertsTopic
+        READINGS_SOURCE: !Ref ReadingsSource
+        OPENAQ_API_KEY: !Ref OpenaqApiKey
+        DATA_GOV_API_KEY: !Ref DataGovApiKey
+        FIRMS_MAP_KEY: !Ref FirmsMapKey
+        GOOGLE_API_KEY: !Ref GoogleApiKey
+        MODEL_PROVIDER: !Ref ModelProvider
+        MODEL_ID: !Ref ModelId
+        WEB_ORIGIN: !Ref WebOrigin
+        WEB_URL: !Ref WebUrl
+        NODE_OPTIONS: --enable-source-maps
+    # STATE_MACHINE_ARN is deliberately not here: set it on ApiFunction only (circular dependency otherwise).
+
+Resources:
+  ReadingsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - { AttributeName: pk, AttributeType: S }
+        - { AttributeName: ts, AttributeType: S }
+      KeySchema:
+        - { AttributeName: pk, KeyType: HASH }
+        - { AttributeName: ts, KeyType: RANGE }
+      TimeToLiveSpecification:
+        AttributeName: ttl
+        Enabled: true
+
+  IncidentsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - { AttributeName: id, AttributeType: S }
+      KeySchema:
+        - { AttributeName: id, KeyType: HASH }
+
+  EvidenceBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      CorsConfiguration:
+        CorsRules:
+          - AllowedMethods: [PUT, GET]
+            AllowedOrigins: !If [HasWebOrigin, [!Ref WebOrigin, 'http://localhost:3000'], ['http://localhost:3000']]
+            AllowedHeaders: ['*']
+            MaxAge: 3000
+
+  AlertsTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: Wajah
+
+  HttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      CorsConfiguration:
+        AllowOrigins: !If [HasWebOrigin, [!Ref WebOrigin, 'http://localhost:3000'], ['http://localhost:3000']]
+        AllowMethods: [GET, POST, OPTIONS]
+        AllowHeaders: [content-type]
+
+  ApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../api/dist/api
+      Timeout: 30
+      MemorySize: 512
+      Policies:
+        - DynamoDBCrudPolicy: { TableName: !Ref ReadingsTable }
+        - DynamoDBCrudPolicy: { TableName: !Ref IncidentsTable }
+        - S3CrudPolicy: { BucketName: !Ref EvidenceBucket }
+        - SNSPublishMessagePolicy: { TopicName: !GetAtt AlertsTopic.TopicName }
+        - Statement:
+            - Effect: Allow
+              Action: [sns:Subscribe]
+              Resource: !Ref AlertsTopic
+      Events:
+        Proxy:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref HttpApi
+            Path: /{proxy+}
+            Method: ANY
+
+  AgentFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../api/dist/agent
+      Timeout: 60
+      MemorySize: 1024
+      Policies:
+        - DynamoDBReadPolicy: { TableName: !Ref ReadingsTable }
+        - DynamoDBReadPolicy: { TableName: !Ref IncidentsTable }
+        - S3ReadPolicy: { BucketName: !Ref EvidenceBucket }
+      FunctionUrlConfig:
+        AuthType: NONE
+        Cors:
+          AllowOrigins: !If [HasWebOrigin, [!Ref WebOrigin, 'http://localhost:3000'], ['http://localhost:3000']]
+          AllowMethods: [POST]
+          AllowHeaders: [content-type]
+
+  IngestFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../api/dist/ingest
+      Timeout: 180
+      MemorySize: 512
+      Policies:
+        - DynamoDBCrudPolicy: { TableName: !Ref ReadingsTable }
+        - DynamoDBCrudPolicy: { TableName: !Ref IncidentsTable }
+        - S3CrudPolicy: { BucketName: !Ref EvidenceBucket }
+      Events:
+        Hourly:
+          Type: Schedule
+          Properties:
+            Schedule: rate(1 hour)
+            Enabled: true
+
+  VerifyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../api/dist/verify
+      Timeout: 120
+      Policies:
+        - DynamoDBCrudPolicy: { TableName: !Ref ReadingsTable }
+        - DynamoDBCrudPolicy: { TableName: !Ref IncidentsTable }
+        - SNSPublishMessagePolicy: { TopicName: !GetAtt AlertsTopic.TopicName }
+      Events:
+        Daily:
+          Type: Schedule
+          Properties:
+            Schedule: cron(0 1 * * ? *)   # 06:30 India time
+            Enabled: true
+
+Outputs:
+  ApiUrl:
+    Value: !Sub https://${HttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}
+  AgentUrl:
+    Value: !GetAtt AgentFunctionUrl.FunctionUrl
+  ReadingsTableName:
+    Value: !Ref ReadingsTable
+  IncidentsTableName:
+    Value: !Ref IncidentsTable
+  EvidenceBucketName:
+    Value: !Ref EvidenceBucket
+  AlertsTopicArn:
+    Value: !Ref AlertsTopic
