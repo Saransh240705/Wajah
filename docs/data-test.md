@@ -29,6 +29,30 @@ Decision rule: "OpenAQ stale but history present: use the CPCB feed for live dat
 
 17 stations in `shared/src/stations.json`: the 13 hotspots plus Lodhi Road, ITO, Mandir Marg and Sirifort for comparison. Every one matches a CPCB location on OpenAQ with all four pollutants; coordinates and `openaqLocationId` come from the locations response. Where a name had two OpenAQ locations, the one with the newest reading was kept.
 
+## Replay dataset (A6.2)
+
+`scripts/seed-replay.ts --from 2025-10-29 --to 2025-11-12`: 295-311 hourly rows per station (of 336), 505 hours of weather, 10,638 fire detections (VIIRS_SNPP_SP).
+
+201 incidents: regional smoke 174, trapped air 17, local burning 5, traffic 5, dust 0. High 160, medium 41.
+
+These are only **14 distinct events**: 9 city-wide farm-smoke events (16-40 stations each, median spatial share 1.0, median 534 upwind fires), 1 city-wide trapped-air event, and a few local spikes. By event, regional smoke is 9 of 14 (64%), under the 70% tuning line; by station-incident it is 87% because each city-wide event is stored once per station. Early November 2025 was the stubble peak, so this mix is plausible.
+
 ## Threshold changes
 
-None yet.
+None. The tuning rule (one cause over 70%) is met only when city-wide events are counted once per station; by event it is not.
+
+## Placebo test (A6.3), first run
+
+Spec method (master PRD 4.7), unedited: **31 of 57 judged fake work orders wrongly marked worked (54.4%)**; 144 more were inconclusive (119 because the whole city shifted). The median net change of the judged fakes is -17%, not about 0, so the expected-fade baseline is biased for this period, not just noisy.
+
+Checked, not adopted (pending decision):
+
+| Variant | Judged | Wrongly worked | Median net |
+| --- | --- | --- | --- |
+| Spec method, threshold -15 | 57 | 31 (54%) | -17.1 |
+| Spec method, threshold -40 | 57 | 10 (18%) | -17.1 |
+| Same-cause baseline pool, -15 | 57 | 33 (58%) | -19.1 |
+| Change minus other stations' change (difference-in-differences), -15 | 159 | 36 (23%) | +2.3 |
+| Difference-in-differences, -25 | 159 | 20 (13%) | +2.3 |
+
+Only 1 judged fake was on a local-cause incident, where real work orders would go.
