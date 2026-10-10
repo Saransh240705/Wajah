@@ -20,6 +20,9 @@ const HINDI: Record<string, string> = {
 
 export interface ToolCapture { incident?: Incident; diagnosis?: { stationId: string; evidence: Incident['evidence']; topCause: Cause } }
 
+const causeName = (c: Cause) => `${PLAYBOOKS[c].labelEn} (Hindi: ${PLAYBOOKS[c].labelHi})`;
+const actionName = (a: keyof typeof ACTIONS) => `${ACTIONS[a].labelEn} (Hindi: ${ACTIONS[a].labelHi})`;
+
 const r1 = (n: number | null | undefined) => (n == null ? null : Math.round(n * 10) / 10);
 const ist = (iso: string) => new Date(iso).toLocaleString('en-IN', { timeZone: config.timezone, day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' });
 
@@ -31,10 +34,10 @@ function summarise(rows: Reading[], k: 'pm25' | 'pm10' | 'no2' | 'co') {
 }
 
 const brief = (i: Incident) => ({
-  id: i.id, area: i.area, stationId: i.stationId, startIndia: ist(i.start), endIndia: i.end ? ist(i.end) : 'still running',
-  peakPm25: i.peakPm25, peakPm10: i.peakPm10, usualPm25: i.baselinePm25, likelyCause: i.topCause, confidence: i.confidence, status: i.status,
+  id: i.id, area: i.area, start: ist(i.start), end: i.end ? ist(i.end) : 'still running',
+  peakPm25: i.peakPm25, peakPm10: i.peakPm10, usualPm25: i.baselinePm25, likelyCause: causeName(i.topCause), confidence: i.confidence, status: i.status,
   clues: i.evidence.filter((c) => c.cause === i.topCause).slice(0, 3).map((c) => c.label),
-  workOrders: i.workOrders.map((w) => ({ action: w.actionType, agency: w.agency, status: w.status, verdict: w.effect?.verdict ?? null, netChangePct: w.effect?.netChangePct ?? null, demo: !!w.demo })),
+  ...(i.workOrders.length ? { workOrders: i.workOrders.map((w) => `${ACTIONS[w.actionType].labelEn} by ${w.agency}: ${w.effect ? `${w.effect.verdict} (net ${w.effect.netChangePct}%)` : w.status}${w.demo ? ', demo' : ''}`) } : {}),
 });
 
 /** Ledger rows from measured work orders. TODO(track-b): replace with buildLedger from api/src/modules/board. */
@@ -54,25 +57,34 @@ export function fallbackLedger(incidents: Incident[], stationId?: string) {
       rows.set(k, r);
     }
   }
-  return [...rows.values()].slice(0, 10).map(({ nets, ...r }) => ({ ...r, avgNetChangePct: nets.length ? r1(nets.reduce((a, b) => a + b, 0) / nets.length) : null }));
+  return [...rows.values()].slice(0, 10).map(({ nets, ...r }) => ({ ...r, action: ACTIONS[r.action as keyof typeof ACTIONS].labelEn, avgNetChangePct: nets.length ? r1(nets.reduce((a, b) => a + b, 0) / nets.length) : null }));
 }
 
 /** Ranked board items. TODO(track-b): replace with buildBoard from api/src/modules/board. */
 export function fallbackBoard(incidents: Incident[], now: string) {
   const since = new Date(Date.parse(now) - config.board.activeHours * H).toISOString();
   const ledger = fallbackLedger(incidents);
-  return incidents
-    .filter((i) => ((i.status === 'open' || i.status === 'recurred') && (i.end == null || i.end >= since)) || (i.status === 'dispatched' && i.workOrders.at(-1)?.status !== 'done' && i.workOrders.length > 0))
-    .map((i) => {
-      const pb = PLAYBOOKS[i.topCause];
-      const step = pb.steps[i.status === 'recurred' ? Math.min(1, pb.steps.length - 1) : 0]!;
-      const h = ledger.find((l) => l.area === i.area && l.action === step.actionType);
-      const priority = (i.peakPm25 / i.baselinePm25) * config.board.confidenceWeight[i.confidence] * (1 + config.board.recurrenceBoost * i.recurrenceCount);
-      return { incidentId: i.id, area: i.area, peakPm25: i.peakPm25, peakPm10: i.peakPm10, likelyCause: i.topCause, confidence: i.confidence, status: i.status,
-        localActionPossible: pb.localActionPossible, action: step.actionType, agency: step.agency, history: h ? `worked ${h.worked} of ${h.tried}` : 'not tried here yet', priority: r1(priority)! };
-    })
-    .sort((a, b) => Number(b.localActionPossible) - Number(a.localActionPossible) || b.priority - a.priority)
-    .slice(0, 5);
+  const active = incidents.filter((i) => ((i.status === 'open' || i.status === 'recurred') && (i.end == null || i.end >= since)) || (i.status === 'dispatched' && i.workOrders.length > 0 && i.workOrders.at(-1)?.status !== 'done'));
+  const row = (i: Incident, areas = 1) => {
+    const pb = PLAYBOOKS[i.topCause];
+    const step = pb.steps[i.status === 'recurred' ? Math.min(1, pb.steps.length - 1) : 0]!;
+    const h = ledger.find((l) => l.area === i.area && l.action === ACTIONS[step.actionType].labelEn);
+    const priority = (i.peakPm25 / i.baselinePm25) * config.board.confidenceWeight[i.confidence] * (1 + config.board.recurrenceBoost * i.recurrenceCount);
+    return { incidentId: i.id, area: areas > 1 ? `${areas} areas at once, highest at ${i.area}` : i.area, peakPm25: i.peakPm25, peakPm10: i.peakPm10,
+      likelyCause: causeName(i.topCause), confidence: i.confidence, status: i.status, localActionPossible: pb.localActionPossible,
+      action: actionName(step.actionType), agency: step.agency, history: h ? `worked ${h.worked} of ${h.tried}` : 'not tried here yet', priority: r1(priority)! };
+  };
+  // A city-wide spike is one row (as on the board design), not one per station
+  const local = active.filter((i) => PLAYBOOKS[i.topCause].localActionPossible).map((i) => row(i));
+  const wide = active.filter((i) => !PLAYBOOKS[i.topCause].localActionPossible).sort((a, b) => a.start.localeCompare(b.start));
+  const events: Incident[][] = [];
+  for (const i of wide) {
+    const ev = events.find((e) => e[0]!.topCause === i.topCause && e.some((x) => x.start <= (i.end ?? now) && (x.end ?? now) >= i.start));
+    if (ev) ev.push(i);
+    else events.push([i]);
+  }
+  const city = events.map((e) => row(e.reduce((a, b) => (b.peakPm25 > a.peakPm25 ? b : a)), e.length));
+  return [...local.sort((a, b) => b.priority - a.priority), ...city.sort((a, b) => b.priority - a.priority)].slice(0, 5);
 }
 
 export function buildTools(store: Store, dataset: Dataset, now: string, capture: ToolCapture) {
@@ -108,7 +120,7 @@ export function buildTools(store: Store, dataset: Dataset, now: string, capture:
       description: 'Pollution spikes (incidents), newest first, with likely cause, confidence, clues, status and work order verdicts.',
       inputSchema: z.object({ stationId: z.string().optional(), since: iso.optional() }),
       callback: async ({ stationId, since }) => {
-        const list = (await store.listIncidents({ dataset, stationId, sinceIso: since })).slice(0, 5);
+        const list = (await store.listIncidents({ dataset, stationId, sinceIso: since })).slice(0, 3);
         if (list[0]) capture.incident = list[0];
         return { incidents: list.map(brief), ...(list.length ? {} : { message: 'no incidents found' }) };
       },
@@ -123,7 +135,7 @@ export function buildTools(store: Store, dataset: Dataset, now: string, capture:
         const d = await diagnoseRange(store, dataset, s, from, to);
         if (!d) return { message: 'no readings in this window' };
         capture.diagnosis = { stationId, evidence: d.evidence.filter((c) => c.cause === d.topCause), topCause: d.topCause };
-        return { area: d.area, peakPm25: d.peakPm25, peakAtIndia: ist(d.peakAt), likelyCause: d.topCause, confidence: d.confidence, scores: d.scores,
+        return { area: d.area, peakPm25: d.peakPm25, peakAtIndia: ist(d.peakAt), likelyCause: causeName(d.topCause), confidence: d.confidence, scores: d.scores,
           features: d.features, clues: d.evidence.filter((c) => c.cause === d.topCause).map((c) => c.label) };
       },
     }),
@@ -164,7 +176,7 @@ export function buildTools(store: Store, dataset: Dataset, now: string, capture:
       inputSchema: z.object({ cause: z.enum(['local_burning', 'dust', 'traffic', 'regional_smoke', 'trapped_air']) }),
       callback: ({ cause }) => {
         const p = PLAYBOOKS[cause];
-        return { cause, localActionPossible: p.localActionPossible, actions: p.steps.map((s, i) => ({ order: i === 0 ? 'first' : 'if no effect', action: ACTIONS[s.actionType].labelEn, agency: s.agency })),
+        return { cause: causeName(cause), localActionPossible: p.localActionPossible, actions: p.steps.map((s, i) => ({ order: i === 0 ? 'first' : 'if no effect', action: actionName(s.actionType), agency: s.agency })),
           advice: p.adviceEn, doNot: p.doNotEn ?? null };
       },
     }),

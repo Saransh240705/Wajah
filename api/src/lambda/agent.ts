@@ -1,7 +1,19 @@
-import type { AskResponse } from '@wajah/shared';
+// Function URL handler for POST /ask (A4.5). Always answers 200 with a readable AskResponse.
+import type { AskRequest } from '@wajah/shared';
+import { ask } from '../modules/agent/run';
+import { getStore } from '../store';
 
-// Placeholder until A4.5: the Function URL exists and always answers 200, as /ask must.
-export const handler = async (): Promise<{ statusCode: number; headers: Record<string, string>; body: string }> => {
-  const body: AskResponse = { answer: 'Ask Wajah is not available yet. Please try again later.', evidence: [], suggestedActions: [] };
-  return { statusCode: 200, headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) };
+interface UrlEvent { body?: string; isBase64Encoded?: boolean; requestContext?: { http?: { method?: string; path?: string } } }
+
+const reply = (body: unknown) => ({ statusCode: 200, headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+
+export const handler = async (event: UrlEvent) => {
+  let req: AskRequest = {};
+  try {
+    const raw = event.isBase64Encoded && event.body ? Buffer.from(event.body, 'base64').toString('utf8') : event.body ?? '{}';
+    req = JSON.parse(raw) as AskRequest;
+  } catch {
+    return reply({ answer: 'Please send a JSON body with a message.', evidence: [], suggestedActions: [] });
+  }
+  return reply(await ask(await getStore(), req));
 };

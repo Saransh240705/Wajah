@@ -100,7 +100,9 @@ export function scoreCauses(features: Features, cfg: Cfg = config, ctx: ScoreCon
     for (const rule of cfg.score.rules[cause] as readonly ScoreRule[]) {
       if (!fires(rule, features)) continue;
       pts += rule.points;
-      evidence.push(chipFor(rule, cause, features, ctx));
+      const chip = chipFor(rule, cause, features, ctx);
+      // Two rules can share one clue (e.g. 50+ and 150+ upwind fires): one chip per clue
+      if (!evidence.some((c) => c.cause === cause && c.label === chip.label)) evidence.push(chip);
     }
     scores[cause] = Math.min(pts, cfg.score.maxPoints);
   }

@@ -31,7 +31,17 @@ for (const ds of (['replay', 'live'] as Dataset[]).filter((d) => !only || d === 
   await store.putWeather(ds, dump.weather[ds] ?? []);
   const fires = Object.entries(dump.fires[ds] ?? {});
   await pool(fires, 8, ([day, rows]) => store.putFires(ds, day, rows));
-  const incidents = dump.incidents.filter((i) => i.dataset === ds);
+  // Keep lifecycle state made on AWS (work orders issued there, workflow verdicts): the local copy brings the
+  // diagnosis, the remote copy wins on work orders, status, checks and escalation when it has more work orders.
+  const remote = new Map((await store.listIncidents({ dataset: ds })).map((i) => [i.id, i]));
+  let merged = 0;
+  const incidents = dump.incidents.filter((i) => i.dataset === ds).map((i) => {
+    const r = remote.get(i.id);
+    if (!r || r.workOrders.length <= i.workOrders.length) return i;
+    merged++;
+    return { ...i, workOrders: r.workOrders, status: r.status, checks: r.checks, recurrenceCount: r.recurrenceCount, escalationLevel: r.escalationLevel, updatedAt: r.updatedAt };
+  });
   await pool(incidents, 8, (i) => store.putIncident(i));
+  if (merged) console.log(`[${ds}] kept AWS work orders on ${merged} incident(s)`);
   console.log(`[${ds}] ${readings.length} readings (${byStation.size} stations), ${(dump.weather[ds] ?? []).length} weather rows, ${fires.length} fire days, ${incidents.length} incidents in ${((Date.now() - t0) / 1000).toFixed(0)} s`);
 }

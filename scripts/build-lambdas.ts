@@ -22,7 +22,8 @@ for (const name of names) {
     format: 'esm',
     outExtension: { '.js': '.mjs' },
     // The nodejs22.x runtime ships AWS SDK v3
-    external: ['@aws-sdk/*'],
+    // Optional Strands peers we do not install (only needed if MODEL_PROVIDER is switched to them)
+    external: ['@aws-sdk/*', 'openai', '@anthropic-ai/sdk'],
     banner: { js: "import { createRequire as __cr } from 'module'; const require = __cr(import.meta.url);" },
     sourcemap: 'inline',
     metafile: true,

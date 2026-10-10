@@ -3,6 +3,9 @@
 import type { Model } from '@strands-agents/sdk';
 
 const DEFAULT_PROVIDER = 'google'; // <- the one-line switch: 'google' | 'bedrock' | 'openai'
+// The SDK's default (gemini-2.5-flash) timed out on 10 Oct 2026. 3.5 Flash-Lite answers in about 6 s and
+// leaves more of the free-tier per-minute quota (3.5 Flash allowed 5 requests a minute; one answer takes 4-6).
+const DEFAULT_GEMINI = 'gemini-3.5-flash-lite';
 
 export async function getModel(): Promise<Model> {
   const provider = process.env.MODEL_PROVIDER || DEFAULT_PROVIDER;
@@ -12,11 +15,19 @@ export async function getModel(): Promise<Model> {
     return new BedrockModel({ region: process.env.AWS_REGION ?? 'ap-south-1', ...(modelId ? { modelId } : {}), maxTokens: 1024 });
   }
   if (provider === 'openai') {
-    const { OpenAIModel } = await import('@strands-agents/sdk/models/openai');
+    // Not bundled (the `openai` package is not installed): switching to OpenAI needs `npm i openai -w @wajah/api`
+    // and removing 'openai' from the externals in scripts/build-lambdas.ts.
+    const spec = '@strands-agents/sdk/models/openai';
+    const { OpenAIModel } = (await import(spec)) as typeof import('@strands-agents/sdk/models/openai');
     return new OpenAIModel({ api: 'chat', ...(modelId ? { modelId } : {}) });
   }
   const { GoogleModel } = await import('@strands-agents/sdk/models/google');
   const apiKey = process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error('GOOGLE_API_KEY is not set');
-  return new GoogleModel({ apiKey, modelId: modelId ?? 'gemini-2.5-flash', params: { temperature: 0.2, maxOutputTokens: 1024 } });
+  // Gemini 3.x thinks before answering and thinking counts toward maxOutputTokens: keep thinking low, leave room.
+  return new GoogleModel({
+    apiKey,
+    modelId: modelId ?? DEFAULT_GEMINI,
+    params: { temperature: 0.2, maxOutputTokens: 8192, thinkingConfig: { thinkingLevel: 'LOW' as never } },
+  });
 }
