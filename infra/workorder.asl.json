@@ -1,0 +1,58 @@
+{
+  "Comment": "Wajah: one execution per work order. Input: { workOrderId, pollSeconds, slaSeconds, readingsSeconds, issuedAtReal }",
+  "StartAt": "NotifyAgency",
+  "States": {
+    "NotifyAgency": {
+      "Type": "Task",
+      "Resource": "${WorkflowFunctionArn}",
+      "Parameters": { "task": "notify", "workOrderId.$": "$.workOrderId" },
+      "ResultPath": null,
+      "Next": "WaitForDone"
+    },
+    "WaitForDone": { "Type": "Wait", "SecondsPath": "$.pollSeconds", "Next": "CheckDone" },
+    "CheckDone": {
+      "Type": "Task",
+      "Resource": "${WorkflowFunctionArn}",
+      "Parameters": { "task": "checkDone", "workOrderId.$": "$.workOrderId", "slaSeconds.$": "$.slaSeconds", "issuedAtReal.$": "$.issuedAtReal" },
+      "ResultPath": "$.check",
+      "Next": "IsDone"
+    },
+    "IsDone": {
+      "Type": "Choice",
+      "Choices": [
+        { "Variable": "$.check.state", "StringEquals": "done", "Next": "WaitForReadings" },
+        { "Variable": "$.check.state", "StringEquals": "cancelled", "Next": "Finished" },
+        { "Variable": "$.check.state", "StringEquals": "overdue", "Next": "EscalateOverdue" }
+      ],
+      "Default": "WaitForDone"
+    },
+    "EscalateOverdue": {
+      "Type": "Task",
+      "Resource": "${WorkflowFunctionArn}",
+      "Parameters": { "task": "escalateOverdue", "workOrderId.$": "$.workOrderId" },
+      "ResultPath": null,
+      "Next": "WaitForDone"
+    },
+    "WaitForReadings": { "Type": "Wait", "SecondsPath": "$.readingsSeconds", "Next": "MeasureEffect" },
+    "MeasureEffect": {
+      "Type": "Task",
+      "Resource": "${WorkflowFunctionArn}",
+      "Parameters": { "task": "measure", "workOrderId.$": "$.workOrderId" },
+      "ResultPath": "$.effect",
+      "Next": "Verdict"
+    },
+    "Verdict": {
+      "Type": "Choice",
+      "Choices": [{ "Variable": "$.effect.verdict", "StringEquals": "no_effect", "Next": "EscalateNoEffect" }],
+      "Default": "Finished"
+    },
+    "EscalateNoEffect": {
+      "Type": "Task",
+      "Resource": "${WorkflowFunctionArn}",
+      "Parameters": { "task": "escalateNoEffect", "workOrderId.$": "$.workOrderId" },
+      "ResultPath": null,
+      "End": true
+    },
+    "Finished": { "Type": "Succeed" }
+  }
+}

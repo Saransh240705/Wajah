@@ -178,7 +178,7 @@ const reading = (stationId: string, ts: string, pm25: number, ratio = 0.62, co =
   stationId, ts, pm25, pm10: Math.round(pm25 / ratio), no2, co, so2: jitter(14, 0.2), o3: jitter(28, 0.3), source: 'openaq',
 });
 const stationSummaries: StationSummary[] = STATIONS.map((s) => {
-  const pm = latestPm25[s.id]!;
+  const pm = latestPm25[s.id] ?? jitter(140, 0.35);
   return { ...s, latest: reading(s.id, NOW, pm, 0.6, Math.round(jitter(140, 0.2)) / 100, jitter(45, 0.3)), band: pm25Band(pm), openIncidentId: activeIncident(s.id) };
 });
 

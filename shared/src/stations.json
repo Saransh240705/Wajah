@@ -1,39 +1,39 @@
 [
   {
     "id": "anand-vihar",
-    "name": "Anand Vihar, Delhi - DPCC",
+    "name": "Anand Vihar, New Delhi - DPCC",
     "area": "Anand Vihar",
     "lat": 28.6468,
     "lon": 77.316,
     "isHotspot": true,
-    "cpcbName": "Anand Vihar, Delhi - DPCC"
+    "openaqLocationId": 235
   },
   {
     "id": "mundka",
     "name": "Mundka, Delhi - DPCC",
     "area": "Mundka",
-    "lat": 28.6842,
-    "lon": 77.0767,
+    "lat": 28.6847,
+    "lon": 77.0766,
     "isHotspot": true,
-    "cpcbName": "Mundka, Delhi - DPCC"
+    "openaqLocationId": 10486
   },
   {
     "id": "wazirpur",
     "name": "Wazirpur, Delhi - DPCC",
     "area": "Wazirpur",
     "lat": 28.6998,
-    "lon": 77.1654,
+    "lon": 77.1655,
     "isHotspot": true,
-    "cpcbName": "Wazirpur, Delhi - DPCC"
+    "openaqLocationId": 8915
   },
   {
     "id": "jahangirpuri",
     "name": "Jahangirpuri, Delhi - DPCC",
     "area": "Jahangirpuri",
     "lat": 28.7328,
-    "lon": 77.1707,
+    "lon": 77.1706,
     "isHotspot": true,
-    "cpcbName": "Jahangirpuri, Delhi - DPCC"
+    "openaqLocationId": 8235
   },
   {
     "id": "rk-puram",
@@ -42,7 +42,7 @@
     "lat": 28.5633,
     "lon": 77.1869,
     "isHotspot": true,
-    "cpcbName": "R K Puram, Delhi - DPCC"
+    "openaqLocationId": 17
   },
   {
     "id": "rohini",
@@ -51,7 +51,7 @@
     "lat": 28.7325,
     "lon": 77.1199,
     "isHotspot": true,
-    "cpcbName": "Rohini, Delhi - DPCC"
+    "openaqLocationId": 10831
   },
   {
     "id": "punjabi-bagh",
@@ -60,7 +60,7 @@
     "lat": 28.674,
     "lon": 77.131,
     "isHotspot": true,
-    "cpcbName": "Punjabi Bagh, Delhi - DPCC"
+    "openaqLocationId": 50
   },
   {
     "id": "okhla",
@@ -69,7 +69,7 @@
     "lat": 28.5308,
     "lon": 77.2713,
     "isHotspot": true,
-    "cpcbName": "Okhla Phase-2, Delhi - DPCC"
+    "openaqLocationId": 8239
   },
   {
     "id": "bawana",
@@ -78,25 +78,25 @@
     "lat": 28.7762,
     "lon": 77.0511,
     "isHotspot": true,
-    "cpcbName": "Bawana, Delhi - DPCC"
+    "openaqLocationId": 8472
   },
   {
     "id": "narela",
     "name": "Narela, Delhi - DPCC",
     "area": "Narela",
     "lat": 28.8228,
-    "lon": 77.1019,
+    "lon": 77.102,
     "isHotspot": true,
-    "cpcbName": "Narela, Delhi - DPCC"
+    "openaqLocationId": 10485
   },
   {
     "id": "vivek-vihar",
     "name": "Vivek Vihar, Delhi - DPCC",
     "area": "Vivek Vihar",
     "lat": 28.6723,
-    "lon": 77.3152,
+    "lon": 77.3153,
     "isHotspot": true,
-    "cpcbName": "Vivek Vihar, Delhi - DPCC"
+    "openaqLocationId": 6938
   },
   {
     "id": "dwarka",
@@ -105,43 +105,43 @@
     "lat": 28.571,
     "lon": 77.0719,
     "isHotspot": true,
-    "cpcbName": "Dwarka-Sector 8, Delhi - DPCC"
+    "openaqLocationId": 6931
   },
   {
     "id": "ashok-vihar",
     "name": "Ashok Vihar, Delhi - DPCC",
     "area": "Ashok Vihar",
     "lat": 28.6954,
-    "lon": 77.1819,
+    "lon": 77.1817,
     "isHotspot": true,
-    "cpcbName": "Ashok Vihar, Delhi - DPCC"
+    "openaqLocationId": 8917
   },
   {
     "id": "lodhi-road",
-    "name": "Lodhi Road, Delhi - IMD",
+    "name": "Lodhi Road, New Delhi - IMD",
     "area": "Lodhi Road",
     "lat": 28.5918,
     "lon": 77.2273,
     "isHotspot": false,
-    "cpcbName": "Lodhi Road, Delhi - IMD"
+    "openaqLocationId": 5634
   },
   {
     "id": "ito",
-    "name": "ITO, Delhi - CPCB",
+    "name": "ITO, New Delhi - CPCB",
     "area": "ITO",
     "lat": 28.6286,
-    "lon": 77.241,
+    "lon": 77.2411,
     "isHotspot": false,
-    "cpcbName": "ITO, Delhi - CPCB"
+    "openaqLocationId": 5613
   },
   {
     "id": "mandir-marg",
-    "name": "Mandir Marg, Delhi - DPCC",
+    "name": "Mandir Marg, New Delhi - DPCC",
     "area": "Mandir Marg",
     "lat": 28.6364,
     "lon": 77.2011,
     "isHotspot": false,
-    "cpcbName": "Mandir Marg, Delhi - DPCC"
+    "openaqLocationId": 6358
   },
   {
     "id": "sirifort",
@@ -150,6 +150,186 @@
     "lat": 28.5504,
     "lon": 77.2159,
     "isHotspot": false,
-    "cpcbName": "Sirifort, Delhi - CPCB"
+    "openaqLocationId": 5586
+  },
+  {
+    "id": "alipur",
+    "name": "Alipur, Delhi - DPCC",
+    "area": "Alipur",
+    "lat": 28.8153,
+    "lon": 77.153,
+    "isHotspot": false,
+    "openaqLocationId": 6932
+  },
+  {
+    "id": "aya-nagar",
+    "name": "Aya Nagar, New Delhi - IMD",
+    "area": "Aya Nagar",
+    "lat": 28.4743,
+    "lon": 77.1316,
+    "isHotspot": false,
+    "openaqLocationId": 5570
+  },
+  {
+    "id": "burari-crossing",
+    "name": "Burari Crossing, New Delhi - IMD",
+    "area": "Burari Crossing",
+    "lat": 28.7257,
+    "lon": 77.2012,
+    "isHotspot": false,
+    "openaqLocationId": 5541
+  },
+  {
+    "id": "mathura-road",
+    "name": "CRRI Mathura Road, New Delhi - IMD",
+    "area": "Mathura Road",
+    "lat": 28.5512,
+    "lon": 77.2736,
+    "isHotspot": false,
+    "openaqLocationId": 5627
+  },
+  {
+    "id": "chandni-chowk",
+    "name": "Chandni Chowk, Delhi - IITM",
+    "area": "Chandni Chowk",
+    "lat": 28.6568,
+    "lon": 77.2272,
+    "isHotspot": false,
+    "openaqLocationId": 11603
+  },
+  {
+    "id": "dtu",
+    "name": "DTU, New Delhi - CPCB",
+    "area": "DTU",
+    "lat": 28.75,
+    "lon": 77.1113,
+    "isHotspot": false,
+    "openaqLocationId": 5626
+  },
+  {
+    "id": "karni-singh-range",
+    "name": "Dr. Karni Singh Shooting Range, Delhi - DPCC",
+    "area": "Karni Singh Range",
+    "lat": 28.4986,
+    "lon": 77.2648,
+    "isHotspot": false,
+    "openaqLocationId": 6934
+  },
+  {
+    "id": "igi-airport",
+    "name": "IGI Airport (T3), Delhi - IMD",
+    "area": "IGI Airport",
+    "lat": 28.5628,
+    "lon": 77.118,
+    "isHotspot": false,
+    "openaqLocationId": 5650
+  },
+  {
+    "id": "dilshad-garden",
+    "name": "IHBAS, Dilshad Garden,New Delhi - CPCB",
+    "area": "Dilshad Garden",
+    "lat": 28.6812,
+    "lon": 77.3025,
+    "isHotspot": false,
+    "openaqLocationId": 6359
+  },
+  {
+    "id": "jawaharlal-nehru-stadium",
+    "name": "Jawaharlal Nehru Stadium, Delhi - DPCC",
+    "area": "Jawaharlal Nehru Stadium",
+    "lat": 28.5803,
+    "lon": 77.2338,
+    "isHotspot": false,
+    "openaqLocationId": 6957
+  },
+  {
+    "id": "national-stadium",
+    "name": "Major Dhyan Chand National Stadium, Delhi - DPCC",
+    "area": "National Stadium",
+    "lat": 28.6113,
+    "lon": 77.2377,
+    "isHotspot": false,
+    "openaqLocationId": 6929
+  },
+  {
+    "id": "nsit-dwarka",
+    "name": "NSIT Dwarka, Delhi - CPCB",
+    "area": "NSIT Dwarka",
+    "lat": 28.6091,
+    "lon": 77.0325,
+    "isHotspot": false,
+    "openaqLocationId": 5622
+  },
+  {
+    "id": "najafgarh",
+    "name": "Najafgarh, Delhi - DPCC",
+    "area": "Najafgarh",
+    "lat": 28.5702,
+    "lon": 76.9338,
+    "isHotspot": false,
+    "openaqLocationId": 10488
+  },
+  {
+    "id": "nehru-nagar",
+    "name": "Nehru Nagar, Delhi - DPCC",
+    "area": "Nehru Nagar",
+    "lat": 28.5679,
+    "lon": 77.2505,
+    "isHotspot": false,
+    "openaqLocationId": 8365
+  },
+  {
+    "id": "north-campus",
+    "name": "North Campus, DU, Delhi - IMD",
+    "area": "North Campus",
+    "lat": 28.6574,
+    "lon": 77.1585,
+    "isHotspot": false,
+    "openaqLocationId": 5610
+  },
+  {
+    "id": "patparganj",
+    "name": "Patparganj, Delhi - DPCC",
+    "area": "Patparganj",
+    "lat": 28.6237,
+    "lon": 77.2872,
+    "isHotspot": false,
+    "openaqLocationId": 6960
+  },
+  {
+    "id": "pusa",
+    "name": "Pusa, Delhi - IMD",
+    "area": "Pusa",
+    "lat": 28.6396,
+    "lon": 77.1463,
+    "isHotspot": false,
+    "openaqLocationId": 5404
+  },
+  {
+    "id": "shadipur",
+    "name": "Shadipur, Delhi - CPCB",
+    "area": "Shadipur",
+    "lat": 28.6515,
+    "lon": 77.1473,
+    "isHotspot": false,
+    "openaqLocationId": 5630
+  },
+  {
+    "id": "sonia-vihar",
+    "name": "Sonia Vihar, Delhi - DPCC",
+    "area": "Sonia Vihar",
+    "lat": 28.7105,
+    "lon": 77.2495,
+    "isHotspot": false,
+    "openaqLocationId": 8475
+  },
+  {
+    "id": "sri-aurobindo-marg",
+    "name": "Sri Aurobindo Marg, Delhi - DPCC",
+    "area": "Sri Aurobindo Marg",
+    "lat": 28.5313,
+    "lon": 77.1902,
+    "isHotspot": false,
+    "openaqLocationId": 10484
   }
 ]

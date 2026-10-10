@@ -15,9 +15,12 @@
     "@aws-sdk/client-sfn": "^3.1149.0",
     "@aws-sdk/client-sns": "^3.1149.0",
     "@aws-sdk/lib-dynamodb": "^3.1149.0",
+    "@google/genai": "^2.28.0",
     "@hono/node-server": "^2.1.4",
+    "@strands-agents/sdk": "^1.20.0",
     "@wajah/shared": "*",
-    "hono": "^4.13.13"
+    "hono": "^4.13.13",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@types/node": "^26.6.5",

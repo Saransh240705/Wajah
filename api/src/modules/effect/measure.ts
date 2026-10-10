@@ -1,5 +1,7 @@
-// Effect measurement, master PRD section 4.7. Pure: everything it needs comes in through EffectInput.
-import { config, type EffectResult, type Incident, type Reading, type Verdict, type Weather, type WorkOrder } from '@wajah/shared';
+// Effect measurement, master PRD section 4.7, with the hybrid baseline adopted after the first placebo test
+// (docs/data-test.md): local causes are compared with the natural fade of past unacted local spikes; city-wide
+// causes with other stations over the same hours. Pure: everything it needs comes in through EffectInput.
+import { PLAYBOOKS, config, type EffectResult, type Incident, type Reading, type Verdict, type Weather, type WorkOrder } from '@wajah/shared';
 
 type EffectCfg = typeof config.effect;
 type Pollutant = EffectResult['pollutant'];
@@ -96,7 +98,7 @@ function weatherIn(weather: Weather[], hours: number[]) {
   return { rain, wind };
 }
 
-/** Median change of unacted spikes at the same offset from their start (master PRD 4.7, expectedChangePct). */
+/** Median change of unacted local-cause spikes at the same offset from their start (local causes only). */
 function expectedChange(input: EffectInput, pollutant: Pollutant, cfg: EffectCfg): { value: number; size: number } | null {
   const { workOrder: wo, incident } = input;
   const start = Date.parse(incident.start);
@@ -104,7 +106,7 @@ function expectedChange(input: EffectInput, pollutant: Pollutant, cfg: EffectCfg
   const doneOffset = (wo.doneAt ? Date.parse(wo.doneAt) : Date.parse(wo.startedAt ?? wo.issuedAt)) - start;
 
   const usable = input.pool
-    .filter((p) => p.incident.id !== incident.id && isUnacted(p.incident))
+    .filter((p) => p.incident.id !== incident.id && isUnacted(p.incident) && PLAYBOOKS[p.incident.topCause].localActionPossible)
     .map((p) => {
       const s = Date.parse(p.incident.start);
       const win = windowsAt(s + refOffset, s + doneOffset, cfg);
@@ -138,8 +140,8 @@ export function measureEffect(input: EffectInput): EffectResult {
   const after = meanAt(input.readings, win.afterHours, pollutant);
   const change = pctChange(before.mean, after.mean) ?? 0;
 
-  const expected = expectedChange(input, pollutant, cfg);
-  const expectedPct = expected?.value ?? 0;
+  const local = PLAYBOOKS[input.incident.topCause].localActionPossible;
+  const expected = local ? expectedChange(input, pollutant, cfg) : null;
 
   // City change: other stations with full data in both windows and no work order in progress
   const skip = new Set([input.incident.stationId, ...input.inProgressStationIds]);
@@ -152,6 +154,9 @@ export function measureEffect(input: EffectInput): EffectResult {
     })
     .filter((x): x is number => x != null);
   const cityPct = cityChanges.length ? cityChanges.reduce((a, b) => a + b, 0) / cityChanges.length : 0;
+  // City-wide causes: what happened at other stations over the same hours is the expected change
+  const cityBaseline = !local && cityChanges.length >= cfg.minComparisonStations;
+  const expectedPct = local ? (expected?.value ?? 0) : cityBaseline ? cityPct : 0;
 
   const wBefore = weatherIn(input.weather, win.beforeHours);
   const wAfter = weatherIn(input.weather, win.afterHours);
@@ -159,7 +164,9 @@ export function measureEffect(input: EffectInput): EffectResult {
   const notes: string[] = [];
   if (before.count < cfg.minReadingsPerWindow) notes.push(`too few readings in the before window (${before.count})`);
   if (after.count < cfg.minReadingsPerWindow) notes.push(`too few readings in the after window (${after.count})`);
-  if (Math.abs(cityPct) >= cfg.cityShiftLimitPct) notes.push(`the whole city shifted at once (${round(cityPct)}%)`);
+  if (local && Math.abs(cityPct) >= cfg.cityShiftLimitPct) notes.push(`the whole city shifted at once (${round(cityPct)}%)`);
+  if (local && !expected) notes.push('no baseline yet');
+  if (!local && !cityBaseline) notes.push(`no baseline yet: only ${cityChanges.length} other stations with full data`);
   const rain = Math.max(wBefore.rain, wAfter.rain);
   if (rain > cfg.rainLimitMm) notes.push(`rain during the window (${round(rain)} mm)`);
   if (wBefore.wind != null && wAfter.wind != null && wBefore.wind > 0) {
@@ -169,7 +176,6 @@ export function measureEffect(input: EffectInput): EffectResult {
     }
   }
   const inconclusive = notes.length > 0;
-  if (!expected) notes.push('no baseline yet');
 
   const netPct = change - expectedPct;
   const verdict: Verdict = inconclusive ? 'inconclusive' : round(netPct) <= cfg.workedNetPct ? 'worked' : 'no_effect';

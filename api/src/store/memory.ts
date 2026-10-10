@@ -10,7 +10,7 @@ export const SNAPSHOT_FILE = join(FIXTURES_DIR, 'snapshot.json');
 export interface MemoryStoreOptions {
   /** Persist every write to this JSON file, and load from it at start if it exists. */
   file?: string;
-  /** What to load when there is no file: the real-data snapshot if present, else the mock fixtures. */
+  /** Without a file: load the real-data snapshot if present, else the mock fixtures. Ignored when `file` is set. */
   seed?: 'auto' | 'fixtures' | 'none';
 }
 
@@ -25,8 +25,9 @@ export class MemoryStore implements Store {
 
   constructor(opts: MemoryStoreOptions = {}) {
     this.file = opts.file;
+    // A file-backed store holds real data: it starts empty when the file is new, never from mock fixtures.
     if (this.file && existsSync(this.file)) this.load(JSON.parse(readFileSync(this.file, 'utf8')));
-    else if (opts.seed !== 'none') this.seed(opts.seed ?? 'auto');
+    else if (!this.file && opts.seed !== 'none') this.seed(opts.seed ?? 'auto');
   }
 
   private seed(mode: 'auto' | 'fixtures') {

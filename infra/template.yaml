@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: Wajah backend (track A). Step one - everything except the Step Functions workflow.
+Description: Wajah backend (track A), including the Step Functions work order workflow.
 
 # Deploy: npx tsx scripts/build-lambdas.ts && cd infra && sam deploy   (no `sam build`: functions are pre-bundled)
 
@@ -34,14 +34,11 @@ Parameters:
     Default: ''
   WebOrigin:
     Type: String
-    Default: ''
-    Description: The Amplify URL, e.g. https://main.xxxx.amplifyapp.com (no trailing slash). Empty allows localhost only.
+    Default: 'http://127.0.0.1:3000'
+    Description: The Amplify URL, e.g. https://main.xxxx.amplifyapp.com (no trailing slash). The default is a harmless local placeholder.
   WebUrl:
     Type: String
     Default: 'http://localhost:3000'
-
-Conditions:
-  HasWebOrigin: !Not [!Equals [!Ref WebOrigin, '']]
 
 Globals:
   Function:
@@ -104,7 +101,7 @@ Resources:
       CorsConfiguration:
         CorsRules:
           - AllowedMethods: [PUT, GET]
-            AllowedOrigins: !If [HasWebOrigin, [!Ref WebOrigin, 'http://localhost:3000'], ['http://localhost:3000']]
+            AllowedOrigins: [!Ref WebOrigin, 'http://localhost:3000']
             AllowedHeaders: ['*']
             MaxAge: 3000
 
@@ -113,11 +110,12 @@ Resources:
     Properties:
       DisplayName: Wajah
 
+  # CORS origins are plain lists: SAM mistranslates an !If here and silently drops the CORS block.
   HttpApi:
     Type: AWS::Serverless::HttpApi
     Properties:
       CorsConfiguration:
-        AllowOrigins: !If [HasWebOrigin, [!Ref WebOrigin, 'http://localhost:3000'], ['http://localhost:3000']]
+        AllowOrigins: [!Ref WebOrigin, 'http://localhost:3000']
         AllowMethods: [GET, POST, OPTIONS]
         AllowHeaders: [content-type]
 
@@ -127,7 +125,11 @@ Resources:
       CodeUri: ../api/dist/api
       Timeout: 30
       MemorySize: 512
+      Environment:
+        Variables:
+          STATE_MACHINE_ARN: !Ref WorkOrderFlow   # ApiFunction only: avoids a circular dependency
       Policies:
+        - StepFunctionsExecutionPolicy: { StateMachineName: !GetAtt WorkOrderFlow.Name }
         - DynamoDBCrudPolicy: { TableName: !Ref ReadingsTable }
         - DynamoDBCrudPolicy: { TableName: !Ref IncidentsTable }
         - S3CrudPolicy: { BucketName: !Ref EvidenceBucket }
@@ -157,7 +159,7 @@ Resources:
       FunctionUrlConfig:
         AuthType: NONE
         Cors:
-          AllowOrigins: !If [HasWebOrigin, [!Ref WebOrigin, 'http://localhost:3000'], ['http://localhost:3000']]
+          AllowOrigins: [!Ref WebOrigin, 'http://localhost:3000']
           AllowMethods: [POST]
           AllowHeaders: [content-type]
 
@@ -194,7 +196,31 @@ Resources:
             Schedule: cron(0 1 * * ? *)   # 06:30 India time
             Enabled: true
 
+  WorkflowFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../api/dist/workflow
+      Timeout: 60
+      MemorySize: 512
+      Policies:
+        - DynamoDBCrudPolicy: { TableName: !Ref ReadingsTable }
+        - DynamoDBCrudPolicy: { TableName: !Ref IncidentsTable }
+        - S3ReadPolicy: { BucketName: !Ref EvidenceBucket }
+        - SNSPublishMessagePolicy: { TopicName: !GetAtt AlertsTopic.TopicName }
+
+  WorkOrderFlow:
+    Type: AWS::Serverless::StateMachine
+    Properties:
+      Type: STANDARD
+      DefinitionUri: workorder.asl.json
+      DefinitionSubstitutions:
+        WorkflowFunctionArn: !GetAtt WorkflowFunction.Arn
+      Policies:
+        - LambdaInvokePolicy: { FunctionName: !Ref WorkflowFunction }
+
 Outputs:
+  StateMachineArn:
+    Value: !Ref WorkOrderFlow
   ApiUrl:
     Value: !Sub https://${HttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}
   AgentUrl:

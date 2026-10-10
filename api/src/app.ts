@@ -25,6 +25,9 @@ export function createApp() {
     await next();
   });
 
+  // On AWS the ANY /{proxy+} route sends preflights here; answer 204 and API Gateway adds the CORS headers.
+  app.options('*', (c) => c.body(null, 204));
+
   app.route('/', misc);
   app.route('/', stations);
   app.route('/', incidents);
