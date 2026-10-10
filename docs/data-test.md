@@ -45,7 +45,7 @@ None. The tuning rule (one cause over 70%) is met only when city-wide events are
 
 Spec method (master PRD 4.7), unedited: **31 of 57 judged fake work orders wrongly marked worked (54.4%)**; 144 more were inconclusive (119 because the whole city shifted). The median net change of the judged fakes is -17%, not about 0, so the expected-fade baseline is biased for this period, not just noisy.
 
-Checked, not adopted (pending decision):
+Variants checked:
 
 | Variant | Judged | Wrongly worked | Median net |
 | --- | --- | --- | --- |
@@ -54,5 +54,8 @@ Checked, not adopted (pending decision):
 | Same-cause baseline pool, -15 | 57 | 33 (58%) | -19.1 |
 | Change minus other stations' change (difference-in-differences), -15 | 159 | 36 (23%) | +2.3 |
 | Difference-in-differences, -25 | 159 | 20 (13%) | +2.3 |
+| **Hybrid (adopted), -15**: local causes vs past unacted local spikes, city-wide causes vs other stations | 152 | **30 (19.7%)** | |
 
-Only 1 judged fake was on a local-cause incident, where real work orders would go.
+Difference-in-differences alone failed on local spikes: all 6 judged local-cause fakes were marked worked, because other stations do not spike with a local one, so a natural fade looks like success. The hybrid uses each comparison only where it fits. Under the hybrid, 9 of the 10 local-cause fakes were inconclusive (city shift, missing readings, wind change) and the one judged was no_effect: this smoke-season period has too few local spikes to measure local accuracy.
+
+Decision (Saransh, 10 Oct): adopt the hybrid; master PRD 4.7 updated. A local spike with no baseline pool is now inconclusive rather than measured against zero fade.

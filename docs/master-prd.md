@@ -231,7 +231,7 @@ This is the core of version 2. It answers one question from sensor data alone: d
 | Before | Mean of the 2 hourly readings ending at or before T |
 | After | Mean of the 3 hourly readings starting the hour after `doneAt`, or after T if never marked done |
 | `changePct` | (after − before) ÷ before × 100 |
-| `expectedChangePct` | The median `changePct` of past spikes where nobody acted, measured at the same number of hours after the spike began. Use this station's unacted incidents if there are 3 or more, otherwise all hotspot stations if there are 5 or more, otherwise 0 with the note "no baseline yet" |
+| `expectedChangePct` | The change expected if nobody acted. **Local causes** (local burning, dust, traffic): the median `changePct` of past unacted local-cause spikes, measured at the same number of hours after the spike began, from this station if there are 3 or more, otherwise from all hotspot stations if there are 5 or more, otherwise "no baseline yet" and the verdict is inconclusive. **City-wide causes** (regional smoke, trapped air): `cityChangePct`, if at least 3 other stations have full data, otherwise inconclusive. *Revised after the first placebo test; see `docs/data-test.md`.* |
 | `cityChangePct` | Mean `changePct` over other stations with full data in both windows and no work order in progress |
 | `netChangePct` | `changePct` − `expectedChangePct` |
 
@@ -239,7 +239,7 @@ This is the core of version 2. It answers one question from sensor data alone: d
 
 **Verdict**
 
-- **Inconclusive** if either window has fewer than 2 readings, if `cityChangePct` is 25 or more in either direction, if rain above 0.2 mm fell in either window, or if mean wind speed doubled or halved between the windows.
+- **Inconclusive** if either window has fewer than 2 readings, if there is no baseline, if rain above 0.2 mm fell in either window, if mean wind speed doubled or halved between the windows, or, for local causes, if `cityChangePct` is 25 or more in either direction.
 - **Worked** if `netChangePct` is −15 or lower.
 - **No effect** otherwise.
 

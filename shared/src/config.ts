@@ -100,7 +100,7 @@ export const config = {
     polishTimeoutMs: 10_000,
   },
 
-  // 4.7 Effect measurement
+  // 4.7 Effect measurement. Local causes: pool of past unacted local spikes. City-wide causes: other stations, same hours.
   effect: {
     beforeHours: 2,              // readings ending at or before T
     afterHours: 3,               // readings starting the hour after doneAt
@@ -111,6 +111,7 @@ export const config = {
     windShiftFactor: 2,          // mean wind doubled or halved is 'inconclusive'
     minStationPool: 3,           // this station's unacted incidents needed for its own baseline
     minHotspotPool: 5,           // otherwise all hotspot stations' unacted incidents
+    minComparisonStations: 3,    // city-wide causes: fewer other stations with full data is 'inconclusive'
     decimals: 1,
   },
 
