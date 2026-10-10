@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: Wajah backend (track A). Step one - everything except the Step Functions workflow.
+Description: Wajah backend (track A), including the Step Functions work order workflow.
 
 # Deploy: npx tsx scripts/build-lambdas.ts && cd infra && sam deploy   (no `sam build`: functions are pre-bundled)
 
@@ -125,7 +125,11 @@ Resources:
       CodeUri: ../api/dist/api
       Timeout: 30
       MemorySize: 512
+      Environment:
+        Variables:
+          STATE_MACHINE_ARN: !Ref WorkOrderFlow   # ApiFunction only: avoids a circular dependency
       Policies:
+        - StepFunctionsExecutionPolicy: { StateMachineName: !GetAtt WorkOrderFlow.Name }
         - DynamoDBCrudPolicy: { TableName: !Ref ReadingsTable }
         - DynamoDBCrudPolicy: { TableName: !Ref IncidentsTable }
         - S3CrudPolicy: { BucketName: !Ref EvidenceBucket }
@@ -192,7 +196,31 @@ Resources:
             Schedule: cron(0 1 * * ? *)   # 06:30 India time
             Enabled: true
 
+  WorkflowFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../api/dist/workflow
+      Timeout: 60
+      MemorySize: 512
+      Policies:
+        - DynamoDBCrudPolicy: { TableName: !Ref ReadingsTable }
+        - DynamoDBCrudPolicy: { TableName: !Ref IncidentsTable }
+        - S3ReadPolicy: { BucketName: !Ref EvidenceBucket }
+        - SNSPublishMessagePolicy: { TopicName: !GetAtt AlertsTopic.TopicName }
+
+  WorkOrderFlow:
+    Type: AWS::Serverless::StateMachine
+    Properties:
+      Type: STANDARD
+      DefinitionUri: workorder.asl.json
+      DefinitionSubstitutions:
+        WorkflowFunctionArn: !GetAtt WorkflowFunction.Arn
+      Policies:
+        - LambdaInvokePolicy: { FunctionName: !Ref WorkflowFunction }
+
 Outputs:
+  StateMachineArn:
+    Value: !Ref WorkOrderFlow
   ApiUrl:
     Value: !Sub https://${HttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}
   AgentUrl:

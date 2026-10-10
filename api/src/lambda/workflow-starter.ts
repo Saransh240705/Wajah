@@ -12,7 +12,7 @@ export function configureWorkflow() {
     const res = await sfn.send(new StartExecutionCommand({
       stateMachineArn: arn,
       name: workOrder.id.replace(/[^A-Za-z0-9-_]/g, '_').slice(0, 80),
-      input: JSON.stringify({ workOrderId: workOrder.id, ...timing }),
+      input: JSON.stringify({ workOrderId: workOrder.id, ...timing, issuedAtReal: new Date().toISOString() }),
     }));
     return res.executionArn;
   });
