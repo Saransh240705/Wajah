@@ -40,8 +40,8 @@ const fx = (n: number) => `${n.toFixed(1)}×`;
 const BAND_TEXT = { night: 'at night', morning_rush: 'in the morning rush hour', evening_rush: 'in the evening rush hour', day: 'in the daytime' } as const;
 
 function areas(f: Features, ctx: ScoreContext): string {
-  if (ctx.spikedStations != null && ctx.stationsWithData) return `${ctx.spikedStations} of ${ctx.stationsWithData}`;
-  return `${Math.round(f.spatialShare * 100)}%`;
+  if (ctx.spikedStations != null && ctx.stationsWithData) return `${ctx.spikedStations} of ${ctx.stationsWithData} areas`;
+  return `${Math.round(f.spatialShare * 100)}% of areas`;
 }
 
 function chipFor(rule: ScoreRule, cause: Cause, f: Features, ctx: ScoreContext): EvidenceChip {
@@ -65,9 +65,9 @@ function chipFor(rule: ScoreRule, cause: Cause, f: Features, ctx: ScoreContext):
       return c(`CO and NO2 both up: ${fx(f.coRise!)} and ${fx(f.no2Rise!)}`, `${fx(f.coRise!)}, ${fx(f.no2Rise!)}`);
     case 'few_areas':
     case 'some_areas':
-      return c(`Only ${areas(f, ctx)} areas spiked`, areas(f, ctx));
+      return c(`Only ${areas(f, ctx)} spiked`, areas(f, ctx).replace(' areas', ''));
     case 'most_areas':
-      return c(`${areas(f, ctx)} areas spiked together`, areas(f, ctx));
+      return c(`${areas(f, ctx)} spiked together`, areas(f, ctx).replace(' areas', ''));
     case 'wind_strong':
       return c(`Wind ${f.windSpeed!.toFixed(1)} m/s, strong enough to lift dust`, `${f.windSpeed!.toFixed(1)} m/s`);
     case 'wind_calm':
