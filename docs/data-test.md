@@ -37,6 +37,24 @@ Decision rule: "OpenAQ stale but history present: use the CPCB feed for live dat
 
 These are only **14 distinct events**: 9 city-wide farm-smoke events (16-40 stations each, median spatial share 1.0, median 534 upwind fires), 1 city-wide trapped-air event, and a few local spikes. By event, regional smoke is 9 of 14 (64%), under the 70% tuning line; by station-incident it is 87% because each city-wide event is stored once per station. Early November 2025 was the stubble peak, so this mix is plausible.
 
+## Stations expanded to 37 (10 Oct, evening)
+
+Every Delhi CPCB/DPCC station on OpenAQ with PM2.5, PM10, NO2 and CO was added (37, incl. Najafgarh); the 13 hotspots stay flagged. Both datasets were reloaded.
+
+- **Replay** (29 Oct to 12 Nov 2025): 405 incidents. Regional smoke 343, trapped air 36, traffic 16, local burning 9, dust 1. High 316, medium 86, low 3.
+- **Live** (26 Sep to 7 Oct 2026, OpenAQ stops at 7 Oct 13:00 UTC): 75 incidents. Traffic 38, local burning 15, dust 11, trapped air 10, regional smoke 1. High 24, medium 50, low 1.
+
+A first live load picked up mock fixture data (the file-backed store seeded fixtures when its file was new). Fixed in MemoryStore; the fake readings (after 7 Oct 13:00 UTC) and all live incidents were removed and detection re-run on real readings only.
+
+## Placebo test, final (hybrid method, 37 stations)
+
+| Dataset | Judged | Wrongly worked | Inconclusive | Local causes only |
+| --- | --- | --- | --- | --- |
+| Replay (written to `shared/src/placebo.json`) | 297 | **62 (20.9%)** | 108 | 0 of 7 |
+| Live | 39 | **11 (28.2%)** | 36 | **9 of 32 (28%)**: traffic 4/16, local burning 2/8, dust 3/8 |
+
+With nothing done, the method says Worked about 1 time in 5 on the replay period and about 1 time in 4 on local spikes. Net changes on local fakes range from -69% to +57%: hourly air is noisy, so one verdict is weak evidence and the ledger shows counts.
+
 ## Threshold changes
 
 None. The tuning rule (one cause over 70%) is met only when city-wide events are counted once per station; by event it is not.
