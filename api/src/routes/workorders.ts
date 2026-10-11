@@ -3,7 +3,7 @@ import { ACTIONS, type ActionType, type Agency, type PhotoCheck } from '@wajah/s
 import type { AppEnv } from '../lib/env';
 import { HttpError } from '../lib/http';
 import { checkPhoto } from '../modules/photo/check';
-import { photoUploadUrl } from '../modules/photo/upload';
+import { photoKey, photoUploadUrl } from '../modules/photo/upload';
 import { finishWorkOrder, issueWorkOrder, loadWorkOrder, measureWorkOrder, startWorkOrder } from '../modules/workorders/service';
 
 const AGENCIES: Agency[] = ['MCD', 'PWD', 'DPCC', 'Traffic Police', 'Residents'];
@@ -41,7 +41,10 @@ export const workOrders = new Hono<AppEnv>()
     let photo: PhotoCheck | undefined;
     if (key) {
       const { workOrder } = await loadWorkOrder(c.var.store, c.req.param('id'));
-      photo = await checkPhoto(key, workOrder.actionType, workOrder.area);
+      // Only this work order's own upload key: never read an arbitrary object from the bucket
+      const expected = photoKey(workOrder.id);
+      if (key !== expected) throw new HttpError(400, 'bad_photo_key', `photoKey must be ${expected}, as returned by /photo-url.`);
+      photo = await checkPhoto(expected, workOrder.actionType, workOrder.area);
     }
     return c.json((await finishWorkOrder(c.var.store, c.req.param('id'), photo)).workOrder);
   })
