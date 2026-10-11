@@ -1,27 +1,22 @@
 version: 1
 applications:
-  - frontend:
+  - appRoot: web
+    frontend:
       phases:
         preBuild:
           commands:
-            - node --version
-            - npm --version
             # Install from monorepo root so @wajah/shared workspace is linked
-            - npm install
+            - cd ..
+            - npm ci
         build:
           commands:
-            - npm run build -w @wajah/web
-            # Copy static assets into standalone bundle (create public dir if missing)
-            - mkdir -p web/.next/standalone/web/public
-            - '[ -d web/public ] && cp -r web/public/. web/.next/standalone/web/public/ || true'
-            - cp -r web/.next/static web/.next/standalone/web/.next/static
+            - npm run build
       artifacts:
-        # Amplify SSR: serve the standalone Node.js server bundle
-        baseDirectory: web/.next/standalone
+        # baseDirectory is relative to appRoot (web/)
+        baseDirectory: .next
         files:
           - '**/*'
       cache:
         paths:
-          - node_modules/**/*
-          - web/.next/cache/**/*
-    appRoot: .
+          - ../node_modules/**/*
+          - .next/cache/**/*
