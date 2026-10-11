@@ -4,11 +4,11 @@ import { datasetNow } from './lib/clock';
 import type { AppEnv } from './lib/env';
 import { errorBody, onError } from './lib/http';
 import { getStore } from './store';
+import { board } from './routes/board';
 import { incidents } from './routes/incidents';
 import { misc } from './routes/misc';
 import { stations } from './routes/stations';
 import { workOrders } from './routes/workorders';
-// TODO(track-b): mount the board router (GET /board, GET /ledger) from ./routes/board once it is merged (A3.8).
 
 export const notFoundRoute = (c: Context) => c.json(errorBody('not_found', `No route for ${c.req.method} ${c.req.path}.`), 404);
 
@@ -32,6 +32,7 @@ export function createApp() {
   app.route('/', stations);
   app.route('/', incidents);
   app.route('/', workOrders);
+  app.route('/', board);
 
   app.notFound(notFoundRoute);
   app.onError(onError);
