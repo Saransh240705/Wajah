@@ -6,6 +6,7 @@ import type { AskResponse, StationSummary } from '@wajah/shared';
 import { useApp } from '../../lib/context';
 import { ask, getStations } from '../../lib/api';
 import { EvidenceRow } from '../../components/EvidenceRow';
+import { t } from '../../lib/i18n';
 
 function AskContent() {
   const router = useRouter();
@@ -21,14 +22,25 @@ function AskContent() {
   const [response, setResponse] = useState<AskResponse | null>(null);
   const [submittedQuery, setSubmittedQuery] = useState('');
 
-  const sampleQuestions = [
+  const sampleQuestions = lang === 'hi' ? [
+    { text: 'आनंद विहार में आज दोपहर प्रदूषण इतना अधिक क्यों था?', stationId: 'anand-vihar' },
+    { text: 'क्या आज का धुआँ पराली जलने से है?', stationId: 'all' },
+    { text: 'जहाँगीरपुरी में कौन सा उपाय काम करता है?', stationId: 'jahangirpuri' },
+    { text: 'आज सबसे पहले कहाँ टीम भेजें?', stationId: 'all' },
+  ] : [
     { text: 'Why was Anand Vihar so bad this afternoon?', stationId: 'anand-vihar' },
     { text: 'Is today\'s smoke from stubble burning?', stationId: 'all' },
     { text: 'जहाँगीरपुरी में कौन सा उपाय काम करता है?', stationId: 'jahangirpuri' },
     { text: 'आज सबसे पहले कहाँ टीम भेजें?', stationId: 'all' },
   ];
 
-  const loadingSteps = [
+  const loadingSteps = lang === 'hi' ? [
+    'पिछली रात के सेंसर रीडिंग का विश्लेषण किया',
+    'हवा की दिशा और मौसम की स्थिति की जाँच की',
+    'NASA FIRMS से हवा के रुख पर खेतों की आग की जाँच की',
+    'रिकॉर्ड में देखा कि यहाँ क्या उपाय सफल रहे हैं',
+    'प्रमाण के साथ उत्तर तैयार किया जा रहा है',
+  ] : [
     'Read the sensor readings for last night',
     'Looked at the wind and weather conditions',
     'Checking farm fires upwind with NASA FIRMS',
@@ -59,7 +71,7 @@ function AskContent() {
       clearInterval(timer);
       clearInterval(stepTimer);
     };
-  }, [loading]);
+  }, [loading, loadingSteps.length]);
 
   const handleSubmit = async (q: string, stationOverride?: string) => {
     if (!q.trim()) return;
@@ -80,7 +92,9 @@ function AskContent() {
       setResponse(res);
     } catch {
       setResponse({
-        answer: 'Sorry, the agent could not answer at this moment. Please check the action board for current incidents.',
+        answer: lang === 'hi'
+          ? 'क्षमा करें, एजेंट इस समय उत्तर नहीं दे सका। कृपया वर्तमान घटनाओं के लिए कार्रवाई बोर्ड देखें।'
+          : 'Sorry, the agent could not answer at this moment. Please check the action board for current incidents.',
         evidence: [],
         suggestedActions: [],
       });
@@ -91,7 +105,7 @@ function AskContent() {
 
   const handleWriteBrief = async () => {
     setLoading(true);
-    setSubmittedQuery('The brief for the next hour');
+    setSubmittedQuery(lang === 'hi' ? 'अगले घंटे की संक्षिप्त रिपोर्ट' : 'The brief for the next hour');
     setResponse(null);
     try {
       const res = await ask({
@@ -102,7 +116,9 @@ function AskContent() {
       setResponse(res);
     } catch {
       setResponse({
-        answer: 'The brief could not be generated at this time.',
+        answer: lang === 'hi'
+          ? 'इस समय संक्षिप्त रिपोर्ट तैयार नहीं की जा सकी।'
+          : 'The brief could not be generated at this time.',
         evidence: [],
         suggestedActions: [],
       });
@@ -116,13 +132,15 @@ function AskContent() {
       {/* Top Header */}
       <div>
         <div className="text-xs font-mono font-bold tracking-wider text-ink-3 uppercase">
-          Ask Wajah
+          {t('ask_wajah_title', lang)}
         </div>
         <h1 className="font-serif text-3xl sm:text-4xl font-extrabold text-ink mt-2 leading-tight">
-          Ask why the air turned bad, or what to do next.
+          {t('ask_wajah_sub', lang)}
         </h1>
         <p className="font-sans text-sm sm:text-base text-ink-2 mt-2 leading-relaxed">
-          Wajah reads the sensors, the wind and the ledger, then answers with its evidence. Ask in English or Hindi.
+          {lang === 'hi'
+            ? 'Wajah सेंसर, हवा और रिकॉर्ड इतिहास का विश्लेषण करता है और प्रमाण के साथ उत्तर देता है। अंग्रेजी या हिंदी में पूछें।'
+            : 'Wajah reads the sensors, the wind and the ledger, then answers with its evidence. Ask in English or Hindi.'}
         </p>
       </div>
 
@@ -130,7 +148,7 @@ function AskContent() {
       {!response && !loading && (
         <div className="space-y-4">
           <div className="text-xs font-mono font-bold uppercase text-ink-3">
-            TRY ONE OF THESE
+            {t('try_one_of_these', lang)}
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {sampleQuestions.map((sq, idx) => (
@@ -157,10 +175,12 @@ function AskContent() {
               className="w-full py-3 border-2 border-ink bg-paper text-ink font-serif text-base font-bold flex items-center justify-center gap-2 hover:bg-sheet transition-colors"
             >
               <span>✍</span>
-              <span>Write the brief</span>
+              <span>{t('write_brief', lang)}</span>
             </button>
             <p className="text-center font-sans text-xs text-ink-3 mt-1.5">
-              The same brief as on the board: what to do in the next hour, and one thing not to do.
+              {lang === 'hi'
+                ? 'बोर्ड जैसी ही रिपोर्ट: अगले घंटे क्या करें, और क्या बिल्कुल न करें।'
+                : 'The same brief as on the board: what to do in the next hour, and one thing not to do.'}
             </p>
           </div>
         </div>
@@ -170,7 +190,9 @@ function AskContent() {
       {loading && (
         <div className="p-6 border-2 border-ink bg-sheet space-y-6">
           <div>
-            <div className="text-xs font-mono text-ink-3">You asked:</div>
+            <div className="text-xs font-mono text-ink-3">
+              {lang === 'hi' ? 'आपने पूछा:' : 'You asked:'}
+            </div>
             <div className="font-serif font-bold text-xl text-ink mt-1">{submittedQuery}</div>
           </div>
 
@@ -184,7 +206,11 @@ function AskContent() {
                 style={{ width: `${Math.min(95, elapsed * 6)}%` }}
               />
             </div>
-            <div className="font-mono text-xs text-ink-3">{elapsed}s of about 20s</div>
+            <div className="font-mono text-xs text-ink-3">
+              {lang === 'hi'
+                ? `लगभग 20 सेकंड में से ${elapsed} सेकंड`
+                : `${elapsed}s of about 20s`}
+            </div>
           </div>
 
           <div className="space-y-2 font-mono text-xs text-ink-2 pt-2 border-t border-rule">
@@ -205,7 +231,9 @@ function AskContent() {
             <div>
               <div className="text-xs font-mono text-ink-3">
                 {lang === 'hi' ? 'आपने पूछा · ' : 'You asked · '}
-                <span className="font-bold text-ink">{selectedStation === 'all' ? 'All Delhi' : selectedStation}</span>
+                <span className="font-bold text-ink">
+                  {selectedStation === 'all' ? t('all_delhi', lang) : selectedStation}
+                </span>
               </div>
               <h2 className="font-serif font-extrabold text-2xl text-ink mt-1">
                 {submittedQuery}
@@ -220,7 +248,7 @@ function AskContent() {
             {response.evidence && response.evidence.length > 0 && (
               <div className="space-y-2">
                 <div className="text-xs font-mono uppercase font-bold text-ink-3">
-                  {lang === 'hi' ? 'सबूत (EVIDENCE)' : 'EVIDENCE'}
+                  {t('evidence_title', lang)}
                 </div>
                 <div className="border border-rule divide-y divide-rule p-2">
                   {response.evidence.map((chip, idx) => (
@@ -237,14 +265,14 @@ function AskContent() {
                   onClick={() => router.push(`/incident/${response.incidentId}?dataset=${dataset}`)}
                   className="px-4 py-2 bg-ink text-white font-mono text-xs font-bold uppercase hover:bg-ink-2"
                 >
-                  {lang === 'hi' ? 'घटना खोलें' : 'Open incident'}
+                  {t('open_incident', lang)}
                 </button>
               )}
               <button
                 onClick={() => router.push(`/board?dataset=${dataset}`)}
                 className="px-4 py-2 border border-ink bg-paper font-mono text-xs font-bold uppercase hover:bg-ink hover:text-white"
               >
-                {lang === 'hi' ? 'बोर्ड खोलें' : 'Open board'}
+                {t('open_board', lang)}
               </button>
               <button
                 onClick={() => {
@@ -253,7 +281,7 @@ function AskContent() {
                 }}
                 className="px-4 py-2 border border-rule font-mono text-xs font-bold uppercase hover:border-ink"
               >
-                {lang === 'hi' ? 'नया सवाल पूछें' : 'Ask another question'}
+                {t('ask_another', lang)}
               </button>
             </div>
           </div>
@@ -263,13 +291,13 @@ function AskContent() {
       {/* Bottom Input Form */}
       <div className="sticky bottom-20 md:bottom-6 bg-paper p-2 border-2 border-ink bg-sheet shadow-sm space-y-2">
         <div className="flex items-center gap-2 px-2 text-xs font-mono text-ink-2">
-          <span>Area:</span>
+          <span>{lang === 'hi' ? 'क्षेत्र:' : 'Area:'}</span>
           <select
             value={selectedStation}
             onChange={(e) => setSelectedStation(e.target.value)}
             className="bg-paper border border-rule px-1.5 py-0.5 font-mono text-xs text-ink focus:outline-none"
           >
-            <option value="all">All Delhi</option>
+            <option value="all">{t('all_delhi', lang)}</option>
             {stations.map((s) => (
               <option key={s.id} value={s.id}>
                 {s.name}
@@ -289,7 +317,7 @@ function AskContent() {
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder={lang === 'hi' ? 'आगे पूछें...' : 'Ask why or what to do...'}
+            placeholder={t('ask_input_placeholder', lang)}
             disabled={loading}
             className="flex-1 px-3 py-2.5 bg-paper border border-rule text-sm font-sans text-ink placeholder:text-ink-3 focus:outline-none focus:border-ink"
           />

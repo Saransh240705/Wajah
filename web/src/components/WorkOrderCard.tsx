@@ -53,22 +53,22 @@ export function WorkOrderCard({ workOrder, className = '' }: WorkOrderCardProps)
       <div className="py-4 border-b border-rule">
         <div className="flex items-center justify-between font-mono text-xs">
           <div className="text-left">
-            <div className="font-bold text-ink">Issued</div>
+            <div className="font-bold text-ink">{lang === 'hi' ? 'जारी किया गया' : 'Issued'}</div>
             <div className="text-ink-3">{formatTimeIST(workOrder.issuedAt) || '--'}</div>
           </div>
           <div className="flex-1 mx-3 border-t-2 border-ink" />
           <div className="text-center">
             <div className={`font-bold ${isInProgress ? 'text-ink' : 'text-ink-3'}`}>
-              In progress
+              {lang === 'hi' ? 'प्रगति पर' : 'In progress'}
             </div>
             <div className="text-ink-3">
-              {isInProgress ? formatTimeIST(workOrder.startedAt) : 'not yet'}
+              {isInProgress ? formatTimeIST(workOrder.startedAt) : (lang === 'hi' ? 'अभी नहीं' : 'not yet')}
             </div>
           </div>
           <div className={`flex-1 mx-3 border-t-2 ${isDone ? 'border-ink' : 'border-dashed border-rule'}`} />
           <div className="text-right">
-            <div className={`font-bold ${isDone ? 'text-ink' : 'text-ink-3'}`}>Done</div>
-            <div className="text-ink-3">{isDone ? formatTimeIST(workOrder.doneAt) : 'not yet'}</div>
+            <div className={`font-bold ${isDone ? 'text-ink' : 'text-ink-3'}`}>{lang === 'hi' ? 'पूर्ण' : 'Done'}</div>
+            <div className="text-ink-3">{isDone ? formatTimeIST(workOrder.doneAt) : (lang === 'hi' ? 'अभी नहीं' : 'not yet')}</div>
           </div>
         </div>
       </div>
@@ -106,7 +106,9 @@ export function WorkOrderCard({ workOrder, className = '' }: WorkOrderCardProps)
           <span className="text-lg">📷</span>
           <div className="text-xs font-sans">
             <span className="font-mono uppercase font-bold text-ink mr-1">
-              Photo check: {workOrder.photo.result}
+              {lang === 'hi'
+                ? `फ़ोटो सत्यापन: ${workOrder.photo.result === 'pass' ? 'सफल' : workOrder.photo.result === 'fail' ? 'विफल' : 'अस्पष्ट'}`
+                : `Photo check: ${workOrder.photo.result}`}
             </span>
             <span className="text-ink-2">{workOrder.photo.note}</span>
           </div>
@@ -116,7 +118,9 @@ export function WorkOrderCard({ workOrder, className = '' }: WorkOrderCardProps)
       {/* Result if measured */}
       {workOrder.effect && (
         <div className="pt-3 pb-1 flex items-center justify-between">
-          <span className="text-xs font-mono uppercase font-bold text-ink-3">RESULT</span>
+          <span className="text-xs font-mono uppercase font-bold text-ink-3">
+            {lang === 'hi' ? 'परिणाम' : 'RESULT'}
+          </span>
           <VerdictBadge
             verdict={workOrder.effect.verdict}
             netChangePct={workOrder.effect.netChangePct}

@@ -10,7 +10,7 @@ import { MapView } from '../../components/MapView';
 import { BandPill } from '../../components/BandPill';
 import { StatusBadge } from '../../components/StatusBadge';
 import { formatDateIST } from '../../lib/utils';
-import { causeLabel } from '../../lib/i18n';
+import { bandLabel, causeLabel } from '../../lib/i18n';
 
 export default function MapPage() {
   const router = useRouter();
@@ -51,7 +51,7 @@ export default function MapPage() {
   if (loading) {
     return (
       <div className="h-[700px] w-full border border-ink bg-sheet flex items-center justify-center font-mono text-xs text-ink-3">
-        Loading Delhi air quality map…
+        {lang === 'hi' ? 'दिल्ली वायु गुणवत्ता नक्शा लोड हो रहा है…' : 'Loading Delhi air quality map…'}
       </div>
     );
   }
@@ -80,11 +80,15 @@ export default function MapPage() {
       {/* Title */}
       <div>
         <div className="text-xs font-mono font-bold tracking-wider text-ink-3 uppercase">
-          Map · {nowLabel}
+          {lang === 'hi' ? `नक्शा · ${nowLabel}` : `Map · ${nowLabel}`}
         </div>
         <h1 className="font-serif text-3xl sm:text-4xl font-extrabold text-ink mt-1">
           {activeStations.length > 0
-            ? `${activeStations.length} area${activeStations.length === 1 ? '' : 's'} spiking now.`
+            ? lang === 'hi'
+              ? `वर्तमान में ${activeStations.length} क्षेत्रों में स्तर बढ़ा हुआ है।`
+              : `${activeStations.length} area${activeStations.length === 1 ? '' : 's'} spiking now.`
+            : lang === 'hi'
+            ? 'सभी निगरानी क्षेत्र सामान्य स्तर पर हैं।'
             : 'All monitored areas within usual levels.'}
         </h1>
       </div>
@@ -97,13 +101,13 @@ export default function MapPage() {
           <div className="border border-ink bg-sheet p-4 space-y-3">
             <div className="flex items-center justify-between border-b border-rule pb-2">
               <span className="text-xs font-mono font-bold tracking-wider text-ink uppercase">
-                ACTIVE INCIDENTS · {activeIncidents.length}
+                {lang === 'hi' ? `सक्रिय घटनाएं · ${activeIncidents.length}` : `ACTIVE INCIDENTS · ${activeIncidents.length}`}
               </span>
               <Link
                 href={`/board?dataset=${dataset}`}
                 className="font-mono text-xs font-bold underline text-ink"
               >
-                Open board →
+                {lang === 'hi' ? 'बोर्ड खोलें →' : 'Open board →'}
               </Link>
             </div>
 
@@ -144,7 +148,7 @@ export default function MapPage() {
           {selectedStation && (
             <div className="border-2 border-ink bg-sheet p-4 space-y-3">
               <div className="text-xs font-mono uppercase font-bold text-ink-3">
-                {selectedStation.name} SELECTED
+                {selectedStation.name} {lang === 'hi' ? 'चयनित' : 'SELECTED'}
               </div>
 
               <div className="flex items-center justify-between">
@@ -153,7 +157,7 @@ export default function MapPage() {
                     {selectedStation.latest?.pm25 ? Math.round(selectedStation.latest.pm25) : '--'}
                   </div>
                   <div className="text-xs font-mono text-ink-2 capitalize">
-                    {selectedStation.band?.replace('_', ' ') || 'Moderate'} · {selectedStation.isHotspot ? 'Hotspot' : 'Comparison station'}
+                    {bandLabel(selectedStation.band, lang)} · {selectedStation.isHotspot ? (lang === 'hi' ? 'हॉटस्पॉट' : 'Hotspot') : (lang === 'hi' ? 'तुलना स्टेशन' : 'Comparison station')}
                   </div>
                 </div>
                 <BandPill
@@ -165,15 +169,19 @@ export default function MapPage() {
 
               {selectedIncident && (
                 <div className="p-2.5 bg-paper border border-rule text-xs font-sans text-ink">
-                  A {selectedIncident.topCause.replace('_', ' ')} spike detected since {selectedIncident.start.slice(11, 16)}.
+                  {lang === 'hi'
+                    ? `${selectedIncident.start.slice(11, 16)} से ${causeLabel(selectedIncident.topCause, lang)} का स्तर बढ़ा हुआ देखा गया।`
+                    : `A ${selectedIncident.topCause.replace('_', ' ')} spike detected since ${selectedIncident.start.slice(11, 16)}.`}
                 </div>
               )}
 
               {/* Fix 3: show reading's own timestamp when it may be stale */}
               <div className="text-[10px] font-mono text-ink-3">
                 {selectedStation.latest?.ts
-                  ? `Last reading ${formatDateIST(selectedStation.latest.ts)}`
-                  : 'No recent reading'}
+                  ? lang === 'hi'
+                    ? `अंतिम रीडिंग ${formatDateIST(selectedStation.latest.ts)}`
+                    : `Last reading ${formatDateIST(selectedStation.latest.ts)}`
+                  : lang === 'hi' ? 'कोई हालिया रीडिंग नहीं' : 'No recent reading'}
               </div>
 
               <div className="flex items-center gap-3 pt-2">
@@ -181,14 +189,14 @@ export default function MapPage() {
                   href={`/area/${selectedStation.id}?dataset=${dataset}`}
                   className="px-3 py-1.5 border border-ink bg-paper font-mono text-xs font-bold hover:bg-ink hover:text-white transition-colors"
                 >
-                  Last 48 hours
+                  {lang === 'hi' ? 'पिछले 48 घंटे' : 'Last 48 hours'}
                 </Link>
                 {selectedIncident && (
                   <Link
                     href={`/incident/${selectedIncident.id}?dataset=${dataset}`}
                     className="px-3 py-1.5 bg-ink text-white font-mono text-xs font-bold hover:bg-ink-2 transition-colors"
                   >
-                    Open incident
+                    {lang === 'hi' ? 'घटना विवरण खोलें' : 'Open incident'}
                   </Link>
                 )}
               </div>
@@ -198,7 +206,7 @@ export default function MapPage() {
           {/* Farm Fires Toggle */}
           <div className="border border-rule bg-sheet p-3 flex items-center justify-between">
             <div className="font-mono text-xs font-bold text-ink">
-              Farm fires and wind · optional layer
+              {lang === 'hi' ? 'खेतों की आग और हवा · वैकल्पिक परत' : 'Farm fires and wind · optional layer'}
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
               <input
@@ -213,20 +221,22 @@ export default function MapPage() {
 
           {/* Map Legend */}
           <div className="border border-rule bg-sheet p-4 space-y-3 font-mono text-xs text-ink-2">
-            <div className="font-bold text-ink uppercase tracking-wider">READING THE MAP</div>
+            <div className="font-bold text-ink uppercase tracking-wider">
+              {lang === 'hi' ? 'नक्शा कैसे पढ़ें' : 'READING THE MAP'}
+            </div>
             <div className="grid grid-cols-3 gap-1 text-[11px] text-center">
-              <div className="bg-band-good text-white p-1">Good 0-30</div>
-              <div className="bg-band-satisfactory text-ink p-1">Sat 31-60</div>
-              <div className="bg-band-moderate text-ink p-1">Mod 61-90</div>
-              <div className="bg-band-poor text-ink p-1">Poor 91-120</div>
-              <div className="bg-band-very-poor text-white p-1">V.Poor 121-250</div>
-              <div className="bg-band-severe text-white p-1">Severe 250+</div>
+              <div className="bg-band-good text-white p-1">{lang === 'hi' ? 'अच्छा 0-30' : 'Good 0-30'}</div>
+              <div className="bg-band-satisfactory text-ink p-1">{lang === 'hi' ? 'संतोषजनक 31-60' : 'Sat 31-60'}</div>
+              <div className="bg-band-moderate text-ink p-1">{lang === 'hi' ? 'मध्यम 61-90' : 'Mod 61-90'}</div>
+              <div className="bg-band-poor text-ink p-1">{lang === 'hi' ? 'खराब 91-120' : 'Poor 91-120'}</div>
+              <div className="bg-band-very-poor text-white p-1">{lang === 'hi' ? 'बहुत खराब 121-250' : 'V.Poor 121-250'}</div>
+              <div className="bg-band-severe text-white p-1">{lang === 'hi' ? 'गंभीर 250+' : 'Severe 250+'}</div>
             </div>
             <div className="space-y-1.5 pt-2 text-[11px]">
-              <div>• Heavy border: Hotspot station</div>
-              <div>• Thin border: Comparison station</div>
-              <div>• Ring: Active spike incident</div>
-              <div>• WO tab: Work order in progress</div>
+              <div>{lang === 'hi' ? '• मोटी सीमा: हॉटस्पॉट स्टेशन' : '• Heavy border: Hotspot station'}</div>
+              <div>{lang === 'hi' ? '• पतली सीमा: तुलना स्टेशन' : '• Thin border: Comparison station'}</div>
+              <div>{lang === 'hi' ? '• घेरा: सक्रिय स्पाइक घटना' : '• Ring: Active spike incident'}</div>
+              <div>{lang === 'hi' ? '• WO: कार्य आदेश प्रगति पर' : '• WO tab: Work order in progress'}</div>
             </div>
           </div>
         </div>

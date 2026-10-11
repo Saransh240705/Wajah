@@ -38,7 +38,7 @@ export function CauseCard({ topCause, confidence, scores, className = '' }: Caus
       return (
         <span className="inline-flex items-center gap-1 font-mono text-xs">
           <span className="text-ink">■■■</span>
-          <span className="font-semibold text-ink ml-1">Confidence: high</span>
+          <span className="font-semibold text-ink ml-1">{lang === 'hi' ? 'भरोसा: उच्च' : 'Confidence: high'}</span>
         </span>
       );
     }
@@ -46,14 +46,14 @@ export function CauseCard({ topCause, confidence, scores, className = '' }: Caus
       return (
         <span className="inline-flex items-center gap-1 font-mono text-xs">
           <span className="text-ink">■■□</span>
-          <span className="font-semibold text-ink ml-1">Confidence: medium</span>
+          <span className="font-semibold text-ink ml-1">{lang === 'hi' ? 'भरोसा: मध्यम' : 'Confidence: medium'}</span>
         </span>
       );
     }
     return (
       <span className="inline-flex items-center gap-1 font-mono text-xs">
         <span className="text-ink">■□□</span>
-        <span className="font-semibold text-ink-3 ml-1">Confidence: low</span>
+        <span className="font-semibold text-ink-3 ml-1">{lang === 'hi' ? 'भरोसा: कम' : 'Confidence: low'}</span>
       </span>
     );
   };
@@ -77,7 +77,7 @@ export function CauseCard({ topCause, confidence, scores, className = '' }: Caus
         <div className="mt-1">{confidenceSquares('low')}</div>
         <p className="font-sans text-sm text-ink-2 mt-2 leading-relaxed">
           {lang === 'hi'
-            ? 'दो कारण लगभग समान रूप से संभावित हैं। जब संकेत विभाजित हों तो वाज़ेह अनुमान नहीं लगाता।'
+            ? 'दो कारण लगभग समान रूप से संभावित हैं। जब संकेत विभाजित हों तो Wajah अनुमान नहीं लगाता।'
             : 'Two causes fit about equally well. Wajah does not pick one when the clues disagree.'}
         </p>
 
@@ -88,11 +88,11 @@ export function CauseCard({ topCause, confidence, scores, className = '' }: Caus
             </div>
             <div className="flex items-center justify-between font-mono text-sm py-1 border-b border-rule">
               <span>{causeLabel(candidate1[0], lang)}</span>
-              <span className="font-bold">score {(candidate1[1] / 100).toFixed(2)}</span>
+              <span className="font-bold">{lang === 'hi' ? 'स्कोर' : 'score'} {(candidate1[1] / 100).toFixed(2)}</span>
             </div>
             <div className="flex items-center justify-between font-mono text-sm py-1">
               <span>{causeLabel(candidate2[0], lang)}</span>
-              <span className="font-bold">score {(candidate2[1] / 100).toFixed(2)}</span>
+              <span className="font-bold">{lang === 'hi' ? 'स्कोर' : 'score'} {(candidate2[1] / 100).toFixed(2)}</span>
             </div>
           </div>
         )}

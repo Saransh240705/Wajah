@@ -68,7 +68,7 @@ export function Header() {
                   : 'text-ink-3 hover:text-ink'
               }`}
             >
-              Live
+              {t('live', lang)}
             </button>
             <span className="text-ink-3">/</span>
             <button
@@ -79,7 +79,7 @@ export function Header() {
                   : 'text-ink-3 hover:text-ink'
               }`}
             >
-              Replay
+              {t('replay', lang)}
             </button>
           </div>
 
@@ -113,7 +113,7 @@ export function Header() {
       {dataset === 'replay' && (
         <div className="w-full bg-paper border-t border-dashed border-ink py-1 px-4 text-center text-xs font-mono font-bold tracking-wider text-ink flex items-center justify-center gap-2">
           <span>⟲</span>
-          <span>REPLAY · recorded readings, not live</span>
+          <span>{t('replay_banner', lang)}</span>
         </div>
       )}
     </header>

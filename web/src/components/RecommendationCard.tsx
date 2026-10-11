@@ -55,7 +55,7 @@ export function RecommendationCard({
         </div>
 
         <div className="mt-4 p-3 bg-ink text-white font-mono text-xs font-bold tracking-wide">
-          <span className="bg-white text-ink px-1.5 py-0.5 mr-2 font-black">DO NOT</span>
+          <span className="bg-white text-ink px-1.5 py-0.5 mr-2 font-black">{lang === 'hi' ? 'बिल्कुल न करें' : 'DO NOT'}</span>
           <span>{lang === 'hi' ? 'इस स्थिति में पानी का छिड़काव न करें।' : 'Do not deploy sprinklers for this.'}</span>
         </div>
 
@@ -123,7 +123,7 @@ export function RecommendationCard({
             </span>
             <div className="flex items-center gap-2">
               <span className="font-mono font-bold text-ink">
-                {history.tried > 0 ? `Worked ${history.worked} of ${history.tried} times` : 'Not tried here yet'}
+                {history.tried > 0 ? (lang === 'hi' ? `${history.tried} में से ${history.worked} बार काम किया` : `Worked ${history.worked} of ${history.tried} times`) : (lang === 'hi' ? 'यहाँ अभी तक नहीं आजमाया गया' : 'Not tried here yet')}
               </span>
               {history.tried > 0 && (
                 <div className="flex items-center gap-0.5 font-mono text-xs">
@@ -147,7 +147,7 @@ export function RecommendationCard({
               {lang === 'hi' ? 'यदि असर न हो:' : 'If it fails:'}
             </span>{' '}
             <span>
-              {ACTIONS[altStep.actionType].labelEn}, through {altStep.agency}
+              {lang === 'hi' ? ACTIONS[altStep.actionType].labelHi : ACTIONS[altStep.actionType].labelEn}, {lang === 'hi' ? `${altStep.agency} के माध्यम से` : `through ${altStep.agency}`}
             </span>
           </div>
         )}

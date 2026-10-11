@@ -56,7 +56,9 @@ export function BriefCard({ initialBrief, className = '' }: BriefCardProps) {
           <div className="font-sans text-sm font-semibold text-ink mt-2">
             {lang === 'hi' ? 'रिपोर्ट तैयार की जा रही है...' : 'Writing the brief from the rows below…'}
           </div>
-          <div className="font-mono text-xs text-ink-3 mt-1">About 10 seconds.</div>
+          <div className="font-mono text-xs text-ink-3 mt-1">
+            {lang === 'hi' ? 'लगभग 10 सेकंड।' : 'About 10 seconds.'}
+          </div>
         </div>
       ) : error ? (
         <div className="py-4">
@@ -82,7 +84,9 @@ export function BriefCard({ initialBrief, className = '' }: BriefCardProps) {
           </div>
 
           <div className="pt-2 border-t border-rule text-[11px] font-mono text-ink-3">
-            Written by Wajah agent from sensor readings and ledger history.
+            {lang === 'hi'
+              ? 'सेंसर रीडिंग और रिकॉर्ड इतिहास से Wajah एजेंट द्वारा तैयार किया गया।'
+              : 'Written by Wajah agent from sensor readings and ledger history.'}
           </div>
         </div>
       ) : (

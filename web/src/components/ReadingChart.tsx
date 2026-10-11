@@ -13,6 +13,7 @@ import {
 } from 'recharts';
 import type { Incident, Reading } from '@wajah/shared';
 import { formatTimeIST } from '../lib/utils';
+import { useApp } from '../lib/context';
 
 interface ReadingChartProps {
   readings: Reading[];
@@ -33,14 +34,17 @@ export function ReadingChart({
   onSelectIncident,
   className = '',
 }: ReadingChartProps) {
+  const { lang } = useApp();
   const [activePollutant, setActivePollutant] = useState<'pm25' | 'pm10' | 'no2' | 'co'>(initialPollutant);
 
   if (!readings || readings.length === 0) {
     return (
       <div className={`p-8 border border-ink bg-paper text-center ${className}`}>
-        <div className="font-serif text-lg font-bold text-ink">No readings for these 48 hours.</div>
+        <div className="font-serif text-lg font-bold text-ink">
+          {lang === 'hi' ? 'इन 48 घंटों के लिए कोई रीडिंग उपलब्ध नहीं है।' : 'No readings for these 48 hours.'}
+        </div>
         <p className="font-sans text-xs text-ink-2 mt-1">
-          The monitor may be offline. Switch to Replay to see recorded data.
+          {lang === 'hi' ? 'हो सकता है कि मॉनिटर ऑफ़लाइन हो। रिकॉर्ड किया गया डेटा देखने के लिए रीप्ले चुनें।' : 'The monitor may be offline. Switch to Replay to see recorded data.'}
         </p>
       </div>
     );
@@ -82,7 +86,13 @@ export function ReadingChart({
           </div>
 
           <div className="text-[11px] font-mono text-ink-3">
-            {activePollutant === 'pm10' ? 'PM10: coarse dust' : activePollutant === 'no2' ? 'NO2: traffic emissions' : activePollutant === 'co' ? 'CO: burning' : 'PM2.5: fine smoke & dust'}
+            {activePollutant === 'pm10'
+              ? (lang === 'hi' ? 'PM10: मोटा धूल कण' : 'PM10: coarse dust')
+              : activePollutant === 'no2'
+              ? (lang === 'hi' ? 'NO2: वाहनों का धुआँ' : 'NO2: traffic emissions')
+              : activePollutant === 'co'
+              ? (lang === 'hi' ? 'CO: दहन' : 'CO: burning')
+              : (lang === 'hi' ? 'PM2.5: बारीक धुआँ व धूल' : 'PM2.5: fine smoke & dust')}
           </div>
         </div>
       )}
@@ -116,9 +126,9 @@ export function ReadingChart({
             {/* Threshold Lines for PM2.5 */}
             {activePollutant === 'pm25' && (
               <>
-                <ReferenceLine y={90} stroke="#6B6A64" strokeDasharray="3 3" label={{ value: 'Poor (90)', position: 'insideRight', fill: '#6B6A64', fontSize: 10 }} />
-                <ReferenceLine y={120} stroke="#6B6A64" strokeDasharray="3 3" label={{ value: 'Very poor (120)', position: 'insideRight', fill: '#6B6A64', fontSize: 10 }} />
-                <ReferenceLine y={250} stroke="#141414" strokeDasharray="3 3" label={{ value: 'Severe (250)', position: 'insideRight', fill: '#141414', fontSize: 10 }} />
+                <ReferenceLine y={90} stroke="#6B6A64" strokeDasharray="3 3" label={{ value: lang === 'hi' ? 'खराब (90)' : 'Poor (90)', position: 'insideRight', fill: '#6B6A64', fontSize: 10 }} />
+                <ReferenceLine y={120} stroke="#6B6A64" strokeDasharray="3 3" label={{ value: lang === 'hi' ? 'बहुत खराब (120)' : 'Very poor (120)', position: 'insideRight', fill: '#6B6A64', fontSize: 10 }} />
+                <ReferenceLine y={250} stroke="#141414" strokeDasharray="3 3" label={{ value: lang === 'hi' ? 'गंभीर (250)' : 'Severe (250)', position: 'insideRight', fill: '#141414', fontSize: 10 }} />
               </>
             )}
 
@@ -157,7 +167,7 @@ export function ReadingChart({
       </div>
 
       <div className="mt-2 text-[10px] font-mono text-ink-3 flex items-center justify-between">
-        <span>Shaded grey bands indicate detected spike windows.</span>
+        <span>{lang === 'hi' ? 'धूसर पट्टियां चिन्हित उछाल अवधियों को दर्शाती हैं।' : 'Shaded grey bands indicate detected spike windows.'}</span>
         <span>µg/m³</span>
       </div>
     </div>

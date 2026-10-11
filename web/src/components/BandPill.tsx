@@ -3,6 +3,8 @@
 import React from 'react';
 import type { AqiBand } from '@wajah/shared';
 import { bandBgClass } from '../lib/utils';
+import { bandLabel } from '../lib/i18n';
+import { useApp } from '../lib/context';
 
 interface BandPillProps {
   value: number | string | null;
@@ -19,9 +21,9 @@ export function BandPill({
   variant = 'compact',
   className = '',
 }: BandPillProps) {
+  const { lang } = useApp();
   const bg = bandBgClass(band);
-  const bandLabel = band ? band.replace('_', ' ') : '';
-  const capitalizedBand = bandLabel.charAt(0).toUpperCase() + bandLabel.slice(1);
+  const capitalizedBand = bandLabel(band, lang);
 
   if (variant === 'legend') {
     return (
@@ -34,7 +36,9 @@ export function BandPill({
   if (variant === 'large') {
     return (
       <div className={`p-4 border border-ink ${bg} ${className}`}>
-        <div className="text-xs font-mono uppercase tracking-widest opacity-80">NOW</div>
+        <div className="text-xs font-mono uppercase tracking-widest opacity-80">
+          {lang === 'hi' ? 'अभी' : 'NOW'}
+        </div>
         <div className="font-slab text-5xl sm:text-6xl font-normal leading-none mt-1">{value ?? '--'}</div>
         <div className="font-serif text-lg font-extrabold capitalize mt-2">{capitalizedBand}</div>
         <div className="text-xs font-mono opacity-90 mt-0.5">

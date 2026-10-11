@@ -10,7 +10,7 @@ import { BriefCard } from '../../components/BriefCard';
 import { BandPill } from '../../components/BandPill';
 import { StatusBadge } from '../../components/StatusBadge';
 import { MapView } from '../../components/MapView';
-import { actionLabel, causeLabel } from '../../lib/i18n';
+import { actionLabel, causeLabel, confidenceLabel, t } from '../../lib/i18n';
 import { formatDateIST } from '../../lib/utils';
 
 export default function BoardPage() {
@@ -78,19 +78,37 @@ export default function BoardPage() {
       {/* Top Header */}
       <div>
         <div className="text-xs font-mono font-bold tracking-wider text-ink-3 uppercase">
-          Action board · {todayStr} · updated {new Date().getHours()}:00
+          {lang === 'hi'
+            ? `कार्रवाई बोर्ड · ${todayStr} · अपडेटेड ${new Date().getHours()}:00`
+            : `Action board · ${todayStr} · updated ${new Date().getHours()}:00`}
         </div>
         <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-extrabold text-ink mt-2 leading-tight">
           {topItem
-            ? `${board.summary.actionable} spikes need a work order this hour. Start with ${topItem.incident.area}.`
+            ? lang === 'hi'
+              ? `इस घंटे ${board.summary.actionable} स्पाइक्स के लिए कार्य आदेश की आवश्यकता है। ${topItem.incident.area} से शुरू करें।`
+              : `${board.summary.actionable} spikes need a work order this hour. Start with ${topItem.incident.area}.`
+            : lang === 'hi'
+            ? 'इस घंटे किसी भी हॉटस्पॉट पर कार्रवाई की आवश्यकता नहीं है।'
             : 'No hotspot needs action this hour.'}
         </h1>
         <div className="mt-2 text-xs sm:text-sm font-mono text-ink-2 flex flex-wrap gap-2">
-          <span>{board.summary.actionable} spikes need a work order</span>
+          <span>
+            {lang === 'hi'
+              ? `${board.summary.actionable} स्पाइक्स को कार्य आदेश चाहिए`
+              : `${board.summary.actionable} spikes need a work order`}
+          </span>
           <span>·</span>
-          <span>{board.summary.inProgress} work order in progress</span>
+          <span>
+            {lang === 'hi'
+              ? `${board.summary.inProgress} कार्य आदेश प्रगति पर है`
+              : `${board.summary.inProgress} work order in progress`}
+          </span>
           <span>·</span>
-          <span>{board.summary.noLocalAction} with no local fix</span>
+          <span>
+            {lang === 'hi'
+              ? `${board.summary.noLocalAction} का कोई स्थानीय समाधान नहीं`
+              : `${board.summary.noLocalAction} with no local fix`}
+          </span>
         </div>
       </div>
 
@@ -105,10 +123,10 @@ export default function BoardPage() {
           <div>
             <div className="flex items-center justify-between border-b-2 border-ink pb-2 mb-3">
               <span className="text-xs font-mono font-bold tracking-wider uppercase text-ink">
-                NEEDS ACTION, HIGHEST PRIORITY FIRST
+                {lang === 'hi' ? 'कार्रवाई आवश्यक, सर्वोच्च प्राथमिकता पहले' : 'NEEDS ACTION, HIGHEST PRIORITY FIRST'}
               </span>
               <span className="hidden sm:inline text-xs font-mono text-ink-3">
-                Peak · likely cause · what to do
+                {lang === 'hi' ? 'अधिकतम स्तर · संभावित कारण · क्या करना है' : 'Peak · likely cause · what to do'}
               </span>
             </div>
 
@@ -150,8 +168,10 @@ export default function BoardPage() {
                           <div className="flex items-center gap-2">
                             <BandPill value={peakVal} band={peakBand} pollutant={peakPollutant} variant="compact" />
                             <div className="text-xs font-mono text-ink-2">
-                              <div>{peakPollutant} peak</div>
-                              <div className="capitalize font-bold text-ink">{peakBand.replace('_', ' ')}</div>
+                              <div>{peakPollutant} {lang === 'hi' ? 'अधिकतम' : 'peak'}</div>
+                              <div className="capitalize font-bold text-ink">
+                                {lang === 'hi' ? (peakBand === 'severe' ? 'गंभीर' : peakBand === 'very_poor' ? 'बहुत खराब' : 'खराब') : peakBand.replace('_', ' ')}
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -164,7 +184,7 @@ export default function BoardPage() {
                             {causeLabel(inc.topCause, lang)}
                           </div>
                           <div className="text-xs font-mono text-ink-3 capitalize">
-                            Confidence: {inc.confidence}
+                            {lang === 'hi' ? `विश्वसनीयता: ${confidenceLabel(inc.confidence, lang)}` : `Confidence: ${inc.confidence}`}
                           </div>
                         </div>
 
@@ -178,7 +198,7 @@ export default function BoardPage() {
 
                           {hasChanged && (
                             <span className="inline-block px-1.5 py-0.5 text-[10px] font-mono font-bold uppercase bg-ink text-white mr-1.5 mt-0.5">
-                              CHANGED
+                              {lang === 'hi' ? 'बदला गया' : 'CHANGED'}
                             </span>
                           )}
 
@@ -193,7 +213,9 @@ export default function BoardPage() {
                         {activeWo ? (
                           <div className="text-left sm:text-right font-mono text-xs">
                             <div className="font-bold text-ink">{activeWo.id.toUpperCase()}</div>
-                            <div className="text-ink-3">In progress</div>
+                            <div className="text-ink-3">
+                              {lang === 'hi' ? 'प्रगति पर' : 'In progress'}
+                            </div>
                           </div>
                         ) : (
                           <button
@@ -205,7 +227,9 @@ export default function BoardPage() {
                                 : 'border-2 border-ink bg-transparent text-ink hover:bg-ink hover:text-white'
                             }`}
                           >
-                            {issuingId === inc.id ? 'Issuing...' : (lang === 'hi' ? 'कार्य आदेश जारी करें' : 'Issue work order')}
+                            {issuingId === inc.id
+                              ? (lang === 'hi' ? 'जारी किया जा रहा है...' : 'Issuing...')
+                              : (lang === 'hi' ? 'कार्य आदेश जारी करें' : 'Issue work order')}
                           </button>
                         )}
                       </div>
@@ -221,9 +245,11 @@ export default function BoardPage() {
             <div className="pt-4">
               <div className="flex items-center justify-between border-b border-dashed border-ink pb-2 mb-3">
                 <span className="text-xs font-mono font-bold tracking-wider uppercase text-ink-3">
-                  NO LOCAL FIX ({noLocalFixItems.length})
+                  {lang === 'hi' ? `कोई स्थानीय समाधान नहीं (${noLocalFixItems.length})` : `NO LOCAL FIX (${noLocalFixItems.length})`}
                 </span>
-                <span className="text-xs font-mono text-ink-3">Nothing to dispatch</span>
+                <span className="text-xs font-mono text-ink-3">
+                  {lang === 'hi' ? 'भेजने के लिए कुछ नहीं' : 'Nothing to dispatch'}
+                </span>
               </div>
 
               <div className="space-y-3">
@@ -282,7 +308,7 @@ export default function BoardPage() {
         <div className="hidden lg:block lg:col-span-4 space-y-4 sticky top-20">
           <div className="border border-ink bg-sheet p-3">
             <div className="text-xs font-mono font-bold tracking-wider uppercase text-ink mb-2">
-              WHERE THEY ARE
+              {t('where_they_are', lang)}
             </div>
             <div className="h-[420px] w-full border border-rule">
               <MapView
@@ -293,13 +319,15 @@ export default function BoardPage() {
               />
             </div>
             <p className="font-sans text-xs text-ink-3 mt-2 leading-tight">
-              The black tab is the rank on this board. WO means a work order is in progress.
+              {lang === 'hi'
+                ? 'काली पट्टी इस बोर्ड पर रैंक दर्शाती है। WO का मतलब है कि कार्य आदेश प्रगति पर है।'
+                : 'The black tab is the rank on this board. WO means a work order is in progress.'}
             </p>
             <Link
               href={`/map?dataset=${dataset}`}
               className="mt-3 block font-mono text-xs font-bold underline text-ink hover:opacity-80"
             >
-              Open the full map →
+              {lang === 'hi' ? 'पूरा नक्शा देखें →' : 'Open the full map →'}
             </Link>
           </div>
         </div>

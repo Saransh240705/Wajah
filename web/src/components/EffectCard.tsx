@@ -26,7 +26,9 @@ export function EffectCard({
   if (!effect) {
     return (
       <div className={`p-4 border border-ink bg-sheet ${className}`}>
-        <div className="text-xs font-mono uppercase font-bold text-ink-3">VERDICT · NOT YET</div>
+        <div className="text-xs font-mono uppercase font-bold text-ink-3">
+          {lang === 'hi' ? 'निर्णय · अभी नहीं' : 'VERDICT · NOT YET'}
+        </div>
         <h3 className="font-serif text-2xl font-extrabold text-ink mt-1">
           {lang === 'hi' ? 'मापा जा रहा है...' : 'Measuring.'}
         </h3>
@@ -42,7 +44,7 @@ export function EffectCard({
             disabled={isMeasuring}
             className="mt-4 px-4 py-2 bg-ink text-white font-mono text-xs font-bold uppercase tracking-wider hover:bg-ink-2 transition-colors disabled:opacity-50"
           >
-            {isMeasuring ? 'Measuring...' : (lang === 'hi' ? 'अभी मापें' : 'Measure now')}
+            {isMeasuring ? (lang === 'hi' ? 'माप रहे हैं...' : 'Measuring...') : (lang === 'hi' ? 'अभी मापें' : 'Measure now')}
           </button>
         )}
       </div>
@@ -58,7 +60,7 @@ export function EffectCard({
       {/* Verdict Header */}
       <div className="border-b border-rule pb-3">
         <div className="text-xs font-mono uppercase font-bold text-ink-3">
-          VERDICT · MEASURED {formatTimeIST(effect.measuredAt)}
+          {lang === 'hi' ? `निर्णय · मापा गया ${formatTimeIST(effect.measuredAt)}` : `VERDICT · MEASURED ${formatTimeIST(effect.measuredAt)}`}
         </div>
         <div className="mt-2">
           {isWorked && (
@@ -82,40 +84,44 @@ export function EffectCard({
         </div>
         <p className="font-sans text-sm text-ink-2 mt-2">
           {isWorked
-            ? `${effect.pollutant.toUpperCase()} fell ${Math.abs(Math.round(effect.netChangePct))}% more than spikes here usually fade on their own.`
+            ? (lang === 'hi'
+                ? `${effect.pollutant.toUpperCase()} सामान्य गिरावट की तुलना में ${Math.abs(Math.round(effect.netChangePct))}% अधिक कम हुआ।`
+                : `${effect.pollutant.toUpperCase()} fell ${Math.abs(Math.round(effect.netChangePct))}% more than spikes here usually fade on their own.`)
             : isNoEffect
-            ? 'The drop matched the usual fade when nobody acts.'
-            : effect.note || 'Sensor data or conditions were inconclusive.'}
+            ? (lang === 'hi'
+                ? 'कमी बिना किसी कार्रवाई के होने वाली सामान्य गिरावट के बराबर थी।'
+                : 'The drop matched the usual fade when nobody acts.')
+            : (effect.note || (lang === 'hi' ? 'सेंसर डेटा या स्थितियाँ अनिर्णायक थीं।' : 'Sensor data or conditions were inconclusive.'))}
         </p>
       </div>
 
       {/* 4 Numbers Grid */}
       <div className="py-4 border-b border-rule grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div className="p-2 border border-rule bg-paper">
-          <div className="text-[11px] font-mono text-ink-3 uppercase">Before</div>
+          <div className="text-[11px] font-mono text-ink-3 uppercase">{lang === 'hi' ? 'पहले' : 'Before'}</div>
           <div className="font-slab text-2xl font-normal text-ink mt-1">{Math.round(effect.beforeMean)}</div>
           <BandPill value={Math.round(effect.beforeMean)} variant="legend" className="mt-1" />
         </div>
 
         <div className="p-2 border border-rule bg-paper">
-          <div className="text-[11px] font-mono text-ink-3 uppercase">After</div>
+          <div className="text-[11px] font-mono text-ink-3 uppercase">{lang === 'hi' ? 'बाद में' : 'After'}</div>
           <div className="font-slab text-2xl font-normal text-ink mt-1">{Math.round(effect.afterMean)}</div>
           <BandPill value={Math.round(effect.afterMean)} variant="legend" className="mt-1" />
         </div>
 
         <div className="p-2 border border-rule bg-paper">
-          <div className="text-[11px] font-mono text-ink-3 uppercase">Expected fade</div>
+          <div className="text-[11px] font-mono text-ink-3 uppercase">{lang === 'hi' ? 'अपेक्षित गिरावट' : 'Expected fade'}</div>
           <div className="font-slab text-2xl font-normal text-ink mt-1">{formatPct(effect.expectedChangePct)}</div>
-          <div className="text-[10px] font-mono text-ink-3 mt-1">if nobody acts</div>
+          <div className="text-[10px] font-mono text-ink-3 mt-1">{lang === 'hi' ? 'बिना कार्रवाई के' : 'if nobody acts'}</div>
         </div>
 
         <div className="p-2 border-2 border-ink bg-paper">
-          <div className="text-[11px] font-mono font-bold text-ink uppercase">Net change</div>
+          <div className="text-[11px] font-mono font-bold text-ink uppercase">{lang === 'hi' ? 'शुद्ध बदलाव' : 'Net change'}</div>
           <div className="font-slab text-2xl font-normal text-ink mt-1">
-            {isInconclusive ? 'Not judged' : formatPct(effect.netChangePct)}
+            {isInconclusive ? (lang === 'hi' ? 'आकलन नहीं' : 'Not judged') : formatPct(effect.netChangePct)}
           </div>
           <div className="text-[10px] font-mono text-ink-3 mt-1">
-            {isInconclusive ? '—' : `${formatPct(effect.changePct)} less ${formatPct(effect.expectedChangePct)}`}
+            {isInconclusive ? '—' : `${formatPct(effect.changePct)} ${lang === 'hi' ? 'घटाकर' : 'less'} ${formatPct(effect.expectedChangePct)}`}
           </div>
         </div>
       </div>
@@ -137,25 +143,27 @@ export function EffectCard({
               <div key={i} className="p-2 border border-rule bg-paper">
                 <div className="font-bold text-ink">{c.date}</div>
                 <div className="text-ink-2 mt-0.5 capitalize">
-                  {c.result === 'clean' ? '✓ Clean' : `⟲ Recurred (peak ${c.peakPm25})`}
+                  {c.result === 'clean' ? (lang === 'hi' ? '✓ साफ़' : '✓ Clean') : (lang === 'hi' ? `⟲ दोबारा बढ़ा (शीर्ष ${c.peakPm25})` : `⟲ Recurred (peak ${c.peakPm25})`)}
                 </div>
               </div>
             ))
           ) : (
             <>
               <div className="p-2 border border-dashed border-rule bg-paper text-ink-3">
-                <div>Later night 1</div>
-                <div className="mt-0.5">Not yet checked</div>
+                <div>{lang === 'hi' ? 'अगली रात 1' : 'Later night 1'}</div>
+                <div className="mt-0.5">{lang === 'hi' ? 'जाँच बाकी' : 'Not yet checked'}</div>
               </div>
               <div className="p-2 border border-dashed border-rule bg-paper text-ink-3">
-                <div>Later night 2</div>
-                <div className="mt-0.5">Not yet checked</div>
+                <div>{lang === 'hi' ? 'अगली रात 2' : 'Later night 2'}</div>
+                <div className="mt-0.5">{lang === 'hi' ? 'जाँच बाकी' : 'Not yet checked'}</div>
               </div>
             </>
           )}
         </div>
         <div className="text-[11px] font-sans text-ink-3 mt-2">
-          The incident is marked Cleared after two consecutive clean nights without a spike in the same hours.
+          {lang === 'hi'
+            ? 'समान घंटों में बिना किसी उछाल के लगातार दो साफ़ रातों के बाद इस घटना को साफ़ (Cleared) चिह्नित किया जाता है।'
+            : 'The incident is marked Cleared after two consecutive clean nights without a spike in the same hours.'}
         </div>
       </div>
     </div>

@@ -42,7 +42,45 @@ export type TranslationKey =
   | 'open_full_ledger'
   | 'ask_why'
   | 'write_brief'
-  | 'refresh';
+  | 'refresh'
+  | 'live'
+  | 'replay'
+  | 'replay_banner'
+  | 'data_sources'
+  | 'method_link'
+  | 'hotspot'
+  | 'comparison_station'
+  | 'work_orders_issued'
+  | 'actions_measured'
+  | 'actions_worked'
+  | 'of_measured'
+  | 'more_waiting'
+  | 'days_7'
+  | 'days_14'
+  | 'all'
+  | 'all_delhi'
+  | 'what_was_tried'
+  | 'tried'
+  | 'average_net_change'
+  | 'placebo_test'
+  | 'repeat_problem_areas'
+  | 'incidents'
+  | 'mostly'
+  | 'where_they_are'
+  | 'map_legend_title'
+  | 'active_incidents'
+  | 'ask_wajah_title'
+  | 'ask_wajah_sub'
+  | 'try_one_of_these'
+  | 'ask_input_placeholder'
+  | 'evidence_title'
+  | 'ask_another'
+  | 'before'
+  | 'after'
+  | 'expected_fade'
+  | 'net_change'
+  | 'did_it_stay_away'
+  | 'instructions';
 
 const dictionary: Record<'en' | 'hi', Record<string, string>> = {
   en: {
@@ -88,6 +126,44 @@ const dictionary: Record<'en' | 'hi', Record<string, string>> = {
     ask_why: 'Ask why',
     write_brief: 'Write the brief',
     refresh: 'Refresh',
+    live: 'Live',
+    replay: 'Replay',
+    replay_banner: 'REPLAY · recorded readings, not live',
+    data_sources: 'Data sources: CPCB / OpenAQ · Open-Meteo · NASA FIRMS · © OpenStreetMap',
+    method_link: 'How Wajah diagnoses and measures',
+    hotspot: 'Hotspot',
+    comparison_station: 'Comparison station',
+    work_orders_issued: 'work orders issued',
+    actions_measured: 'actions measured',
+    actions_worked: 'actions that worked',
+    of_measured: 'Of the measured:',
+    more_waiting: 'more waiting to be measured.',
+    days_7: '7 days',
+    days_14: '14 days',
+    all: 'All',
+    all_delhi: 'All Delhi',
+    what_was_tried: 'WHAT WAS TRIED, AND HOW OFTEN IT WORKED',
+    tried: 'Tried',
+    average_net_change: 'Average net change',
+    placebo_test: 'PLACEBO TEST',
+    repeat_problem_areas: 'REPEAT PROBLEM AREAS',
+    incidents: 'incidents',
+    mostly: 'mostly',
+    where_they_are: 'WHERE THEY ARE',
+    map_legend_title: 'READING THE MAP',
+    active_incidents: 'ACTIVE INCIDENTS',
+    ask_wajah_title: 'Ask Wajah',
+    ask_wajah_sub: 'Ask why the air turned bad, or what to do next.',
+    try_one_of_these: 'TRY ONE OF THESE',
+    ask_input_placeholder: 'Ask why or what to do...',
+    evidence_title: 'EVIDENCE',
+    ask_another: 'Ask another question',
+    before: 'Before',
+    after: 'After',
+    expected_fade: 'Expected fade',
+    net_change: 'Net change',
+    did_it_stay_away: 'DID IT STAY AWAY',
+    instructions: 'INSTRUCTIONS',
   },
   hi: {
     nav_board: 'बोर्ड',
@@ -132,6 +208,44 @@ const dictionary: Record<'en' | 'hi', Record<string, string>> = {
     ask_why: 'कारण पूछें',
     write_brief: 'संक्षिप्त रिपोर्ट लिखें',
     refresh: 'ताज़ा करें',
+    live: 'लाइव',
+    replay: 'रीप्ले',
+    replay_banner: 'रीप्ले · दर्ज की गई रीडिंग, लाइव नहीं',
+    data_sources: 'डेटा स्रोत: CPCB / OpenAQ · Open-Meteo · NASA FIRMS · © OpenStreetMap',
+    method_link: 'Wajah विधि एवं सीमाएं',
+    hotspot: 'हॉटस्पॉट',
+    comparison_station: 'तुलना स्टेशन',
+    work_orders_issued: 'कार्य आदेश जारी किए गए',
+    actions_measured: 'मापी गई कार्रवाइयां',
+    actions_worked: 'सफल कार्रवाइयां',
+    of_measured: 'मापे गए में से:',
+    more_waiting: 'और मापे जाने की प्रतीक्षा में।',
+    days_7: '7 दिन',
+    days_14: '14 दिन',
+    all: 'सभी',
+    all_delhi: 'पूरा दिल्ली',
+    what_was_tried: 'क्या उपाय किए गए, और वे कितनी बार सफल रहे',
+    tried: 'प्रयास किया',
+    average_net_change: 'औसत शुद्ध परिवर्तन',
+    placebo_test: 'प्लेसिबो परीक्षण',
+    repeat_problem_areas: 'बार-बार समस्या वाले क्षेत्र',
+    incidents: 'घटनाएं',
+    mostly: 'अधिकतर',
+    where_they_are: 'स्थान / कहाँ हैं',
+    map_legend_title: 'नक्शा कैसे पढ़ें',
+    active_incidents: 'सक्रिय घटनाएं',
+    ask_wajah_title: 'Wajah से पूछें',
+    ask_wajah_sub: 'पूछें कि हवा क्यों खराब हुई, या आगे क्या कदम उठाएं।',
+    try_one_of_these: 'इनमें से कोई प्रश्न पूछें',
+    ask_input_placeholder: 'आगे पूछें कि क्या हुआ या क्या करना है...',
+    evidence_title: 'प्रमाण (EVIDENCE)',
+    ask_another: 'नया सवाल पूछें',
+    before: 'पहले',
+    after: 'बाद में',
+    expected_fade: 'अपेक्षित गिरावट',
+    net_change: 'शुद्ध परिवर्तन',
+    did_it_stay_away: 'क्या प्रदूषण दोबारा बढ़ा?',
+    instructions: 'निर्देश',
   },
 };
 
@@ -180,4 +294,27 @@ export function statusLabel(status: IncidentStatus | string, lang: 'en' | 'hi' =
     recurred: { en: 'RECURRED', hi: 'फिर हुआ' },
   };
   return map[status]?.[lang] ?? status;
+}
+
+export function bandLabel(band: string | null | undefined, lang: 'en' | 'hi' = 'en'): string {
+  if (!band) return '';
+  const normalized = band.toLowerCase().replace('-', '_');
+  const map: Record<string, { en: string; hi: string }> = {
+    good: { en: 'Good', hi: 'अच्छा' },
+    satisfactory: { en: 'Satisfactory', hi: 'संतोषजनक' },
+    moderate: { en: 'Moderate', hi: 'मध्यम' },
+    poor: { en: 'Poor', hi: 'खराब' },
+    very_poor: { en: 'Very poor', hi: 'बहुत खराब' },
+    severe: { en: 'Severe', hi: 'गंभीर' },
+  };
+  return map[normalized]?.[lang] ?? (band.charAt(0).toUpperCase() + band.slice(1).replace('_', ' '));
+}
+
+export function confidenceLabel(conf: string, lang: 'en' | 'hi' = 'en'): string {
+  const map: Record<string, { en: string; hi: string }> = {
+    high: { en: 'high', hi: 'उच्च' },
+    medium: { en: 'medium', hi: 'मध्यम' },
+    low: { en: 'low', hi: 'कम' },
+  };
+  return map[conf]?.[lang] ?? conf;
 }

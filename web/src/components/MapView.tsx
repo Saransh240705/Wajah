@@ -5,6 +5,8 @@ import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import type { Fire, Incident, StationSummary } from '@wajah/shared';
 import { bandHex } from '../lib/utils';
+import { useApp } from '../lib/context';
+import { bandLabel } from '../lib/i18n';
 
 interface MapViewProps {
   stations: StationSummary[];
@@ -35,6 +37,7 @@ const LeafletMap = dynamic(
       zoom = 11,
       center = [28.62, 77.21],
     }: MapViewProps) {
+      const { lang } = useApp();
       useEffect(() => {
         // Fix default leaflet icons
         delete (L.Icon.Default.prototype as { _getIconUrl?: unknown })._getIconUrl;
@@ -106,7 +109,7 @@ const LeafletMap = dynamic(
               >
                 <Popup>
                   <div className="font-mono text-xs">
-                    <div className="font-bold">Farm Fire Detection</div>
+                    <div className="font-bold">{lang === 'hi' ? 'पराली आग की पहचान' : 'Farm Fire Detection'}</div>
                     <div>FRP: {fire.frp} MW</div>
                   </div>
                 </Popup>
@@ -127,10 +130,10 @@ const LeafletMap = dynamic(
                 <div className="font-sans text-xs p-1">
                   <div className="font-serif font-bold text-sm text-ink">{st.name}</div>
                   <div className="font-mono text-ink-3 mt-0.5">
-                    PM2.5: {st.latest?.pm25 ? `${Math.round(st.latest.pm25)} µg/m³` : 'No data'}
+                    PM2.5: {st.latest?.pm25 ? `${Math.round(st.latest.pm25)} µg/m³` : (lang === 'hi' ? 'कोई डेटा नहीं' : 'No data')}
                   </div>
-                  <div className="font-mono text-ink-3 capitalize">
-                    Status: {st.band ? st.band.replace('_', ' ') : 'Offline'}
+                  <div className="font-mono text-ink-3">
+                    {lang === 'hi' ? 'स्थिति:' : 'Status:'} {st.band ? bandLabel(st.band, lang) : (lang === 'hi' ? 'ऑफ़लाइन' : 'Offline')}
                   </div>
                 </div>
               </Popup>
@@ -144,20 +147,21 @@ const LeafletMap = dynamic(
     ssr: false,
     loading: () => (
       <div className="w-full h-full bg-[#E4E2DC] flex items-center justify-center font-mono text-xs text-ink-3">
-        Loading map tiles…
+        Loading…
       </div>
     ),
   }
 );
 
 export function MapView(props: MapViewProps) {
+  const { lang } = useApp();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
   if (!mounted) {
     return (
       <div className={`w-full h-full bg-[#E4E2DC] flex items-center justify-center font-mono text-xs text-ink-3 ${props.className || ''}`}>
-        Loading map…
+        {lang === 'hi' ? 'नक्शा लोड हो रहा है…' : 'Loading map…'}
       </div>
     );
   }

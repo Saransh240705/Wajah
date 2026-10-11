@@ -101,13 +101,21 @@ export default function IncidentPage({ params }: { params: Promise<{ id: string 
   // Dynamic status text under headline
   let subText = '';
   if (latestWo?.effect?.verdict === 'worked') {
-    subText = `${actionLabel(latestWo.actionType, lang)} worked. ${pollutant} fell ${Math.abs(Math.round(latestWo.effect.netChangePct))}% more than spikes here usually fade on their own.`;
+    subText = lang === 'hi'
+      ? `${actionLabel(latestWo.actionType, lang)} का असर हुआ। ${pollutant} सामान्य गिरावट से ${Math.abs(Math.round(latestWo.effect.netChangePct))}% अधिक कम हुआ।`
+      : `${actionLabel(latestWo.actionType, lang)} worked. ${pollutant} fell ${Math.abs(Math.round(latestWo.effect.netChangePct))}% more than spikes here usually fade on their own.`;
   } else if (latestWo?.effect?.verdict === 'no_effect') {
-    subText = `${actionLabel(latestWo.actionType, lang)} did not help. The drop matched the usual fade, and the spike may recur.`;
+    subText = lang === 'hi'
+      ? `${actionLabel(latestWo.actionType, lang)} से कोई लाभ नहीं हुआ। गिरावट सामान्य स्तर के समान थी, और स्पाइक दोबारा हो सकता है।`
+      : `${actionLabel(latestWo.actionType, lang)} did not help. The drop matched the usual fade, and the spike may recur.`;
   } else if (latestWo?.status === 'in_progress') {
-    subText = `${actionLabel(latestWo.actionType, lang)} is under way. The ${latestWo.agency} team started work.`;
+    subText = lang === 'hi'
+      ? `${actionLabel(latestWo.actionType, lang)} जारी है। ${latestWo.agency} टीम ने काम शुरू कर दिया है।`
+      : `${actionLabel(latestWo.actionType, lang)} is under way. The ${latestWo.agency} team started work.`;
   } else {
-    subText = `The likely cause is ${causeLabel(incident.topCause, lang).toLowerCase()}. Recommended action ready below.`;
+    subText = lang === 'hi'
+      ? `संभावित कारण ${causeLabel(incident.topCause, lang)} है। अनुशंसित कार्रवाई नीचे तैयार है।`
+      : `The likely cause is ${causeLabel(incident.topCause, lang).toLowerCase()}. Recommended action ready below.`;
   }
 
   const handleIssueWorkOrder = async (actionType?: any, agency?: any) => {
@@ -159,12 +167,18 @@ export default function IncidentPage({ params }: { params: Promise<{ id: string 
       <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 border-b-2 border-ink pb-6">
         <div className="space-y-2 flex-1">
           <div className="flex items-center gap-2 text-xs font-mono text-ink-3">
-            <span>Incident · {incident.area} · {formatDateTimeRangeIST(incident.start, incident.end)}</span>
+            <span>
+              {lang === 'hi'
+                ? `घटना · ${incident.area} · ${formatDateTimeRangeIST(incident.start, incident.end)}`
+                : `Incident · ${incident.area} · ${formatDateTimeRangeIST(incident.start, incident.end)}`}
+            </span>
             <StatusBadge status={incident.status} recurrenceCount={incident.recurrenceCount} variant="stamp" />
           </div>
 
           <h1 className="font-serif text-3xl sm:text-4xl font-extrabold text-ink leading-tight">
-            {pollutant} has reached {peakVal}, about {ratio} times the usual level here.
+            {lang === 'hi'
+              ? `${pollutant} ${peakVal} तक पहुंच गया है, जो यहाँ के सामान्य स्तर से लगभग ${ratio} गुना है।`
+              : `${pollutant} has reached ${peakVal}, about ${ratio} times the usual level here.`}
           </h1>
 
           <p className="font-sans text-sm sm:text-base text-ink-2 leading-relaxed">
@@ -187,10 +201,16 @@ export default function IncidentPage({ params }: { params: Promise<{ id: string 
           <div className="absolute -left-[15px] sm:-left-[31px] top-1.5 w-6 h-6 rounded-full bg-ink text-white flex items-center justify-center font-mono text-xs font-bold">
             ✓
           </div>
-          <div className="text-xs font-mono font-bold uppercase text-ink-3">Step 1 of 5 · done</div>
-          <h2 className="font-serif text-2xl font-extrabold text-ink">Detect</h2>
+          <div className="text-xs font-mono font-bold uppercase text-ink-3">
+            {lang === 'hi' ? 'चरण 1 / 5 · पूरा हुआ' : 'Step 1 of 5 · done'}
+          </div>
+          <h2 className="font-serif text-2xl font-extrabold text-ink">
+            {lang === 'hi' ? 'पहचान (Detect)' : 'Detect'}
+          </h2>
           <p className="font-sans text-sm text-ink-2">
-            Spike detected at {incident.start.slice(11, 16)}. Peaked at {peakVal} µg/m³.
+            {lang === 'hi'
+              ? `${incident.start.slice(11, 16)} पर स्पाइक देखा गया। अधिकतम स्तर ${peakVal} µg/m³ रहा।`
+              : `Spike detected at ${incident.start.slice(11, 16)}. Peaked at ${peakVal} µg/m³.`}
           </p>
 
           <ReadingChart
@@ -204,7 +224,7 @@ export default function IncidentPage({ params }: { params: Promise<{ id: string 
             href={`/area/${incident.stationId}?dataset=${dataset}`}
             className="inline-block font-mono text-xs font-bold underline text-ink"
           >
-            Last 48 hours for {incident.area} →
+            {lang === 'hi' ? `${incident.area} के पिछले 48 घंटे →` : `Last 48 hours for ${incident.area} →`}
           </Link>
         </div>
 
@@ -213,8 +233,12 @@ export default function IncidentPage({ params }: { params: Promise<{ id: string 
           <div className="absolute -left-[15px] sm:-left-[31px] top-5 w-6 h-6 rounded-full bg-ink text-white flex items-center justify-center font-mono text-xs font-bold">
             ✓
           </div>
-          <div className="text-xs font-mono font-bold uppercase text-ink-3">Step 2 of 5 · done</div>
-          <h2 className="font-serif text-2xl font-extrabold text-ink">Diagnose</h2>
+          <div className="text-xs font-mono font-bold uppercase text-ink-3">
+            {lang === 'hi' ? 'चरण 2 / 5 · पूरा हुआ' : 'Step 2 of 5 · done'}
+          </div>
+          <h2 className="font-serif text-2xl font-extrabold text-ink">
+            {lang === 'hi' ? 'कारण (Diagnose)' : 'Diagnose'}
+          </h2>
 
           <CauseCard
             topCause={incident.topCause}
@@ -224,7 +248,7 @@ export default function IncidentPage({ params }: { params: Promise<{ id: string 
 
           <div className="border border-ink bg-sheet p-4 space-y-2">
             <div className="text-xs font-mono uppercase font-bold text-ink-3">
-              EVIDENCE · {incident.evidence.length} CLUES
+              {lang === 'hi' ? `प्रमाण · ${incident.evidence.length} संकेत` : `EVIDENCE · ${incident.evidence.length} CLUES`}
             </div>
             {incident.evidence.map((chip, idx) => (
               <EvidenceRow key={chip.key} index={idx} chip={chip} />
@@ -237,7 +261,11 @@ export default function IncidentPage({ params }: { params: Promise<{ id: string 
               onClick={() => setShowOtherCauses(!showOtherCauses)}
               className="font-mono text-xs font-bold underline text-ink flex items-center gap-1"
             >
-              <span>{showOtherCauses ? '▼ Hide' : '▶ Other causes considered'}</span>
+              <span>
+                {showOtherCauses
+                  ? (lang === 'hi' ? '▼ छिपाएं' : '▼ Hide')
+                  : (lang === 'hi' ? '▶ अन्य विचार किए गए कारण' : '▶ Other causes considered')}
+              </span>
             </button>
             {showOtherCauses && (
               <div className="mt-2 p-3 border border-rule bg-paper space-y-1 font-mono text-xs">
@@ -257,8 +285,12 @@ export default function IncidentPage({ params }: { params: Promise<{ id: string 
           <div className="absolute -left-[15px] sm:-left-[31px] top-5 w-6 h-6 rounded-full bg-ink text-white flex items-center justify-center font-mono text-xs font-bold">
             ✓
           </div>
-          <div className="text-xs font-mono font-bold uppercase text-ink-3">Step 3 of 5 · done</div>
-          <h2 className="font-serif text-2xl font-extrabold text-ink">Prescribe</h2>
+          <div className="text-xs font-mono font-bold uppercase text-ink-3">
+            {lang === 'hi' ? 'चरण 3 / 5 · पूरा हुआ' : 'Step 3 of 5 · done'}
+          </div>
+          <h2 className="font-serif text-2xl font-extrabold text-ink">
+            {lang === 'hi' ? 'उपाय (Prescribe)' : 'Prescribe'}
+          </h2>
 
           <RecommendationCard
             topCause={incident.topCause}
@@ -280,20 +312,28 @@ export default function IncidentPage({ params }: { params: Promise<{ id: string 
           </div>
 
           <div className="text-xs font-mono font-bold uppercase text-ink-3">
-            Step 4 of 5 · {currentStep === 4 ? 'now' : 'done'}
+            {lang === 'hi'
+              ? `चरण 4 / 5 · ${currentStep === 4 ? 'अभी' : 'पूरा हुआ'}`
+              : `Step 4 of 5 · ${currentStep === 4 ? 'now' : 'done'}`}
           </div>
-          <h2 className="font-serif text-2xl font-extrabold text-ink">Act</h2>
+          <h2 className="font-serif text-2xl font-extrabold text-ink">
+            {lang === 'hi' ? 'कार्रवाई (Act)' : 'Act'}
+          </h2>
 
           {latestWo ? (
             <WorkOrderCard workOrder={latestWo} />
           ) : (
             <div className="border border-ink bg-sheet p-6 space-y-4">
               <div className="text-xs font-mono font-bold uppercase text-ink-3">
-                WO-DRAFT · {isNoLocalFix ? 'PUBLIC ADVISORY' : 'WATER SPRINKLING'}
+                WO-DRAFT · {isNoLocalFix ? (lang === 'hi' ? 'जन सलाह' : 'PUBLIC ADVISORY') : (lang === 'hi' ? 'पानी का छिड़काव' : 'WATER SPRINKLING')}
               </div>
               <p className="font-sans text-sm text-ink leading-relaxed">
                 {isNoLocalFix
-                  ? 'Air across Delhi is in the Severe band due to regional smoke. Issue public health advisory.'
+                  ? lang === 'hi'
+                    ? 'क्षेत्रीय धुएं के कारण दिल्ली भर में हवा गंभीर स्तर पर है। जन स्वास्थ्य सलाह जारी करें।'
+                    : 'Air across Delhi is in the Severe band due to regional smoke. Issue public health advisory.'
+                  : lang === 'hi'
+                  ? `${incident.area} निगरानी स्टेशन के लगभग 1 किमी के दायरे में मुख्य सड़कों पर पानी का छिड़काव करें। फ़ील्ड पेज पर 'काम शुरू किया' और 'काम पूरा किया' दर्ज करें।`
                   : `Sprinkle the main roads within about 1 km of the ${incident.area} monitoring station. Tap Mark started and Mark done on the field page.`}
               </p>
 
@@ -303,13 +343,15 @@ export default function IncidentPage({ params }: { params: Promise<{ id: string 
                 className="w-full py-3 bg-ink text-white font-mono text-xs font-bold uppercase tracking-wider hover:bg-ink-2 transition-colors disabled:opacity-50"
               >
                 {isIssuing
-                  ? 'Issuing work order...'
+                  ? (lang === 'hi' ? 'कार्य आदेश जारी किया जा रहा है...' : 'Issuing work order...')
                   : isNoLocalFix
                   ? (lang === 'hi' ? 'जन सलाह जारी करें' : 'Issue public advisory')
                   : (lang === 'hi' ? 'कार्य आदेश जारी करें' : 'Issue work order')}
               </button>
               <div className="text-[11px] font-mono text-ink-3">
-                DEMO: Creates a field link for the team. No real order is sent.
+                {lang === 'hi'
+                  ? 'डेमो: टीम के लिए एक फ़ील्ड लिंक बनाता है। कोई वास्तविक आदेश नहीं भेजा जाता।'
+                  : 'DEMO: Creates a field link for the team. No real order is sent.'}
               </div>
             </div>
           )}
@@ -326,13 +368,19 @@ export default function IncidentPage({ params }: { params: Promise<{ id: string 
           </div>
 
           <div className="text-xs font-mono font-bold uppercase text-ink-3">
-            Step 5 of 5 · {isNoLocalFix ? 'not measured' : latestWo?.effect ? 'done' : 'next'}
+            {lang === 'hi'
+              ? `चरण 5 / 5 · ${isNoLocalFix ? 'मापा नहीं गया' : latestWo?.effect ? 'पूरा हुआ' : 'अगला कदम'}`
+              : `Step 5 of 5 · ${isNoLocalFix ? 'not measured' : latestWo?.effect ? 'done' : 'next'}`}
           </div>
-          <h2 className="font-serif text-2xl font-extrabold text-ink">Prove</h2>
+          <h2 className="font-serif text-2xl font-extrabold text-ink">
+            {lang === 'hi' ? 'परिणाम (Prove)' : 'Prove'}
+          </h2>
 
           {isNoLocalFix ? (
             <div className="p-4 border border-rule bg-sheet text-ink-2 font-sans text-sm">
-              Nothing is measured for a public advisory. Wajah keeps watching the readings and will notify when smoke clears.
+              {lang === 'hi'
+                ? 'जन सलाह के लिए कुछ भी मापा नहीं जाता। Wajah रीडिंग पर नज़र रखता है और धुआँ छंटने पर सूचित करेगा।'
+                : 'Nothing is measured for a public advisory. Wajah keeps watching the readings and will notify when smoke clears.'}
             </div>
           ) : latestWo ? (
             <div className="space-y-4">
@@ -347,24 +395,30 @@ export default function IncidentPage({ params }: { params: Promise<{ id: string 
               {latestWo.effect?.verdict === 'no_effect' && (
                 <div className="p-4 border-2 border-ink bg-sheet space-y-3">
                   <div className="font-serif text-lg font-bold text-ink">
-                    This did not help. Recommended next: mechanical sweeping.
+                    {lang === 'hi'
+                      ? 'इससे कोई असर नहीं हुआ। अगला अनुशंसित उपाय: मशीन से सफाई।'
+                      : 'This did not help. Recommended next: mechanical sweeping.'}
                   </div>
                   <p className="font-sans text-xs text-ink-2">
-                    Sprinkling has had no effect here. MCD sweeping is recommended next.
+                    {lang === 'hi'
+                      ? 'यहाँ पानी के छिड़काव का कोई असर नहीं हुआ। MCD द्वारा मशीन से सफाई की सिफारिश की जाती है।'
+                      : 'Sprinkling has had no effect here. MCD sweeping is recommended next.'}
                   </p>
                   <button
                     onClick={() => handleIssueWorkOrder('mechanical_sweeping', 'MCD')}
                     disabled={isIssuing}
                     className="w-full py-2.5 bg-ink text-white font-mono text-xs font-bold uppercase tracking-wider"
                   >
-                    Issue work order: mechanical sweeping
+                    {lang === 'hi' ? 'कार्य आदेश जारी करें: मशीन से सफाई' : 'Issue work order: mechanical sweeping'}
                   </button>
                 </div>
               )}
             </div>
           ) : (
             <div className="p-4 border border-dashed border-rule bg-paper font-sans text-sm text-ink-3">
-              Measuring starts when the field team marks the job done. It needs 3 hours of readings after the job.
+              {lang === 'hi'
+                ? 'फ़ील्ड टीम द्वारा काम पूरा करने के बाद माप शुरू होता है। इसके लिए काम के बाद 3 घंटे की रीडिंग की आवश्यकता होती है।'
+                : 'Measuring starts when the field team marks the job done. It needs 3 hours of readings after the job.'}
             </div>
           )}
         </div>

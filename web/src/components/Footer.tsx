@@ -27,7 +27,7 @@ export function Footer() {
             href="/method"
             className="font-mono underline text-ink hover:text-ink-2 transition-colors font-semibold"
           >
-            {lang === 'hi' ? 'वाज़ेह विधि एवं सीमाएं' : 'How Wajah diagnoses and measures'}
+            {lang === 'hi' ? 'Wajah विधि एवं सीमाएं' : 'How Wajah diagnoses and measures'}
           </Link>
         </div>
       </div>
