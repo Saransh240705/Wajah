@@ -13,5 +13,5 @@ coverage/
 .data/
 *.tsbuildinfo
 /Wajah.pdf
-
+/brag-output*/
 
