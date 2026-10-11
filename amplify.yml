@@ -6,14 +6,17 @@ applications:
           commands:
             - node --version
             - npm --version
-            # Install from monorepo root so all workspaces (shared, api, web) are linked
+            # Install from monorepo root so @wajah/shared workspace is linked
             - npm install
         build:
           commands:
             - npm run build -w @wajah/web
+            # Copy static assets into the standalone server bundle
+            - cp -r web/public web/.next/standalone/web/public
+            - cp -r web/.next/static web/.next/standalone/web/.next/static
       artifacts:
-        # Next.js standalone + static output
-        baseDirectory: web/.next
+        # Serve the standalone Node.js server (Amplify SSR)
+        baseDirectory: web/.next/standalone
         files:
           - '**/*'
       cache:
