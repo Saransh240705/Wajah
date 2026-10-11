@@ -4,7 +4,7 @@ import React from 'react';
 import type { ActionType, Agency, Cause } from '@wajah/shared';
 import { ACTIONS, PLAYBOOKS } from '@wajah/shared';
 import { useApp } from '../lib/context';
-import { actionLabel } from '../lib/i18n';
+import { actionLabel, reasonText } from '../lib/i18n';
 
 interface RecommendationCardProps {
   topCause: Cause;
@@ -64,7 +64,7 @@ export function RecommendationCard({
             <span className="text-xs font-mono uppercase text-ink-3 block">
               {lang === 'hi' ? 'कारण' : 'Why'}
             </span>
-            <p className="text-ink mt-0.5 leading-relaxed">{pb?.likelyEn ?? reason}</p>
+            <p className="text-ink mt-0.5 leading-relaxed">{lang === 'hi' ? (pb?.likelyHi ?? reasonText(reason, lang)) : (pb?.likelyEn ?? reason)}</p>
           </div>
 
           <div className="border-b border-rule pb-2">
@@ -113,7 +113,7 @@ export function RecommendationCard({
           <span className="text-xs font-mono uppercase text-ink-3 block">
             {lang === 'hi' ? 'क्यों' : 'Why'}
           </span>
-          <p className="text-ink mt-0.5">{reason}</p>
+          <p className="text-ink mt-0.5">{reasonText(reason, lang)}</p>
         </div>
 
         {history && (

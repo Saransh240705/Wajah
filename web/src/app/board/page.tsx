@@ -10,7 +10,7 @@ import { BriefCard } from '../../components/BriefCard';
 import { BandPill } from '../../components/BandPill';
 import { StatusBadge } from '../../components/StatusBadge';
 import { MapView } from '../../components/MapView';
-import { actionLabel, causeLabel, confidenceLabel, t } from '../../lib/i18n';
+import { actionLabel, areaLabel, causeLabel, confidenceLabel, reasonText, t } from '../../lib/i18n';
 import { formatDateIST } from '../../lib/utils';
 
 export default function BoardPage() {
@@ -71,7 +71,7 @@ export default function BoardPage() {
   const noLocalFixItems = board.items.filter((item) => !item.localActionPossible);
   const topItem = actionableItems[0];
 
-  const todayStr = formatDateIST(new Date().toISOString());
+  const todayStr = formatDateIST(new Date().toISOString(), lang);
 
   return (
     <div className="space-y-8">
@@ -85,7 +85,7 @@ export default function BoardPage() {
         <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-extrabold text-ink mt-2 leading-tight">
           {topItem
             ? lang === 'hi'
-              ? `इस घंटे ${board.summary.actionable} स्पाइक्स के लिए कार्य आदेश की आवश्यकता है। ${topItem.incident.area} से शुरू करें।`
+              ? `इस घंटे ${board.summary.actionable} स्पाइक्स के लिए कार्य आदेश की आवश्यकता है। ${areaLabel(topItem.incident.area, lang)} से शुरू करें।`
               : `${board.summary.actionable} spikes need a work order this hour. Start with ${topItem.incident.area}.`
             : lang === 'hi'
             ? 'इस घंटे किसी भी हॉटस्पॉट पर कार्रवाई की आवश्यकता नहीं है।'
@@ -160,7 +160,7 @@ export default function BoardPage() {
                         <div className="space-y-1">
                           <div className="flex items-center gap-2">
                             <span className="font-serif text-xl sm:text-2xl font-extrabold text-ink underline decoration-1">
-                              {inc.area}
+                              {areaLabel(inc.area, lang)}
                             </span>
                             <StatusBadge status={inc.status} recurrenceCount={inc.recurrenceCount} />
                           </div>
@@ -203,7 +203,7 @@ export default function BoardPage() {
                           )}
 
                           <div className="text-xs font-sans text-ink-2 mt-0.5">
-                            {item.recommended.reason}
+                            {reasonText(item.recommended.reason, lang)}
                           </div>
                         </div>
                       </div>
@@ -270,7 +270,7 @@ export default function BoardPage() {
                           </span>
                           <div>
                             <div className="font-serif text-xl font-extrabold text-ink">
-                              {inc.area}
+                              {areaLabel(inc.area, lang)}
                             </div>
                             <div className="flex items-center gap-2 mt-1">
                               <BandPill value={inc.peakPm25} band="severe" pollutant="PM2.5" variant="compact" />
@@ -283,7 +283,7 @@ export default function BoardPage() {
                             {causeLabel(inc.topCause, lang)}
                           </div>
                           <div className="text-xs font-sans text-ink-2">
-                            {item.recommended.reason}
+                            {reasonText(item.recommended.reason, lang)}
                           </div>
                         </div>
 

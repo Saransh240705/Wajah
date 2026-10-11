@@ -3,6 +3,7 @@
 import React from 'react';
 import type { EvidenceChip } from '@wajah/shared';
 import { useApp } from '../lib/context';
+import { chipLabel, chipTitle } from '../lib/i18n';
 
 interface EvidenceRowProps {
   index: number;
@@ -26,8 +27,8 @@ export function EvidenceRow({ index, chip, className = '' }: EvidenceRowProps) {
       <div className="flex items-baseline gap-3 pr-4">
         <span className="font-mono text-xs font-bold text-ink-3 shrink-0">{letter}</span>
         <div>
-          <div className="text-xs font-mono uppercase text-ink-3">{chip.key.replace(/_/g, ' ')}</div>
-          <div className="font-sans font-semibold text-ink mt-0.5">{chip.label}</div>
+          <div className="text-xs font-mono uppercase text-ink-3">{chipTitle(chip.key, lang)}</div>
+          <div className="font-sans font-semibold text-ink mt-0.5">{chipLabel(chip, lang)}</div>
         </div>
       </div>
       <div className="shrink-0 text-right">

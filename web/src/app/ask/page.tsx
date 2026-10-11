@@ -252,7 +252,7 @@ function AskContent() {
                 </div>
                 <div className="border border-rule divide-y divide-rule p-2">
                   {response.evidence.map((chip, idx) => (
-                    <EvidenceRow key={chip.key || idx} index={idx} chip={chip} />
+                    <EvidenceRow key={`${chip.cause}-${chip.key}-${idx}`} index={idx} chip={chip} />
                   ))}
                 </div>
               </div>

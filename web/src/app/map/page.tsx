@@ -9,8 +9,8 @@ import { getFires, getIncidents, getStations } from '../../lib/api';
 import { MapView } from '../../components/MapView';
 import { BandPill } from '../../components/BandPill';
 import { StatusBadge } from '../../components/StatusBadge';
-import { formatDateIST } from '../../lib/utils';
-import { bandLabel, causeLabel } from '../../lib/i18n';
+import { formatDateIST, formatTimeIST } from '../../lib/utils';
+import { areaLabel, bandLabel, causeLabel } from '../../lib/i18n';
 
 export default function MapPage() {
   const router = useRouter();
@@ -66,8 +66,8 @@ export default function MapPage() {
     .sort()
     .at(-1);
   const nowLabel = latestReadingTs
-    ? formatDateIST(latestReadingTs)
-    : formatDateIST(new Date().toISOString());
+    ? formatDateIST(latestReadingTs, lang)
+    : formatDateIST(new Date().toISOString(), lang);
 
   const activeIncidents = incidents.filter(
     (i) => i.status === 'open' || i.status === 'dispatched' || i.status === 'recurred'
@@ -126,12 +126,12 @@ export default function MapPage() {
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-serif font-bold text-sm text-ink">{inc.area}</span>
+                    <span className="font-serif font-bold text-sm text-ink">{areaLabel(inc.area, lang)}</span>
                     <StatusBadge status={inc.status} recurrenceCount={inc.recurrenceCount} />
                   </div>
                   {/* Fix 4: show date+time so same area on different days is distinguishable */}
                   <div className="text-[10px] font-mono text-ink-3 mt-0.5">
-                    {formatDateIST(inc.start)}
+                    {formatDateIST(inc.start, lang)}
                   </div>
                   <div className="flex items-center gap-2 mt-1 text-xs font-mono text-ink-2">
                     <span className="font-bold text-ink">
@@ -170,8 +170,8 @@ export default function MapPage() {
               {selectedIncident && (
                 <div className="p-2.5 bg-paper border border-rule text-xs font-sans text-ink">
                   {lang === 'hi'
-                    ? `${selectedIncident.start.slice(11, 16)} से ${causeLabel(selectedIncident.topCause, lang)} का स्तर बढ़ा हुआ देखा गया।`
-                    : `A ${selectedIncident.topCause.replace('_', ' ')} spike detected since ${selectedIncident.start.slice(11, 16)}.`}
+                    ? `${formatTimeIST(selectedIncident.start)} से ${causeLabel(selectedIncident.topCause, lang)} का स्तर बढ़ा हुआ देखा गया।`
+                    : `A ${selectedIncident.topCause.replace('_', ' ')} spike detected since ${formatTimeIST(selectedIncident.start)}.`}
                 </div>
               )}
 
@@ -179,7 +179,7 @@ export default function MapPage() {
               <div className="text-[10px] font-mono text-ink-3">
                 {selectedStation.latest?.ts
                   ? lang === 'hi'
-                    ? `अंतिम रीडिंग ${formatDateIST(selectedStation.latest.ts)}`
+                    ? `अंतिम रीडिंग ${formatDateIST(selectedStation.latest.ts, lang)}`
                     : `Last reading ${formatDateIST(selectedStation.latest.ts)}`
                   : lang === 'hi' ? 'कोई हालिया रीडिंग नहीं' : 'No recent reading'}
               </div>

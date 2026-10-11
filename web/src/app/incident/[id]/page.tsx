@@ -16,8 +16,8 @@ import { RecommendationCard } from '../../../components/RecommendationCard';
 import { WorkOrderCard } from '../../../components/WorkOrderCard';
 import { EffectCard } from '../../../components/EffectCard';
 import { ReadingChart } from '../../../components/ReadingChart';
-import { formatDateTimeRangeIST } from '../../../lib/utils';
-import { actionLabel, causeLabel } from '../../../lib/i18n';
+import { formatDateTimeRangeIST, formatTimeIST } from '../../../lib/utils';
+import { actionLabel, areaLabel, causeLabel, reasonText } from '../../../lib/i18n';
 
 export default function IncidentPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
@@ -94,6 +94,7 @@ export default function IncidentPage({ params }: { params: Promise<{ id: string 
   // Headline pollutant & peak
   const isDust = incident.topCause === 'dust';
   const peakVal = isDust && incident.peakPm10 ? incident.peakPm10 : incident.peakPm25;
+  const topEvidence = incident.evidence.filter((c) => c.cause === incident.topCause);
   const pollutant = isDust && incident.peakPm10 ? 'PM10' : 'PM2.5';
   const peakBand = peakVal > 250 ? 'severe' : peakVal > 120 ? 'very_poor' : 'poor';
   const ratio = (peakVal / (incident.baselinePm25 || 100)).toFixed(1);
@@ -114,8 +115,8 @@ export default function IncidentPage({ params }: { params: Promise<{ id: string 
       : `${actionLabel(latestWo.actionType, lang)} is under way. The ${latestWo.agency} team started work.`;
   } else {
     subText = lang === 'hi'
-      ? `संभावित कारण ${causeLabel(incident.topCause, lang)} है। अनुशंसित कार्रवाई नीचे तैयार है।`
-      : `The likely cause is ${causeLabel(incident.topCause, lang).toLowerCase()}. Recommended action ready below.`;
+      ? `${PLAYBOOKS[incident.topCause].likelyHi} अनुशंसित कार्रवाई नीचे तैयार है।`
+      : `${PLAYBOOKS[incident.topCause].likelyEn} Recommended action ready below.`;
   }
 
   const handleIssueWorkOrder = async (actionType?: any, agency?: any) => {
@@ -169,7 +170,7 @@ export default function IncidentPage({ params }: { params: Promise<{ id: string 
           <div className="flex items-center gap-2 text-xs font-mono text-ink-3">
             <span>
               {lang === 'hi'
-                ? `घटना · ${incident.area} · ${formatDateTimeRangeIST(incident.start, incident.end)}`
+                ? `घटना · ${areaLabel(incident.area, lang)} · ${formatDateTimeRangeIST(incident.start, incident.end, lang)}`
                 : `Incident · ${incident.area} · ${formatDateTimeRangeIST(incident.start, incident.end)}`}
             </span>
             <StatusBadge status={incident.status} recurrenceCount={incident.recurrenceCount} variant="stamp" />
@@ -198,7 +199,7 @@ export default function IncidentPage({ params }: { params: Promise<{ id: string 
       <div className="space-y-10 pl-2 sm:pl-6 border-l-2 border-ink/40">
         {/* STEP 1: DETECT */}
         <div className="relative space-y-3">
-          <div className="absolute -left-[15px] sm:-left-[31px] top-1.5 w-6 h-6 rounded-full bg-ink text-white flex items-center justify-center font-mono text-xs font-bold">
+          <div className="absolute -left-[21px] sm:-left-[37px] top-1.5 w-6 h-6 rounded-full bg-ink text-white flex items-center justify-center font-mono text-xs font-bold">
             ✓
           </div>
           <div className="text-xs font-mono font-bold uppercase text-ink-3">
@@ -209,8 +210,8 @@ export default function IncidentPage({ params }: { params: Promise<{ id: string 
           </h2>
           <p className="font-sans text-sm text-ink-2">
             {lang === 'hi'
-              ? `${incident.start.slice(11, 16)} पर स्पाइक देखा गया। अधिकतम स्तर ${peakVal} µg/m³ रहा।`
-              : `Spike detected at ${incident.start.slice(11, 16)}. Peaked at ${peakVal} µg/m³.`}
+              ? `${formatTimeIST(incident.start)} पर स्पाइक देखा गया। अधिकतम स्तर ${peakVal} µg/m³ रहा।`
+              : `Spike detected at ${formatTimeIST(incident.start)}. Peaked at ${peakVal} µg/m³.`}
           </p>
 
           <ReadingChart
@@ -224,13 +225,13 @@ export default function IncidentPage({ params }: { params: Promise<{ id: string 
             href={`/area/${incident.stationId}?dataset=${dataset}`}
             className="inline-block font-mono text-xs font-bold underline text-ink"
           >
-            {lang === 'hi' ? `${incident.area} के पिछले 48 घंटे →` : `Last 48 hours for ${incident.area} →`}
+            {lang === 'hi' ? `${areaLabel(incident.area, lang)} के पिछले 48 घंटे →` : `Last 48 hours for ${incident.area} →`}
           </Link>
         </div>
 
         {/* STEP 2: DIAGNOSE */}
         <div className="relative space-y-4 pt-4 border-t border-rule">
-          <div className="absolute -left-[15px] sm:-left-[31px] top-5 w-6 h-6 rounded-full bg-ink text-white flex items-center justify-center font-mono text-xs font-bold">
+          <div className="absolute -left-[21px] sm:-left-[37px] top-5 w-6 h-6 rounded-full bg-ink text-white flex items-center justify-center font-mono text-xs font-bold">
             ✓
           </div>
           <div className="text-xs font-mono font-bold uppercase text-ink-3">
@@ -246,12 +247,13 @@ export default function IncidentPage({ params }: { params: Promise<{ id: string 
             scores={incident.scores}
           />
 
+          {/* Clues for the likely cause only; other causes' scores are under "Other causes considered" */}
           <div className="border border-ink bg-sheet p-4 space-y-2">
             <div className="text-xs font-mono uppercase font-bold text-ink-3">
-              {lang === 'hi' ? `प्रमाण · ${incident.evidence.length} संकेत` : `EVIDENCE · ${incident.evidence.length} CLUES`}
+              {lang === 'hi' ? `प्रमाण · ${topEvidence.length} संकेत` : `EVIDENCE · ${topEvidence.length} CLUES`}
             </div>
-            {incident.evidence.map((chip, idx) => (
-              <EvidenceRow key={chip.key} index={idx} chip={chip} />
+            {topEvidence.map((chip, idx) => (
+              <EvidenceRow key={`${chip.cause}-${chip.key}`} index={idx} chip={chip} />
             ))}
           </div>
 
@@ -272,7 +274,7 @@ export default function IncidentPage({ params }: { params: Promise<{ id: string 
                 {(Object.entries(incident.scores) as [any, number][]).map(([c, score]) => (
                   <div key={c} className="flex justify-between py-1 border-b border-rule last:border-b-0">
                     <span className="capitalize">{causeLabel(c, lang)}</span>
-                    <span className="font-bold">score {(score / 100).toFixed(2)}</span>
+                    <span className="font-bold">{lang === 'hi' ? 'अंक' : 'score'} {(score / 100).toFixed(2)}</span>
                   </div>
                 ))}
               </div>
@@ -282,7 +284,7 @@ export default function IncidentPage({ params }: { params: Promise<{ id: string 
 
         {/* STEP 3: PRESCRIBE */}
         <div className="relative space-y-4 pt-4 border-t border-rule">
-          <div className="absolute -left-[15px] sm:-left-[31px] top-5 w-6 h-6 rounded-full bg-ink text-white flex items-center justify-center font-mono text-xs font-bold">
+          <div className="absolute -left-[21px] sm:-left-[37px] top-5 w-6 h-6 rounded-full bg-ink text-white flex items-center justify-center font-mono text-xs font-bold">
             ✓
           </div>
           <div className="text-xs font-mono font-bold uppercase text-ink-3">
@@ -304,7 +306,7 @@ export default function IncidentPage({ params }: { params: Promise<{ id: string 
         {/* STEP 4: ACT */}
         <div className="relative space-y-4 pt-4 border-t border-rule" id="act">
           <div
-            className={`absolute -left-[15px] sm:-left-[31px] top-5 w-6 h-6 rounded-full flex items-center justify-center font-mono text-xs font-bold ${
+            className={`absolute -left-[21px] sm:-left-[37px] top-5 w-6 h-6 rounded-full flex items-center justify-center font-mono text-xs font-bold ${
               currentStep === 4 ? 'ring-2 ring-ink bg-paper text-ink font-bold' : currentStep > 4 ? 'bg-ink text-white' : 'bg-rule text-ink-3'
             }`}
           >
@@ -333,7 +335,7 @@ export default function IncidentPage({ params }: { params: Promise<{ id: string 
                     ? 'क्षेत्रीय धुएं के कारण दिल्ली भर में हवा गंभीर स्तर पर है। जन स्वास्थ्य सलाह जारी करें।'
                     : 'Air across Delhi is in the Severe band due to regional smoke. Issue public health advisory.'
                   : lang === 'hi'
-                  ? `${incident.area} निगरानी स्टेशन के लगभग 1 किमी के दायरे में मुख्य सड़कों पर पानी का छिड़काव करें। फ़ील्ड पेज पर 'काम शुरू किया' और 'काम पूरा किया' दर्ज करें।`
+                  ? `${areaLabel(incident.area, lang)} निगरानी स्टेशन के लगभग 1 किमी के दायरे में मुख्य सड़कों पर पानी का छिड़काव करें। फ़ील्ड पेज पर 'काम शुरू किया' और 'काम पूरा किया' दर्ज करें।`
                   : `Sprinkle the main roads within about 1 km of the ${incident.area} monitoring station. Tap Mark started and Mark done on the field page.`}
               </p>
 
@@ -360,7 +362,7 @@ export default function IncidentPage({ params }: { params: Promise<{ id: string 
         {/* STEP 5: PROVE */}
         <div className="relative space-y-4 pt-4 border-t border-rule" id="prove">
           <div
-            className={`absolute -left-[15px] sm:-left-[31px] top-5 w-6 h-6 rounded-full flex items-center justify-center font-mono text-xs font-bold ${
+            className={`absolute -left-[21px] sm:-left-[37px] top-5 w-6 h-6 rounded-full flex items-center justify-center font-mono text-xs font-bold ${
               currentStep === 5 ? 'ring-2 ring-ink bg-paper text-ink' : 'border border-dashed border-ink-3 text-ink-3'
             }`}
           >

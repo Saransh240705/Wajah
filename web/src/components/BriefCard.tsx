@@ -31,7 +31,7 @@ export function BriefCard({ initialBrief, className = '' }: BriefCardProps) {
 
   const currentHour = new Date().getHours();
   const nextHour = (currentHour + 1) % 24;
-  const timeHeader = `${currentHour}:00 TO ${nextHour}:00`;
+  const timeHeader = lang === 'hi' ? `${currentHour}:00 से ${nextHour}:00 तक` : `${currentHour}:00 TO ${nextHour}:00`;
 
   return (
     <div className={`p-4 border-2 border-ink bg-sheet ${className}`}>

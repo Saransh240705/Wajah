@@ -5,7 +5,7 @@ import Link from 'next/link';
 import type { Ledger, Scoreboard } from '@wajah/shared';
 import { useApp } from '../../lib/context';
 import { getLedger, getScoreboard } from '../../lib/api';
-import { actionLabel, causeLabel, t } from '../../lib/i18n';
+import { actionLabel, areaLabel, causeLabel, t } from '../../lib/i18n';
 import { formatPct } from '../../lib/utils';
 
 export default function LedgerPage() {
@@ -215,7 +215,7 @@ export default function LedgerPage() {
                       href={`/area/${row.stationId}?dataset=${dataset}`}
                       className="underline decoration-1 hover:opacity-80"
                     >
-                      {row.area}
+                      {areaLabel(row.area, lang)}
                     </Link>
                     {row.illustrative && (
                       <span className="ml-2 px-1.5 py-0.2 text-[10px] font-mono border border-dashed border-ink-3 text-ink-3">
@@ -299,7 +299,7 @@ export default function LedgerPage() {
                   </span>
                   <div>
                     <span className="font-serif font-bold text-base text-ink underline">
-                      {area.area}
+                      {areaLabel(area.area, lang)}
                     </span>
                     {area.topCause && (
                       <span className="ml-2 font-mono text-xs text-ink-3">
