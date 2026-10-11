@@ -4,8 +4,13 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 set -a; [ -f api/.env ] && . api/.env; set +a
-WEB_ORIGIN_PARAM="${1:-${DEPLOY_WEB_ORIGIN:-http://127.0.0.1:3000}}"
-WEB_URL_PARAM="${2:-${DEPLOY_WEB_URL:-http://localhost:3000}}"
+# Without arguments, keep the deployed stack's current WebOrigin/WebUrl (e.g. the Amplify URL)
+current() { aws cloudformation describe-stacks --stack-name wajah --query "Stacks[0].Parameters[?ParameterKey=='$1'].ParameterValue" --output text 2>/dev/null | grep -v '^None$' || true; }
+WEB_ORIGIN_PARAM="${1:-${DEPLOY_WEB_ORIGIN:-$(current WebOrigin)}}"
+WEB_URL_PARAM="${2:-${DEPLOY_WEB_URL:-$(current WebUrl)}}"
+WEB_ORIGIN_PARAM="${WEB_ORIGIN_PARAM:-http://127.0.0.1:3000}"
+WEB_URL_PARAM="${WEB_URL_PARAM:-http://localhost:3000}"
+echo "WebOrigin=$WEB_ORIGIN_PARAM WebUrl=$WEB_URL_PARAM"
 
 npx tsx scripts/build-lambdas.ts
 
