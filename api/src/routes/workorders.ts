@@ -2,6 +2,8 @@ import { Hono } from 'hono';
 import { ACTIONS, type ActionType, type Agency, type PhotoCheck } from '@wajah/shared';
 import type { AppEnv } from '../lib/env';
 import { HttpError } from '../lib/http';
+import { checkPhoto } from '../modules/photo/check';
+import { photoKey, photoUploadUrl } from '../modules/photo/upload';
 import { finishWorkOrder, issueWorkOrder, loadWorkOrder, measureWorkOrder, startWorkOrder } from '../modules/workorders/service';
 
 const AGENCIES: Agency[] = ['MCD', 'PWD', 'DPCC', 'Traffic Police', 'Residents'];
@@ -35,9 +37,22 @@ export const workOrders = new Hono<AppEnv>()
   .post('/work-orders/:id/done', async (c) => {
     const b = await body(c);
     const key = typeof b.photoKey === 'string' && b.photoKey ? b.photoKey : undefined;
-    // TODO(A7.2): run the photo check here. Until then a sent photo is recorded as unchecked.
-    const photo: PhotoCheck | undefined = key ? { key, result: 'unclear', note: 'Photo could not be checked' } : undefined;
+    // The photo check is shown, never enforced: the order is marked done whatever it says
+    let photo: PhotoCheck | undefined;
+    if (key) {
+      const { workOrder } = await loadWorkOrder(c.var.store, c.req.param('id'));
+      // Only this work order's own upload key: never read an arbitrary object from the bucket
+      const expected = photoKey(workOrder.id);
+      if (key !== expected) throw new HttpError(400, 'bad_photo_key', `photoKey must be ${expected}, as returned by /photo-url.`);
+      photo = await checkPhoto(expected, workOrder.actionType, workOrder.area);
+    }
     return c.json((await finishWorkOrder(c.var.store, c.req.param('id'), photo)).workOrder);
+  })
+  .post('/work-orders/:id/photo-url', async (c) => {
+    const { workOrder } = await loadWorkOrder(c.var.store, c.req.param('id'));
+    const r = await photoUploadUrl(workOrder.id);
+    if (!r) throw new HttpError(503, 'photo_unavailable', 'Photo upload needs the deployed bucket (EVIDENCE_BUCKET).');
+    return c.json(r);
   })
   .post('/work-orders/:id/measure', async (c) => {
     // Re-measures even if an effect exists. Before the after window is complete: unchanged, 200, no new effect.

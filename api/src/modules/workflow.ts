@@ -24,7 +24,7 @@ export async function runWorkflowTask(store: Store, e: WorkflowEvent, now: Date 
       await publish(`Wajah work order: ${action} at ${w.area}`, [
         `${w.agency}: please carry out this work order${w.demo ? ' (DEMO, simulated)' : ''}.`,
         '', w.instructionsEn, '', `Why: ${w.reason}`, '', `Field page: ${link(w.id, incident.dataset)}`, `Work order: ${w.id}`,
-      ].join('\n'));
+      ].join('\n'), { agency: w.agency, type: 'work_order' });
       return { ok: true };
     }
     case 'checkDone': {
@@ -40,7 +40,7 @@ export async function runWorkflowTask(store: Store, e: WorkflowEvent, now: Date 
       return { state: 'waiting' };
     }
     case 'escalateOverdue': {
-      await publish(`Overdue: ${action} at ${w.area}`, `Work order ${w.id} (${w.agency}) is not marked done within the deadline.\n\nField page: ${link(w.id, incident.dataset)}`);
+      await publish(`Overdue: ${action} at ${w.area}`, `Work order ${w.id} (${w.agency}) is not marked done within the deadline.\n\nField page: ${link(w.id, incident.dataset)}`, { agency: w.agency, type: 'overdue' });
       return { ok: true };
     }
     case 'measure': {
@@ -58,7 +58,7 @@ export async function runWorkflowTask(store: Store, e: WorkflowEvent, now: Date 
         `${action} by ${w.agency} at ${w.area} did not reduce pollution beyond the expected change (net ${w.effect?.netChangePct ?? '?'}%).`,
         alt ? `Recommended next: ${ACTIONS[alt.actionType].labelEn} through ${alt.agency}.` : 'No alternative action in the playbook.',
         '', `Incident: ${incident.id}`,
-      ].join('\n'));
+      ].join('\n'), { agency: w.agency, type: 'no_effect' });
       return { ok: true };
     }
   }
