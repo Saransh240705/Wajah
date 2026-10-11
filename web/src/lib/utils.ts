@@ -1,11 +1,11 @@
 import type { AqiBand } from '@wajah/shared';
 
 /** Format an ISO date string to India Standard Time (IST, UTC+5:30) */
-export function formatTimeIST(iso: string | null | undefined): string {
+export function formatTimeIST(iso: string | null | undefined, lang: 'en' | 'hi' = 'en'): string {
   if (!iso) return '';
   try {
     const d = new Date(iso);
-    return d.toLocaleTimeString('en-IN', {
+    return d.toLocaleTimeString(lang === 'hi' ? 'hi-IN' : 'en-IN', {
       timeZone: 'Asia/Kolkata',
       hour: '2-digit',
       minute: '2-digit',
@@ -16,11 +16,11 @@ export function formatTimeIST(iso: string | null | undefined): string {
   }
 }
 
-export function formatDateIST(iso: string | null | undefined): string {
+export function formatDateIST(iso: string | null | undefined, lang: 'en' | 'hi' = 'en'): string {
   if (!iso) return '';
   try {
     const d = new Date(iso);
-    return d.toLocaleDateString('en-IN', {
+    return d.toLocaleDateString(lang === 'hi' ? 'hi-IN' : 'en-IN', {
       timeZone: 'Asia/Kolkata',
       weekday: 'short',
       day: 'numeric',
@@ -31,14 +31,14 @@ export function formatDateIST(iso: string | null | undefined): string {
   }
 }
 
-export function formatDateTimeRangeIST(startIso: string, endIso?: string | null): string {
-  const dateStr = formatDateIST(startIso);
-  const startTime = formatTimeIST(startIso);
+export function formatDateTimeRangeIST(startIso: string, endIso?: string | null, lang: 'en' | 'hi' = 'en'): string {
+  const dateStr = formatDateIST(startIso, lang);
+  const startTime = formatTimeIST(startIso, lang);
   if (!endIso) {
-    return `${dateStr}, since ${startTime}`;
+    return lang === 'hi' ? `${dateStr}, ${startTime} से` : `${dateStr}, since ${startTime}`;
   }
-  const endTime = formatTimeIST(endIso);
-  return `${dateStr}, ${startTime} to ${endTime}`;
+  const endTime = formatTimeIST(endIso, lang);
+  return lang === 'hi' ? `${dateStr}, ${startTime} से ${endTime} तक` : `${dateStr}, ${startTime} to ${endTime}`;
 }
 
 export function formatPct(val: number | null | undefined): string {

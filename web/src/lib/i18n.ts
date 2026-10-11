@@ -318,3 +318,140 @@ export function confidenceLabel(conf: string, lang: 'en' | 'hi' = 'en'): string 
   };
   return map[conf]?.[lang] ?? conf;
 }
+
+// ---------------------------------------------------------------------------------------------------------------
+// Server text in Hindi. The API sends some text in English only (evidence clues, recommendation reasons, grouped
+// board labels, station names). These helpers render it in Hindi from fixed server patterns; anything unknown falls
+// back to the original English rather than guessing.
+// ---------------------------------------------------------------------------------------------------------------
+
+const AREA_HI: Record<string, string> = {
+  'Anand Vihar': 'आनंद विहार', Mundka: 'मुंडका', Wazirpur: 'वज़ीरपुर', Jahangirpuri: 'जहाँगीरपुरी', 'R K Puram': 'आर के पुरम',
+  Rohini: 'रोहिणी', 'Punjabi Bagh': 'पंजाबी बाग', Okhla: 'ओखला', Bawana: 'बवाना', Narela: 'नरेला', 'Vivek Vihar': 'विवेक विहार',
+  Dwarka: 'द्वारका', 'Ashok Vihar': 'अशोक विहार', 'Lodhi Road': 'लोधी रोड', ITO: 'आईटीओ', 'Mandir Marg': 'मंदिर मार्ग',
+  Sirifort: 'सीरी फोर्ट', Alipur: 'अलीपुर', 'Aya Nagar': 'आया नगर', 'Burari Crossing': 'बुराड़ी क्रॉसिंग', 'Mathura Road': 'मथुरा रोड',
+  'Chandni Chowk': 'चांदनी चौक', DTU: 'डीटीयू', 'Karni Singh Range': 'करणी सिंह रेंज', 'IGI Airport': 'आईजीआई हवाई अड्डा',
+  'Dilshad Garden': 'दिलशाद गार्डन', 'Jawaharlal Nehru Stadium': 'जवाहरलाल नेहरू स्टेडियम', 'National Stadium': 'नेशनल स्टेडियम',
+  'NSIT Dwarka': 'एनएसआईटी द्वारका', Najafgarh: 'नजफ़गढ़', 'Nehru Nagar': 'नेहरू नगर', 'North Campus': 'नॉर्थ कैंपस',
+  Patparganj: 'पटपड़गंज', Pusa: 'पूसा', Shadipur: 'शादीपुर', 'Sonia Vihar': 'सोनिया विहार', 'Sri Aurobindo Marg': 'श्री अरबिंदो मार्ग',
+};
+
+/** Area label, including the board's grouped "N areas at once, highest at X". */
+export function areaLabel(area: string | null | undefined, lang: 'en' | 'hi' = 'en'): string {
+  if (!area) return '';
+  if (lang !== 'hi') return area;
+  const grouped = area.match(/^(\d+) areas at once, highest at (.+)$/);
+  if (grouped) return `${grouped[1]} क्षेत्र एक साथ, सबसे अधिक ${AREA_HI[grouped[2]!] ?? grouped[2]} में`;
+  return AREA_HI[area] ?? area;
+}
+
+const CHIP_TITLE: Record<string, { en: string; hi: string }> = {
+  pm_ratio_fine: { en: 'Particle size', hi: 'कणों का आकार' },
+  pm_ratio_smoke: { en: 'Particle size', hi: 'कणों का आकार' },
+  pm_ratio_coarse: { en: 'Particle size', hi: 'कणों का आकार' },
+  pm_ratio_mixed: { en: 'Particle size', hi: 'कणों का आकार' },
+  co_rise: { en: 'Carbon monoxide', hi: 'कार्बन मोनोऑक्साइड' },
+  co_rise_traffic: { en: 'Carbon monoxide', hi: 'कार्बन मोनोऑक्साइड' },
+  co_flat: { en: 'Carbon monoxide', hi: 'कार्बन मोनोऑक्साइड' },
+  no2_rise: { en: 'Nitrogen dioxide', hi: 'नाइट्रोजन डाइऑक्साइड' },
+  co_no2_rise: { en: 'CO and NO2', hi: 'CO और NO2' },
+  few_areas: { en: 'Areas that spiked', hi: 'कितने क्षेत्रों में बढ़ा' },
+  some_areas: { en: 'Areas that spiked', hi: 'कितने क्षेत्रों में बढ़ा' },
+  most_areas: { en: 'Areas that spiked', hi: 'कितने क्षेत्रों में बढ़ा' },
+  wind_strong: { en: 'Wind', hi: 'हवा' },
+  wind_calm: { en: 'Wind', hi: 'हवा' },
+  wind_from_northwest: { en: 'Wind direction', hi: 'हवा की दिशा' },
+  low_mixing: { en: 'Air ceiling', hi: 'हवा की परत' },
+  upwind_fires: { en: 'Farm fires upwind', hi: 'हवा की दिशा में पराली की आग' },
+  upwind_fires_many: { en: 'Farm fires upwind', hi: 'हवा की दिशा में पराली की आग' },
+  few_upwind_fires: { en: 'Farm fires upwind', hi: 'हवा की दिशा में पराली की आग' },
+  few_fires: { en: 'Farm fires upwind', hi: 'हवा की दिशा में पराली की आग' },
+  night: { en: 'Time of day', hi: 'समय' },
+  rush_hour: { en: 'Time of day', hi: 'समय' },
+  daytime: { en: 'Time of day', hi: 'समय' },
+};
+
+/** Short title for an evidence clue (instead of the raw rule key). */
+export function chipTitle(key: string, lang: 'en' | 'hi' = 'en'): string {
+  return CHIP_TITLE[key]?.[lang] ?? key.replace(/_/g, ' ');
+}
+
+const BAND_HI: Record<string, string> = { night: 'रात में', 'morning rush': 'सुबह की भीड़ के समय', 'evening rush': 'शाम की भीड़ के समय', day: 'दिन में' };
+
+/** Evidence clue sentence. The API's labels are English; in Hindi, rebuild the sentence from the rule and its value. */
+export function chipLabel(chip: { key: string; label: string; value: string }, lang: 'en' | 'hi' = 'en'): string {
+  if (lang !== 'hi') return chip.label;
+  const v = chip.value;
+  // "10 of 36" -> "36 में से 10"
+  const of = v.match(/^(\d+) of (\d+)$/);
+  const areas = of ? `${of[2]} में से ${of[1]}` : v;
+  switch (chip.key) {
+    case 'pm_ratio_fine':
+    case 'pm_ratio_smoke': return `बारीक कण ज़्यादा: PM2.5, PM10 का ${v} गुना है`;
+    case 'pm_ratio_coarse': return `मोटे कण ज़्यादा: PM2.5, PM10 का केवल ${v} गुना है`;
+    case 'pm_ratio_mixed': return `मिले-जुले आकार के कण: PM2.5, PM10 का ${v} गुना है`;
+    case 'co_rise':
+    case 'co_rise_traffic': return `CO सामान्य स्तर से ${v} बढ़ा`;
+    case 'co_flat': return `CO लगभग सामान्य स्तर पर (${v})`;
+    case 'no2_rise': return `NO2 सामान्य स्तर से ${v} बढ़ा`;
+    case 'co_no2_rise': return `CO और NO2 दोनों बढ़े: ${v.replace(', ', ' और ')}`;
+    case 'few_areas':
+    case 'some_areas': return of ? `${of[2]} में से केवल ${of[1]} क्षेत्रों में बढ़ा` : `केवल ${areas} क्षेत्रों में बढ़ा`;
+    case 'most_areas': return `${areas} क्षेत्रों में एक साथ बढ़ा`;
+    case 'wind_strong': return `हवा ${v}, धूल उड़ाने लायक तेज़`;
+    case 'wind_calm': return `हवा लगभग थमी हुई, ${v}`;
+    case 'low_mixing': return `हवा ज़मीन के पास फँसी: हवा की परत केवल ${v} गहरी`;
+    case 'wind_from_northwest': return `हवा उत्तर-पश्चिम (${v}) से, पराली की आग की दिशा से`;
+    case 'upwind_fires':
+    case 'upwind_fires_many': return `पिछले 48 घंटों में हवा की दिशा में ${v} जगह पराली की आग`;
+    case 'few_upwind_fires':
+    case 'few_fires': return `हवा की दिशा में केवल ${v} जगह पराली की आग`;
+    case 'night':
+    case 'rush_hour':
+    case 'daytime': return `सबसे ज़्यादा स्तर ${BAND_HI[v] ?? v}`;
+    default: return chip.label;
+  }
+}
+
+const CAUSE_EN_HI: Record<string, string> = {
+  'Local burning': 'आसपास कुछ जलाना', Dust: 'धूल', Traffic: 'यातायात', 'Smoke from farm fires': 'पराली का धुआँ', 'Trapped air': 'रुकी हुई हवा',
+  'Still air trapping pollution': 'रुकी हुई हवा',
+};
+const ACTION_EN_HI: Record<string, string> = {
+  'Water sprinkling': 'पानी का छिड़काव', Sprinkling: 'पानी का छिड़काव', 'Mechanical sweeping': 'मशीन से सड़क की सफ़ाई',
+  'Anti-burning patrol': 'आग रोकने की गश्त', 'The anti-burning patrol': 'आग रोकने की गश्त', 'Traffic management': 'यातायात प्रबंधन',
+  'Construction inspection': 'निर्माण स्थलों की जाँच', 'Public advisory': 'जन सलाह', 'The public advisory': 'जन सलाह',
+};
+const hiCause = (s: string) => CAUSE_EN_HI[s] ?? CAUSE_EN_HI[s.charAt(0).toUpperCase() + s.slice(1)] ?? s;
+const hiAction = (s: string) => ACTION_EN_HI[s] ?? ACTION_EN_HI[s.charAt(0).toUpperCase() + s.slice(1)] ?? s;
+
+/** Recommendation reason sentences (built on the server from fixed templates). */
+export function reasonText(reason: string | null | undefined, lang: 'en' | 'hi' = 'en'): string {
+  if (!reason) return '';
+  if (lang !== 'hi') return reason;
+  const sentences = reason.split(/(?<=\.)\s+/).map((s) => s.trim()).filter(Boolean);
+  const out = sentences.map((s) => {
+    let m: RegExpMatchArray | null;
+    if (s === 'No local action will help.') return 'कोई स्थानीय उपाय मदद नहीं करेगा।';
+    if (s === 'Do not deploy sprinklers.') return 'पानी का छिड़काव न करें।';
+    if (s === 'Hold all burning until the air clears.') return 'हवा साफ़ होने तक कुछ भी न जलाएँ।';
+    if ((m = s.match(/^(.+) upwind is the likely cause\.$/))) return `संभावित कारण हवा की दिशा में ${hiCause(m[1]!)} है।`;
+    if ((m = s.match(/^(.+) is the likely cause\.$/))) return `संभावित कारण ${hiCause(m[1]!)} है।`;
+    if ((m = s.match(/^(.+?)(?: here)? has not been tried here yet\.$/))) return `${hiAction(m[1]!)} यहाँ अभी तक आज़माया नहीं गया।`;
+    if ((m = s.match(/^(.+?)(?: here)? has no measured result here yet\.$/))) return `${hiAction(m[1]!)} का यहाँ अभी तक कोई मापा गया परिणाम नहीं है।`;
+    if ((m = s.match(/^(.+?)(?: here)? worked(?: here)? (\d+) of (\d+) times\.$/))) return `${hiAction(m[1]!)} से यहाँ ${m[3]} में से ${m[2]} बार असर हुआ।`;
+    if ((m = s.match(/^(.+?)(?: here)? had no effect(?: here)? (\d+) of (\d+) times(?:, so try (.+))?\.$/)))
+      return `${hiAction(m[1]!)} से यहाँ ${m[3]} में से ${m[2]} बार असर नहीं हुआ${m[4] ? `, इसलिए ${hiAction(m[4])} आज़माएँ` : ''}।`;
+    if ((m = s.match(/^(.+?) had no effect here (\d+) times\.$/))) return `${hiAction(m[1]!)} से यहाँ ${m[2]} बार असर नहीं हुआ।`;
+    if ((m = s.match(/^Try (.+)\.$/))) return `${hiAction(m[1]!)} आज़माएँ।`;
+    return s;
+  });
+  return out.join(' ');
+}
+
+/** Hindi instructions from the server carry the English place name; show the Hindi one. */
+export function instructionsText(wo: { area: string; instructionsEn: string; instructionsHi: string }, lang: 'en' | 'hi' = 'en'): string {
+  if (lang !== 'hi') return wo.instructionsEn;
+  const hi = areaLabel(wo.area, 'hi');
+  return hi && hi !== wo.area ? wo.instructionsHi.split(wo.area).join(hi) : wo.instructionsHi;
+}

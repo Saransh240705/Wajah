@@ -8,7 +8,7 @@ import { getLedger, getStationReadings } from '../../../lib/api';
 import { BandPill } from '../../../components/BandPill';
 import { ReadingChart } from '../../../components/ReadingChart';
 import { formatDateTimeRangeIST, formatPct } from '../../../lib/utils';
-import { actionLabel, bandLabel, causeLabel, statusLabel, verdictLabel } from '../../../lib/i18n';
+import { actionLabel, areaLabel, bandLabel, causeLabel, statusLabel, verdictLabel } from '../../../lib/i18n';
 
 export default function AreaPage({ params }: { params: Promise<{ stationId: string }> }) {
   const resolvedParams = use(params);
@@ -77,7 +77,7 @@ export default function AreaPage({ params }: { params: Promise<{ stationId: stri
         <div className="space-y-2 flex-1">
           <div className="text-xs font-mono text-ink-3 uppercase">
             {lang === 'hi'
-              ? `क्षेत्र · ${station.area} · ${station.isHotspot ? 'हॉटस्पॉट' : 'स्टेशन'} · अपडेटेड ${new Date().getHours()}:00`
+              ? `क्षेत्र · ${areaLabel(station.area, lang)} · ${station.isHotspot ? 'हॉटस्पॉट' : 'स्टेशन'} · अपडेटेड ${new Date().getHours()}:00`
               : `Area · ${station.area} · ${station.isHotspot ? 'Hotspot' : 'Station'} · updated ${new Date().getHours()}:00`}
           </div>
           <h1 className="font-serif text-3xl sm:text-4xl font-extrabold text-ink leading-tight">
@@ -145,7 +145,7 @@ export default function AreaPage({ params }: { params: Promise<{ stationId: stri
                   </span>
                   <div>
                     <div className="font-serif font-bold text-sm text-ink">
-                      {formatDateTimeRangeIST(inc.start, inc.end)}
+                      {formatDateTimeRangeIST(inc.start, inc.end, lang)}
                     </div>
                     <div className="text-xs font-mono text-ink-3">
                       {causeLabel(inc.topCause, lang)} · {pol} {lang === 'hi' ? 'अधिकतम' : 'peak'}

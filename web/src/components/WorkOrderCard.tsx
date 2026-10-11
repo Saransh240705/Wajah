@@ -3,8 +3,9 @@
 import React, { useState } from 'react';
 import type { WorkOrder } from '@wajah/shared';
 import { useApp } from '../lib/context';
+import { StepTimeline } from './StepTimeline';
 import { formatTimeIST } from '../lib/utils';
-import { actionLabel } from '../lib/i18n';
+import { actionLabel, instructionsText } from '../lib/i18n';
 import { VerdictBadge } from './VerdictBadge';
 
 interface WorkOrderCardProps {
@@ -51,26 +52,21 @@ export function WorkOrderCard({ workOrder, className = '' }: WorkOrderCardProps)
 
       {/* Progress Timeline */}
       <div className="py-4 border-b border-rule">
-        <div className="flex items-center justify-between font-mono text-xs">
-          <div className="text-left">
-            <div className="font-bold text-ink">{lang === 'hi' ? 'जारी किया गया' : 'Issued'}</div>
-            <div className="text-ink-3">{formatTimeIST(workOrder.issuedAt) || '--'}</div>
-          </div>
-          <div className="flex-1 mx-3 border-t-2 border-ink" />
-          <div className="text-center">
-            <div className={`font-bold ${isInProgress ? 'text-ink' : 'text-ink-3'}`}>
-              {lang === 'hi' ? 'प्रगति पर' : 'In progress'}
-            </div>
-            <div className="text-ink-3">
-              {isInProgress ? formatTimeIST(workOrder.startedAt) : (lang === 'hi' ? 'अभी नहीं' : 'not yet')}
-            </div>
-          </div>
-          <div className={`flex-1 mx-3 border-t-2 ${isDone ? 'border-ink' : 'border-dashed border-rule'}`} />
-          <div className="text-right">
-            <div className={`font-bold ${isDone ? 'text-ink' : 'text-ink-3'}`}>{lang === 'hi' ? 'पूर्ण' : 'Done'}</div>
-            <div className="text-ink-3">{isDone ? formatTimeIST(workOrder.doneAt) : (lang === 'hi' ? 'अभी नहीं' : 'not yet')}</div>
-          </div>
-        </div>
+        <StepTimeline
+          steps={[
+            { label: lang === 'hi' ? 'जारी किया गया' : 'Issued', time: formatTimeIST(workOrder.issuedAt) || '--', reached: true },
+            {
+              label: lang === 'hi' ? 'प्रगति पर' : 'In progress',
+              time: workOrder.startedAt ? formatTimeIST(workOrder.startedAt) : (lang === 'hi' ? 'अभी नहीं' : 'not yet'),
+              reached: isInProgress || isDone,
+            },
+            {
+              label: lang === 'hi' ? 'पूर्ण' : 'Done',
+              time: isDone ? formatTimeIST(workOrder.doneAt) : (lang === 'hi' ? 'अभी नहीं' : 'not yet'),
+              reached: isDone,
+            },
+          ]}
+        />
       </div>
 
       {/* Instructions */}
@@ -96,7 +92,7 @@ export function WorkOrderCard({ workOrder, className = '' }: WorkOrderCardProps)
           </div>
         </div>
         <p className="font-sans text-sm text-ink leading-relaxed">
-          {instLang === 'hi' ? workOrder.instructionsHi : workOrder.instructionsEn}
+          {instructionsText(workOrder, instLang)}
         </p>
       </div>
 

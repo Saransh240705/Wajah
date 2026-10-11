@@ -3,9 +3,10 @@
 import React, { useEffect, useState, use } from 'react';
 import type { Incident, WorkOrder } from '@wajah/shared';
 import { useApp } from '../../../lib/context';
+import { StepTimeline } from '../../../components/StepTimeline';
 import { getWorkOrder } from '../../../lib/api';
 import { FieldActionButtons } from '../../../components/FieldActionButtons';
-import { actionLabel } from '../../../lib/i18n';
+import { actionLabel, areaLabel, instructionsText, reasonText } from '../../../lib/i18n';
 import { formatTimeIST } from '../../../lib/utils';
 
 export default function WorkOrderFieldPage({ params }: { params: Promise<{ id: string }> }) {
@@ -100,32 +101,19 @@ export default function WorkOrderFieldPage({ params }: { params: Promise<{ id: s
             {workOrder.id.toUpperCase()}
           </div>
           <h1 className="font-devanagari font-extrabold text-3xl sm:text-4xl text-ink mt-1">
-            {workOrder.area}
+            {areaLabel(workOrder.area, lang)}
           </h1>
         </div>
 
         {/* Timeline Stamps */}
-        <div className="py-2 border-b border-rule">
-          <div className="flex items-center justify-between font-mono text-xs">
-            <div>
-              <div className="font-bold text-ink">{lang === 'hi' ? 'जारी' : 'Issued'}</div>
-              <div className="text-ink-3">{formatTimeIST(workOrder.issuedAt) || '--'}</div>
-            </div>
-            <div className="flex-1 mx-2 border-t border-ink" />
-            <div>
-              <div className={`font-bold ${isInProgress || isDone ? 'text-ink' : 'text-ink-3'}`}>
-                {lang === 'hi' ? 'काम शुरू' : 'Started'}
-              </div>
-              <div className="text-ink-3">{formatTimeIST(workOrder.startedAt) || '--'}</div>
-            </div>
-            <div className={`flex-1 mx-2 border-t ${isDone ? 'border-ink' : 'border-dashed border-rule'}`} />
-            <div>
-              <div className={`font-bold ${isDone ? 'text-ink' : 'text-ink-3'}`}>
-                {lang === 'hi' ? 'काम पूरा' : 'Done'}
-              </div>
-              <div className="text-ink-3">{formatTimeIST(workOrder.doneAt) || '--'}</div>
-            </div>
-          </div>
+        <div className="py-3 border-b border-rule">
+          <StepTimeline
+            steps={[
+              { label: lang === 'hi' ? 'जारी' : 'Issued', time: formatTimeIST(workOrder.issuedAt) || '--', reached: true },
+              { label: lang === 'hi' ? 'काम शुरू' : 'Started', time: formatTimeIST(workOrder.startedAt) || '--', reached: isInProgress || isDone },
+              { label: lang === 'hi' ? 'काम पूरा' : 'Done', time: formatTimeIST(workOrder.doneAt) || '--', reached: isDone },
+            ]}
+          />
         </div>
 
         {/* Section: What to do */}
@@ -138,7 +126,7 @@ export default function WorkOrderFieldPage({ params }: { params: Promise<{ id: s
             <span>{actionLabel(workOrder.actionType, lang)}</span>
           </h2>
           <p className="font-sans text-sm sm:text-base text-ink leading-relaxed mt-2">
-            {lang === 'hi' ? workOrder.instructionsHi : workOrder.instructionsEn}
+            {instructionsText(workOrder, lang)}
           </p>
         </div>
 
@@ -148,7 +136,7 @@ export default function WorkOrderFieldPage({ params }: { params: Promise<{ id: s
             {lang === 'hi' ? 'क्यों' : 'Why'}
           </div>
           <p className="font-sans text-sm text-ink-2 leading-relaxed">
-            {workOrder.reason}
+            {reasonText(workOrder.reason, lang)}
           </p>
         </div>
 
