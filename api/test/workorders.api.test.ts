@@ -103,3 +103,10 @@ describe('photo key validation', () => {
     expect((await store.getIncident(targetId))!.workOrders[0]!.status).toBe('issued');
   });
 });
+
+describe('demo flag', () => {
+  it('work orders issued through the API are marked demo', async () => {
+    const { workOrder } = (await (await post(`/incidents/${targetId}/work-orders`)).json()) as { workOrder: WorkOrder };
+    expect(workOrder.demo).toBe(true);
+  });
+});

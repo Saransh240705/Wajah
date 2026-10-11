@@ -78,3 +78,17 @@ Variants checked:
 Difference-in-differences alone failed on local spikes: all 6 judged local-cause fakes were marked worked, because other stations do not spike with a local one, so a natural fade looks like success. The hybrid uses each comparison only where it fits. Under the hybrid, 9 of the 10 local-cause fakes were inconclusive (city shift, missing readings, wind change) and the one judged was no_effect: this smoke-season period has too few local spikes to measure local accuracy.
 
 Decision (Saransh, 10 Oct): adopt the hybrid; master PRD 4.7 updated. A local spike with no baseline pool is now inconclusive rather than measured against zero fade.
+
+## Hero incidents for the video (A6.6, replay dataset)
+
+All work orders are simulated (DEMO); their verdicts are what the real readings gave, unedited.
+
+| Beat | Incident | What it shows |
+| --- | --- | --- |
+| Farm smoke, "no local action will help" | `replay-rohini-2025111117` | PM2.5 690 at Rohini, 33 of 37 areas spiked together, 716 farm fires upwind; likely smoke from farm fires, high confidence |
+| Local spike with a work order | `replay-bawana-2025110915` | Likely local burning, high confidence; anti-burning patrol by MCD; verdict **no effect** (net +12.8%), incident recurred |
+| No effect, run through Step Functions on AWS | `replay-pusa-2025110813` | Traffic management by Traffic Police; execution ran NotifyAgency to EscalateNoEffect; verdict **no effect** (net +37.1%); incident recurred |
+| Photo check | `replay-mundka-2025110715-w1` | Photo of a water tanker spraying a road: check **pass** (note: the order was water sprinkling on a local-burning incident, issued for the photo test) |
+| Ask in Hindi | `replay-jahangirpuri-2025111117` | "कल रात जहाँगीरपुरी में हवा इतनी खराब क्यों थी?" answered in Hindi: likely farm smoke, high confidence, 714 fires upwind |
+
+No replay work order received **worked**: none was carried out, so that is the correct result. Replay has only one dust spike (low confidence), so there is no dust hero. For a "Worked" effect card, the web app's mock fixtures have an illustrative sample, labelled as such.
