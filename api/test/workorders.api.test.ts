@@ -110,3 +110,15 @@ describe('demo flag', () => {
     expect(workOrder.demo).toBe(true);
   });
 });
+
+describe('GET /stations openIncidentId', () => {
+  it('only links incidents still running or ended within the board window', async () => {
+    const list = (await (await app.request('/stations?dataset=replay')).json()) as { id: string; openIncidentId: string | null }[];
+    // Synthetic replay: Anand Vihar's last spike ended 18 h before the period's end; earlier ones days before
+    expect(list.find((s) => s.id === 'anand-vihar')!.openIncidentId).toBe(targetId);
+    const old = (await store.listIncidents({ dataset: 'replay' })).filter((i) => i.id !== targetId);
+    for (const i of old) await store.putIncident({ ...i, stationId: 'rohini' });
+    const again = (await (await app.request('/stations?dataset=replay')).json()) as { id: string; openIncidentId: string | null }[];
+    expect(again.find((s) => s.id === 'rohini')!.openIncidentId).toBeNull();
+  });
+});
