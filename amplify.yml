@@ -11,11 +11,12 @@ applications:
         build:
           commands:
             - npm run build -w @wajah/web
-            # Copy static assets into the standalone server bundle
-            - cp -r web/public web/.next/standalone/web/public
+            # Copy static assets into standalone bundle (create public dir if missing)
+            - mkdir -p web/.next/standalone/web/public
+            - '[ -d web/public ] && cp -r web/public/. web/.next/standalone/web/public/ || true'
             - cp -r web/.next/static web/.next/standalone/web/.next/static
       artifacts:
-        # Serve the standalone Node.js server (Amplify SSR)
+        # Amplify SSR: serve the standalone Node.js server bundle
         baseDirectory: web/.next/standalone
         files:
           - '**/*'
