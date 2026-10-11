@@ -115,8 +115,8 @@ export default function IncidentPage({ params }: { params: Promise<{ id: string 
       : `${actionLabel(latestWo.actionType, lang)} is under way. The ${latestWo.agency} team started work.`;
   } else {
     subText = lang === 'hi'
-      ? `संभावित कारण ${causeLabel(incident.topCause, lang)} है। अनुशंसित कार्रवाई नीचे तैयार है।`
-      : `The likely cause is ${causeLabel(incident.topCause, lang).toLowerCase()}. Recommended action ready below.`;
+      ? `${PLAYBOOKS[incident.topCause].likelyHi} अनुशंसित कार्रवाई नीचे तैयार है।`
+      : `${PLAYBOOKS[incident.topCause].likelyEn} Recommended action ready below.`;
   }
 
   const handleIssueWorkOrder = async (actionType?: any, agency?: any) => {
