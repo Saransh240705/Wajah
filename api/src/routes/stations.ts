@@ -1,19 +1,21 @@
 import { Hono } from 'hono';
-import { pm25Band, type Incident, type StationSummary } from '@wajah/shared';
+import { config, pm25Band, type Incident, type StationSummary } from '@wajah/shared';
 import type { AppEnv } from '../lib/env';
 import { intParam, notFound } from '../lib/http';
 import { STATIONS, stationById } from '../lib/stations';
 
 const H = 3600_000;
-export const isActive = (i: Incident) => i.status === 'open' || i.status === 'recurred' || i.end === null;
+/** Active now: not cleared, and still running or ended within the board's window of the dataset's clock. */
+export const isActive = (i: Incident, now: string) =>
+  i.status !== 'cleared' && (i.end === null || Date.parse(i.end) >= Date.parse(now) - config.board.activeHours * H);
 
 export const stations = new Hono<AppEnv>()
   .get('/stations', async (c) => {
-    const { store, dataset } = c.var;
+    const { store, dataset, now } = c.var;
     const [latest, incidents] = await Promise.all([store.getLatestReadings(dataset), store.listIncidents({ dataset })]);
     const body: StationSummary[] = STATIONS.map((s) => {
       const r = latest.find((x) => x.stationId === s.id) ?? null;
-      return { ...s, latest: r, band: pm25Band(r?.pm25), openIncidentId: incidents.find((i) => i.stationId === s.id && isActive(i))?.id ?? null };
+      return { ...s, latest: r, band: pm25Band(r?.pm25), openIncidentId: incidents.find((i) => i.stationId === s.id && isActive(i, now))?.id ?? null };
     });
     return c.json(body);
   })
