@@ -8,6 +8,7 @@ import type { Store } from '../../store';
 import { diagnoseRange } from '../fingerprint/diagnose';
 import { angleDiff, bearingDeg, circularMeanDeg, haversineKm } from '../fingerprint/features';
 import { isUnacted } from '../effect/measure';
+import { buildBoard, buildLedger } from '../board';
 
 const H = 3600_000;
 
@@ -39,53 +40,6 @@ const brief = (i: Incident) => ({
   clues: i.evidence.filter((c) => c.cause === i.topCause).slice(0, 3).map((c) => c.label),
   ...(i.workOrders.length ? { workOrders: i.workOrders.map((w) => `${ACTIONS[w.actionType].labelEn} by ${w.agency}: ${w.effect ? `${w.effect.verdict} (net ${w.effect.netChangePct}%)` : w.status}${w.demo ? ', demo' : ''}`) } : {}),
 });
-
-/** Ledger rows from measured work orders. TODO(track-b): replace with buildLedger from api/src/modules/board. */
-export function fallbackLedger(incidents: Incident[], stationId?: string) {
-  const rows = new Map<string, { area: string; action: string; tried: number; worked: number; noEffect: number; inconclusive: number; nets: number[] }>();
-  for (const i of incidents) {
-    if (stationId && i.stationId !== stationId) continue;
-    for (const w of i.workOrders) {
-      if (!w.effect || !ACTIONS[w.actionType].measurable) continue;
-      const k = `${i.stationId}|${w.actionType}`;
-      const r = rows.get(k) ?? { area: i.area, action: w.actionType, tried: 0, worked: 0, noEffect: 0, inconclusive: 0, nets: [] };
-      r.tried++;
-      if (w.effect.verdict === 'worked') r.worked++;
-      else if (w.effect.verdict === 'no_effect') r.noEffect++;
-      else r.inconclusive++;
-      if (w.effect.verdict !== 'inconclusive') r.nets.push(w.effect.netChangePct);
-      rows.set(k, r);
-    }
-  }
-  return [...rows.values()].slice(0, 10).map(({ nets, ...r }) => ({ ...r, action: ACTIONS[r.action as keyof typeof ACTIONS].labelEn, avgNetChangePct: nets.length ? r1(nets.reduce((a, b) => a + b, 0) / nets.length) : null }));
-}
-
-/** Ranked board items. TODO(track-b): replace with buildBoard from api/src/modules/board. */
-export function fallbackBoard(incidents: Incident[], now: string) {
-  const since = new Date(Date.parse(now) - config.board.activeHours * H).toISOString();
-  const ledger = fallbackLedger(incidents);
-  const active = incidents.filter((i) => ((i.status === 'open' || i.status === 'recurred') && (i.end == null || i.end >= since)) || (i.status === 'dispatched' && i.workOrders.length > 0 && i.workOrders.at(-1)?.status !== 'done'));
-  const row = (i: Incident, areas = 1) => {
-    const pb = PLAYBOOKS[i.topCause];
-    const step = pb.steps[i.status === 'recurred' ? Math.min(1, pb.steps.length - 1) : 0]!;
-    const h = ledger.find((l) => l.area === i.area && l.action === ACTIONS[step.actionType].labelEn);
-    const priority = (i.peakPm25 / i.baselinePm25) * config.board.confidenceWeight[i.confidence] * (1 + config.board.recurrenceBoost * i.recurrenceCount);
-    return { incidentId: i.id, area: areas > 1 ? `${areas} areas at once, highest at ${i.area}` : i.area, peakPm25: i.peakPm25, peakPm10: i.peakPm10,
-      likelyCause: causeName(i.topCause), confidence: i.confidence, status: i.status, localActionPossible: pb.localActionPossible,
-      action: actionName(step.actionType), agency: step.agency, history: h ? `worked ${h.worked} of ${h.tried}` : 'not tried here yet', priority: r1(priority)! };
-  };
-  // A city-wide spike is one row (as on the board design), not one per station
-  const local = active.filter((i) => PLAYBOOKS[i.topCause].localActionPossible).map((i) => row(i));
-  const wide = active.filter((i) => !PLAYBOOKS[i.topCause].localActionPossible).sort((a, b) => a.start.localeCompare(b.start));
-  const events: Incident[][] = [];
-  for (const i of wide) {
-    const ev = events.find((e) => e[0]!.topCause === i.topCause && e.some((x) => x.start <= (i.end ?? now) && (x.end ?? now) >= i.start));
-    if (ev) ev.push(i);
-    else events.push([i]);
-  }
-  const city = events.map((e) => row(e.reduce((a, b) => (b.peakPm25 > a.peakPm25 ? b : a)), e.length));
-  return [...local.sort((a, b) => b.priority - a.priority), ...city.sort((a, b) => b.priority - a.priority)].slice(0, 5);
-}
 
 export function buildTools(store: Store, dataset: Dataset, now: string, capture: ToolCapture) {
   const iso = z.string().describe('ISO 8601 time in UTC, e.g. 2025-11-03T16:00:00Z');
@@ -184,7 +138,18 @@ export function buildTools(store: Store, dataset: Dataset, now: string, capture:
       name: 'get_board',
       description: 'The action board: spikes needing action now, highest priority first, with the recommended action, agency and ledger history.',
       inputSchema: z.object({}),
-      callback: async () => ({ items: fallbackBoard(await all(), now) }),
+      // Same board as GET /board (Track B's buildBoard), so the brief and the board always agree
+      callback: async () => {
+        const incidents = await all();
+        const board = buildBoard(incidents, buildLedger(incidents, { days: 14, now }), now);
+        const items = board.items.slice(0, 5).map((b) => ({
+          incidentId: b.incident.id, area: b.incident.area, peakPm25: b.incident.peakPm25, peakPm10: b.incident.peakPm10,
+          likelyCause: causeName(b.incident.topCause), confidence: b.incident.confidence, status: b.incident.status,
+          localActionPossible: b.localActionPossible, action: actionName(b.recommended.actionType), agency: b.recommended.agency,
+          reason: b.recommended.reason, history: b.history.tried ? `worked ${b.history.worked} of ${b.history.tried}` : 'not tried here yet',
+        }));
+        return { summary: board.summary, items, ...(items.length ? {} : { message: 'No hotspot needs action this hour.' }) };
+      },
     }),
     tool({
       name: 'get_ledger',
@@ -192,8 +157,13 @@ export function buildTools(store: Store, dataset: Dataset, now: string, capture:
       inputSchema: z.object({ stationId: z.string().optional() }),
       callback: async ({ stationId }) => {
         const incidents = await all();
-        const rows = fallbackLedger(incidents, stationId);
-        return { rows, unactedIncidents: incidents.filter(isUnacted).length, ...(rows.length ? {} : { message: 'no measured work orders yet' }) };
+        const ledger = buildLedger(incidents, { days: 14, now });
+        const rows = ledger.rows.filter((r) => !stationId || r.stationId === stationId).slice(0, 10).map((r) => ({
+          area: r.area, action: ACTIONS[r.actionType].labelEn, tried: r.tried, worked: r.worked, noEffect: r.noEffect,
+          inconclusive: r.inconclusive, avgNetChangePct: r.avgNetChangePct, illustrative: r.illustrative,
+        }));
+        return { rows, totals: ledger.totals, placebo: ledger.placebo, unactedIncidents: incidents.filter(isUnacted).length,
+          ...(rows.length ? {} : { message: 'no measured work orders yet' + (stationId ? ' at this station' : '') }) };
       },
     }),
   ];
