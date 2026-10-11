@@ -60,7 +60,9 @@ export async function issueWorkOrder(store: Store, incidentId: string, body: { a
   const incident = await loadIncident(store, incidentId);
   const now = await eventTime(store, incident, 'issue');
   const recommend = await getRecommender(store, incident.dataset);
-  const r = issue(incident, { now, actionType: body.actionType, agency: body.agency, recommend, demo: body.demo, usualPm10: await usualPm10(store, incident) });
+  // Every work order in this prototype is simulated (master PRD section 1): DEMO unless real ones are switched on
+  const demo = body.demo ?? process.env.REAL_WORK_ORDERS !== 'true';
+  const r = issue(incident, { now, actionType: body.actionType, agency: body.agency, recommend, demo, usualPm10: await usualPm10(store, incident) });
   if (workflowStarter && ACTIONS[r.workOrder.actionType].measurable) {
     const executionArn = await workflowStarter(r.workOrder, r.incident);
     if (executionArn) {

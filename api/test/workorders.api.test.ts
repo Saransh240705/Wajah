@@ -93,3 +93,20 @@ describe('A3.6 ingest fallback and A3.7 verdict consequences', () => {
     expect((await s.store.getIncident(s.targetId))!.status).toBe('recurred');
   });
 });
+
+describe('photo key validation', () => {
+  it('rejects a photoKey that is not this work order\'s own upload key', async () => {
+    const { workOrder } = (await (await post(`/incidents/${targetId}/work-orders`)).json()) as { workOrder: WorkOrder };
+    const bad = await post(`/work-orders/${workOrder.id}/done`, { photoKey: 'evidence/some-other-incident.json' });
+    expect(bad.status).toBe(400);
+    expect(await bad.json()).toMatchObject({ error: { code: 'bad_photo_key' } });
+    expect((await store.getIncident(targetId))!.workOrders[0]!.status).toBe('issued');
+  });
+});
+
+describe('demo flag', () => {
+  it('work orders issued through the API are marked demo', async () => {
+    const { workOrder } = (await (await post(`/incidents/${targetId}/work-orders`)).json()) as { workOrder: WorkOrder };
+    expect(workOrder.demo).toBe(true);
+  });
+});

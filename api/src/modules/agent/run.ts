@@ -1,6 +1,6 @@
 // Agent runner, track A A4.4. Evidence and suggested actions come from code, never from the model.
 import { AfterToolCallEvent, Agent, BeforeToolCallEvent } from '@strands-agents/sdk';
-import { config, type AskRequest, type AskResponse, type Dataset } from '@wajah/shared';
+import { ACTIONS, PLAYBOOKS, config, type AskRequest, type AskResponse, type Dataset } from '@wajah/shared';
 import { datasetNow } from '../../lib/clock';
 import type { Store } from '../../store';
 import { getModel } from './model';
@@ -9,6 +9,15 @@ import { buildTools, type ToolCapture } from './tools';
 
 const isHindi = (s?: string) => !!s && /[ऀ-ॿ]/.test(s);
 const log = (o: Record<string, unknown>) => console.log(JSON.stringify(o));
+
+/** The model can see code names in tool schemas; replace any that slip into the answer with readable names. */
+export function readableNames(answer: string): string {
+  const hi = isHindi(answer);
+  let out = answer;
+  for (const p of Object.values(PLAYBOOKS)) out = out.replaceAll(p.cause, hi ? p.labelHi : p.labelEn.toLowerCase());
+  for (const a of Object.values(ACTIONS)) out = out.replaceAll(a.type, hi ? a.labelHi : a.labelEn.toLowerCase());
+  return out;
+}
 
 function apology(req: AskRequest): AskResponse {
   const hi = req.mode === 'brief' ? req.lang === 'hi' : isHindi(req.message);
@@ -58,7 +67,7 @@ export async function ask(store: Store, req: AskRequest): Promise<AskResponse> {
       limits: { turns: config.agent.maxToolCalls + 2 },
     });
     if (result.stopReason === 'cancelled') throw new Error('agent timed out');
-    const answer = result.toString().trim();
+    const answer = readableNames(result.toString().trim());
     if (!answer) throw new Error('empty answer');
 
     // Evidence from the last diagnose, else the incident from list_incidents
