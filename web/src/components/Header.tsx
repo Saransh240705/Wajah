@@ -34,9 +34,10 @@ export function Header() {
         <div className="flex items-center gap-8">
           <Link
             href="/board"
-            className="font-slab text-2xl sm:text-3xl font-normal tracking-tight text-ink hover:opacity-80 transition-opacity"
+            className="flex items-baseline gap-2 font-slab text-2xl sm:text-3xl font-normal tracking-tight text-ink hover:opacity-80 transition-opacity"
           >
-            Wajah
+            <span>Wajah</span>
+            <span lang="hi" className="text-xl sm:text-2xl text-band-severe">वजह</span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-6 text-sm font-sans font-medium text-ink">
