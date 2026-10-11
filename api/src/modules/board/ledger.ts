@@ -1,25 +1,11 @@
 import type { ActionType, Incident, Ledger, LedgerRow, Verdict } from '@wajah/shared';
 import { ACTIONS } from '@wajah/shared';
-import { existsSync, readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+// Fix 7: bundled import so placebo data is available in Lambda (no filesystem)
+import placebo from '@wajah/shared/placebo.json' with { type: 'json' };
 
 export interface BuildLedgerOptions {
   days?: number;
   now: string;
-}
-
-function loadPlacebo(): Ledger['placebo'] {
-  try {
-    const here = dirname(fileURLToPath(import.meta.url));
-    const p = join(here, '../../../../shared/src/placebo.json');
-    if (existsSync(p)) {
-      return JSON.parse(readFileSync(p, 'utf-8'));
-    }
-  } catch {
-    // optional placebo
-  }
-  return null;
 }
 
 export function buildLedger(incidents: Incident[], opts: BuildLedgerOptions): Ledger {
@@ -128,7 +114,7 @@ export function buildLedger(incidents: Incident[], opts: BuildLedgerOptions): Le
       noEffect: totalNoEffect,
       inconclusive: totalInconclusive,
     },
-    placebo: loadPlacebo(),
+    placebo: placebo as Ledger['placebo'],
     rows,
   };
 }
