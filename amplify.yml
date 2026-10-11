@@ -1,19 +1,23 @@
 version: 1
 applications:
-  - appRoot: web
-    frontend:
+  - frontend:
       phases:
         preBuild:
           commands:
-            - npm ci
+            - node --version
+            - npm --version
+            # Install from monorepo root so all workspaces (shared, api, web) are linked
+            - npm install
         build:
           commands:
-            - npm run build
+            - npm run build -w @wajah/web
       artifacts:
-        baseDirectory: .next
+        # Next.js standalone + static output
+        baseDirectory: web/.next
         files:
           - '**/*'
       cache:
         paths:
           - node_modules/**/*
-          - .next/cache/**/*
+          - web/.next/cache/**/*
+    appRoot: .
