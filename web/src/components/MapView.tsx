@@ -1,5 +1,6 @@
 'use client';
 
+import 'leaflet/dist/leaflet.css';
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import type { Fire, Incident, StationSummary } from '@wajah/shared';
@@ -43,7 +44,10 @@ const LeafletMap = dynamic(
         const val = st.latest?.pm25 ? Math.round(st.latest.pm25) : '--';
         const hex = bandHex(st.band);
         const isSelected = st.id === selectedStationId;
-        const inc = incidents.find((i) => i.stationId === st.id && (i.status === 'open' || i.status === 'dispatched' || i.status === 'recurred'));
+        // Fix 2: use openIncidentId (set by /stations API) — only incidents still running/recent
+        const inc = st.openIncidentId != null
+          ? incidents.find((i) => i.id === st.openIncidentId)
+          : undefined;
         const hasActiveWo = inc?.workOrders.some((w) => w.status === 'issued' || w.status === 'in_progress');
 
         const borderStyle = st.isHotspot ? 'border-2 border-black font-extrabold' : 'border border-black font-medium';

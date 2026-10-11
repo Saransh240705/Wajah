@@ -56,6 +56,19 @@ export default function MapPage() {
     );
   }
 
+  // Fix 2: a station is "spiking" only when the API says it has an open incident
+  const activeStations = stations.filter((s) => s.openIncidentId != null);
+
+  // Fix 5: use the dataset's own clock (latest reading time), not browser Date
+  const latestReadingTs = stations
+    .map((s) => s.latest?.ts)
+    .filter(Boolean)
+    .sort()
+    .at(-1);
+  const nowLabel = latestReadingTs
+    ? formatDateIST(latestReadingTs)
+    : formatDateIST(new Date().toISOString());
+
   const activeIncidents = incidents.filter(
     (i) => i.status === 'open' || i.status === 'dispatched' || i.status === 'recurred'
   );
@@ -67,11 +80,11 @@ export default function MapPage() {
       {/* Title */}
       <div>
         <div className="text-xs font-mono font-bold tracking-wider text-ink-3 uppercase">
-          Map · {formatDateIST(new Date().toISOString())} · PM2.5 now, updated {new Date().getHours()}:00
+          Map · {nowLabel}
         </div>
         <h1 className="font-serif text-3xl sm:text-4xl font-extrabold text-ink mt-1">
-          {activeIncidents.length > 0
-            ? `${activeIncidents.length} areas are spiking now.`
+          {activeStations.length > 0
+            ? `${activeStations.length} area${activeStations.length === 1 ? '' : 's'} spiking now.`
             : 'All monitored areas within usual levels.'}
         </h1>
       </div>
@@ -112,7 +125,11 @@ export default function MapPage() {
                     <span className="font-serif font-bold text-sm text-ink">{inc.area}</span>
                     <StatusBadge status={inc.status} recurrenceCount={inc.recurrenceCount} />
                   </div>
-                  <div className="flex items-center gap-2 mt-1.5 text-xs font-mono text-ink-2">
+                  {/* Fix 4: show date+time so same area on different days is distinguishable */}
+                  <div className="text-[10px] font-mono text-ink-3 mt-0.5">
+                    {formatDateIST(inc.start)}
+                  </div>
+                  <div className="flex items-center gap-2 mt-1 text-xs font-mono text-ink-2">
                     <span className="font-bold text-ink">
                       {inc.topCause === 'dust' && inc.peakPm10 ? inc.peakPm10 : inc.peakPm25}
                     </span>
@@ -151,6 +168,13 @@ export default function MapPage() {
                   A {selectedIncident.topCause.replace('_', ' ')} spike detected since {selectedIncident.start.slice(11, 16)}.
                 </div>
               )}
+
+              {/* Fix 3: show reading's own timestamp when it may be stale */}
+              <div className="text-[10px] font-mono text-ink-3">
+                {selectedStation.latest?.ts
+                  ? `Last reading ${formatDateIST(selectedStation.latest.ts)}`
+                  : 'No recent reading'}
+              </div>
 
               <div className="flex items-center gap-3 pt-2">
                 <Link
