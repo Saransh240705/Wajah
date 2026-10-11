@@ -5,7 +5,7 @@ import type { Model } from '@strands-agents/sdk';
 const DEFAULT_PROVIDER = 'google'; // <- the one-line switch: 'google' | 'bedrock' | 'openai'
 // The SDK's default (gemini-2.5-flash) timed out on 10 Oct 2026. 3.5 Flash-Lite answers in about 6 s and
 // leaves more of the free-tier per-minute quota (3.5 Flash allowed 5 requests a minute; one answer takes 4-6).
-const DEFAULT_GEMINI = 'gemini-3.5-flash-lite';
+export const DEFAULT_GEMINI = 'gemini-3.5-flash-lite';
 
 export async function getModel(): Promise<Model> {
   const provider = process.env.MODEL_PROVIDER || DEFAULT_PROVIDER;
